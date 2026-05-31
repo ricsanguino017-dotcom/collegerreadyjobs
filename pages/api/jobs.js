@@ -1,5 +1,5 @@
 // pages/api/jobs.js
-// Secure Adzuna proxy — API keys never reach the browser
+// JSearch (via RapidAPI) proxy — keys never reach the browser
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -12,48 +12,56 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing param: what' })
   }
 
-  if (!process.env.ADZUNA_APP_ID || !process.env.ADZUNA_APP_KEY) {
-    return res.status(500).json({ error: 'Adzuna keys not configured on server' })
+  if (!process.env.JSEARCH_API_KEY) {
+    return res.status(500).json({ error: 'JSEARCH_API_KEY not set in environment variables' })
   }
 
   try {
-    const query = type === 'internship' ? `${what} internship` : what
-    const params = new URLSearchParams({
-      app_id: process.env.ADZUNA_APP_ID,
-      app_key: process.env.ADZUNA_APP_KEY,
-      results_per_page: Math.min(parseInt(count) || 6, 15),
-      what: query,
-      'content-type': 'application/json',
-      sort_by: 'date',
-    })
-    if (where) params.append('where', where)
+    const query = type === 'internship'
+      ? `${what} internship`
+      : `${what} entry level`
 
-    const url = `https://api.adzuna.com/v1/api/jobs/us/search/1?${params}`
-    const response = await fetch(url)
+    const params = new URLSearchParams({
+      query: where ? `${query} in ${where}` : query,
+      page: '1',
+      num_pages: '1',
+      date_posted: 'month',
+    })
+
+    const response = await fetch(
+      `https://jsearch.p.rapidapi.com/search?${params}`,
+      {
+        headers: {
+          'X-RapidAPI-Key': process.env.JSEARCH_API_KEY,
+          'X-RapidAPI-Host': 'jsearch.p.rapidapi.com',
+        },
+      }
+    )
 
     if (!response.ok) {
-      return res.status(response.status).json({ error: `Adzuna error: ${response.status}` })
+      return res.status(response.status).json({ error: `JSearch error: ${response.status}` })
     }
 
     const data = await response.json()
 
-    // Strip to only what frontend needs
-    const jobs = (data.results || []).map(j => ({
-      id: j.id,
-      title: j.title,
-      company: j.company?.display_name || 'Company not listed',
-      location: j.location?.display_name || 'US',
-      salary_min: j.salary_min || null,
-      salary_max: j.salary_max || null,
-      description: j.description ? j.description.substring(0, 200) : '',
-      redirect_url: j.redirect_url || '#',
-      contract_time: j.contract_time || null,
+    // Normalize JSearch response to match what frontend expects
+    const jobs = (data.data || []).slice(0, parseInt(count) || 6).map(j => ({
+      id: j.job_id,
+      title: j.job_title,
+      company: j.employer_name || 'Company not listed',
+      location: [j.job_city, j.job_state, j.job_country].filter(Boolean).join(', ') || 'US',
+      salary_min: j.job_min_salary || null,
+      salary_max: j.job_max_salary || null,
+      description: j.job_description ? j.job_description.substring(0, 200) : '',
+      redirect_url: j.job_apply_link || j.job_google_link || '#',
+      contract_time: j.job_employment_type || null,
     }))
 
     res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate')
-    return res.status(200).json({ results: jobs, total: data.count || 0 })
+    return res.status(200).json({ results: jobs, total: jobs.length })
+
   } catch (err) {
-    console.error('Jobs proxy error:', err)
-    return res.status(500).json({ error: 'Failed to fetch jobs' })
+    console.error('JSearch error:', err)
+    return res.status(500).json({ error: 'Failed to fetch jobs: ' + err.message })
   }
 }
