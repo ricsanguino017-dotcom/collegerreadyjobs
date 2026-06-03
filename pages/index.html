@@ -368,7 +368,7 @@ select option{background:var(--inp);color:var(--inp-c)}
 <div class="feats">
   <div class="feat"><div class="feat-ic"><i class="ti ti-target"></i></div><h3>ATS Resume Tailor</h3><p>Score compatibility, find missing keywords, rewrite bullets to match.</p><span class="gpill">★ Core feature</span></div>
   <div class="feat"><div class="feat-ic"><i class="ti ti-arrows-exchange"></i></div><h3>Before vs after</h3><p>See exactly how AI improves each bullet — original vs optimized side by side.</p></div>
-  <div class="feat"><div class="feat-ic"><i class="ti ti-briefcase"></i></div><h3>Real job listings</h3><p>Live entry-level jobs and internships from Adzuna — real openings you can apply to now.</p></div>
+  <div class="feat"><div class="feat-ic"><i class="ti ti-briefcase"></i></div><h3>Real job listings</h3><p>Live entry-level jobs and internships — real openings you can apply to now.</p></div>
   <div class="feat"><div class="feat-ic"><i class="ti ti-microphone"></i></div><h3>Interview prep</h3><p>Role-specific practice questions with coaching tips for your exact role.</p></div>
   <div class="feat"><div class="feat-ic"><i class="ti ti-mail"></i></div><h3>Cover letter builder</h3><p>Professional tailored cover letters in seconds.</p></div>
   <div class="feat"><div class="feat-ic"><i class="ti ti-download"></i></div><h3>Download reports</h3><p>Save your ATS reports as files you can keep, share, and track.</p></div>
@@ -519,8 +519,8 @@ select option{background:var(--inp);color:var(--inp-c)}
 
     <div id="tab-jobs" class="pg">
       <p class="pg-t">Entry-level job finder</p>
-      <p class="pg-s">Real live job listings from Adzuna — actual open positions you can apply to now.</p>
-      <div class="live-badge"><div class="live-dot"></div>Live listings from Adzuna</div>
+      <p class="pg-s">Real live job listings — actual open positions you can apply to now.</p>
+      <div class="live-badge"><div class="live-dot"></div>Live listings from JSearch</div>
       <label class="lbl">Job title / keywords</label>
       <input class="inp-f" type="text" id="j-what" placeholder="e.g. financial analyst, marketing coordinator..."/>
       <label class="lbl">Location</label>
@@ -533,8 +533,8 @@ select option{background:var(--inp);color:var(--inp-c)}
 
     <div id="tab-interns" class="pg">
       <p class="pg-t">Internship finder</p>
-      <p class="pg-s">Real live internship listings from Adzuna.</p>
-      <div class="live-badge"><div class="live-dot"></div>Live listings from Adzuna</div>
+      <p class="pg-s">Real live internship listings.</p>
+      <div class="live-badge"><div class="live-dot"></div>Live listings from JSearch</div>
       <label class="lbl">Field / keywords</label>
       <input class="inp-f" type="text" id="i-what" placeholder="e.g. finance intern, marketing intern..."/>
       <label class="lbl">Location</label>
@@ -764,32 +764,50 @@ function toast(m){ var t=document.getElementById('tst'); t.textContent=m; t.clas
 
 // ─── AUTH ───
 function gSignIn(){
-  // For production: implement real Google OAuth via Firebase Auth or Supabase Auth
-  // Setup steps:
-  // 1. Go to console.firebase.google.com → create project
-  // 2. Enable Google sign-in under Authentication
-  // 3. Add your domain to authorized domains
-  // 4. Use: firebase.auth().signInWithPopup(new firebase.auth.GoogleProvider())
-  // For now — show a message and let user fill in details manually
-  var name = prompt('Enter your full name to continue (Google OAuth requires Firebase setup for production):');
-  if(!name) return;
-  var major = prompt('Enter your major (e.g. Business Administration, Computer Science):') || 'Business Administration';
-  U={name:name.trim(), major:major.trim(), initials:name.trim().substring(0,2).toUpperCase()};
-  launch();
+  // Redirect to signup form — full Google OAuth coming soon with Supabase
+  showPage('page-signup');
+  setTimeout(function(){
+    var existing = document.getElementById('google-note');
+    if(!existing){
+      var note = document.createElement('div');
+      note.id = 'google-note';
+      note.style.cssText = 'background:#E6F1FF;border:1px solid #B5D4F4;border-radius:10px;padding:.875rem 1rem;font-size:13px;color:#0C447C;margin-bottom:1rem;line-height:1.6';
+      note.innerHTML = '<strong>Sign up with your details below.</strong> Full Google sign-in coming soon.';
+      var authBox = document.querySelector('#page-signup .auth-box');
+      var divdr = authBox ? authBox.querySelector('.divdr') : null;
+      if(authBox && divdr) authBox.insertBefore(note, divdr);
+    }
+  }, 50);
 }
 function signIn(){
   var e=document.getElementById('si-em').value.trim();
+  var n=document.getElementById('si-nm')?document.getElementById('si-nm').value.trim():'';
+  var emailOK=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
   if(!e){ alert('Please enter your email.'); return; }
-  U={name:e.split('@')[0], major:'Business Administration', initials:e.substring(0,2).toUpperCase()};
+  if(!emailOK){ alert('Please enter a valid email address (e.g. you@gmail.com).'); return; }
+  if(!n){ alert('Please enter your full name.'); return; }
+  n=n.charAt(0).toUpperCase()+n.slice(1);
+  var saved=JSON.parse(localStorage.getItem('crj_user_'+e)||'null');
+  if(saved){ U=saved; launch(); return; }
+  U={name:n, major:'Business Administration', initials:n.substring(0,2).toUpperCase(), email:e};
+  localStorage.setItem('crj_user_'+e, JSON.stringify(U));
+  localStorage.setItem('crj_user', JSON.stringify(U));
   launch();
 }
 function signUp(){
   var n=document.getElementById('su-nm').value.trim();
+  var e=document.getElementById('su-em').value.trim();
+  var p=document.getElementById('su-pw').value;
   var m=document.getElementById('su-mj').value;
-  if(!n){ alert('Please enter your name.'); return; }
+  var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if(!n){ alert('Please enter your full name.'); return; }
+  if(!e){ alert('Please enter your email.'); return; }
+  if(!emailRegex.test(e)){ alert('Please enter a valid email address (e.g. you@gmail.com).'); return; }
+  if(!p||p.length<6){ alert('Please create a password with at least 6 characters.'); return; }
   if(!m){ alert('Please select your major.'); return; }
-  U={name:n, major:m, initials:n.substring(0,2).toUpperCase()};
+  U={name:n, major:m, initials:n.substring(0,2).toUpperCase(), email:e};
   localStorage.setItem('crj_user', JSON.stringify(U));
+  localStorage.setItem('crj_user_'+e, JSON.stringify(U));
   launch();
 }
 function signOut(){ U=null; saved=[]; showPage('page-landing'); }
@@ -950,25 +968,10 @@ async function ai(prompt, tokens){
 }
 
 // ─── ADZUNA ───
-// Adzuna calls go through /api/jobs — keys hidden on server
-async function adzuna(what, where, count){
-  var params = new URLSearchParams({what:what, count:count||6, type:'job'});
-  if(where) params.append('where', where);
-  var r = await fetch('/api/jobs?'+params);
-  if(!r.ok) throw new Error('Jobs API error: '+r.status);
-  return await r.json();
-}
-async function adzunaIntern(field, where, count){
-  var what = field.toLowerCase().includes('intern')?field:field+' intern';
-  var params = new URLSearchParams({what:what, count:count||6, type:'internship'});
-  if(where) params.append('where', where);
-  var r = await fetch('/api/jobs?'+params);
-  if(!r.ok) throw new Error('Jobs API error: '+r.status);
-  return await r.json();
-}
+// Job search uses /api/jobs backend route directly
 function jcard(j){
   var sal='Salary not listed';
-  // Handle both Adzuna direct format and /api/jobs backend format
+  // Handle /api/jobs backend format
   var company = j.company&&j.company.display_name ? j.company.display_name : (j.company||'Company');
   var location = j.location&&j.location.display_name ? j.location.display_name : (j.location||'US');
   if(j.salary_min&&j.salary_max) sal='$'+Math.round(j.salary_min/1000)+'k – $'+Math.round(j.salary_max/1000)+'k';
@@ -1181,8 +1184,11 @@ async function findInterns(){
   var btn=document.getElementById('ifb'), c=document.getElementById('interns-res');
   btn.disabled=true; btn.innerHTML='<span class="sp"></span>Searching...'; c.innerHTML='';
   try{
-    // Try "intern" search first, fall back to AI-generated if Adzuna returns nothing
-    var d=await adzunaIntern(field,where,6);
+    // Try "intern" search first, fall back to AI-generated if no results
+    var params=new URLSearchParams({what:field.toLowerCase().includes('intern')?field:field+' internship',count:6,type:'internship'});
+    if(where) params.append('where',where);
+    var resp=await fetch('/api/jobs?'+params);
+    var d=await resp.json();
     if(d.results&&d.results.length){
       c.innerHTML='<div style="margin-top:12px"><p style="font-size:13px;color:var(--text3);margin-bottom:10px">'+d.results.length+' live internship listings</p>'+d.results.map(jcard).join('')+'</div>';
     } else {
@@ -1190,7 +1196,7 @@ async function findInterns(){
       c.innerHTML='<p style="color:var(--text2);font-size:14px;margin-top:10px;display:flex;align-items:center;gap:8px"><span class="sp sp-b"></span>No live listings found — generating AI examples...</p>';
       var raw=await ai('Generate 5 realistic paid internship listings for a '+field+' student'+(where?' near '+where:' in the US')+'. Use real Fortune 500 company names. Return ONLY valid JSON: [{"title":"...","company":"...","location":"City, State","salary":"$XX/hr","salary_min":null,"salary_max":null,"description":"Brief job desc","redirect_url":"https://www.linkedin.com/jobs","contract_time":"internship"}]',900);
       var jobs=JSON.parse(raw.replace(/```json|```/g,'').trim());
-      c.innerHTML='<div style="margin-top:12px"><div style="background:var(--gold-lt);border:1px solid #F0D080;border-radius:var(--r);padding:.75rem 1rem;font-size:13px;color:#7A4800;margin-bottom:12px">No live Adzuna listings right now — showing AI-generated examples. Check back daily for real openings.</div>'+jobs.map(function(j){ return '<div class="jc"><div class="co">'+j.company+'</div><h4>'+j.title+'</h4><p>'+j.location+' · '+j.salary+'</p><div class="jc-desc">'+j.description+'</div><div class="tgs"><span class="tg" style="background:var(--gold-lt);color:#7A4800;border-color:#F0D080">AI example</span><span class="tg m">Internship</span></div><a href="'+j.redirect_url+'" target="_blank" class="apply-btn"><i class="ti ti-external-link" style="font-size:13px"></i>Search on LinkedIn</a></div>'; }).join('')+'</div>';
+      c.innerHTML='<div style="margin-top:12px"><div style="background:var(--gold-lt);border:1px solid #F0D080;border-radius:var(--r);padding:.75rem 1rem;font-size:13px;color:#7A4800;margin-bottom:12px">No live listings right now — showing AI-generated examples. Check back daily for real openings.</div>'+jobs.map(function(j){ return '<div class="jc"><div class="co">'+j.company+'</div><h4>'+j.title+'</h4><p>'+j.location+' · '+j.salary+'</p><div class="jc-desc">'+j.description+'</div><div class="tgs"><span class="tg" style="background:var(--gold-lt);color:#7A4800;border-color:#F0D080">AI example</span><span class="tg m">Internship</span></div><a href="'+j.redirect_url+'" target="_blank" class="apply-btn"><i class="ti ti-external-link" style="font-size:13px"></i>Search on LinkedIn</a></div>'; }).join('')+'</div>';
     }
   }catch(e){
     c.innerHTML='<p style="color:var(--text2);font-size:14px;margin-top:12px">Could not load internships. Check your internet connection and try again.</p>';
@@ -1471,7 +1477,7 @@ async function findInterns(){
   btn.disabled=true; btn.innerHTML='<span class="sp"></span>Searching...'; el.innerHTML='';
   try{
     var what=field.toLowerCase().includes('intern')?field:field+' internship';
-    // Call /api/jobs backend — Adzuna keys hidden server-side
+    // Call /api/jobs backend route
     var iParams=new URLSearchParams({what:what,count:6,type:'internship'});
     if(where) iParams.append('where',where);
     var resp=await fetch('/api/jobs?'+iParams);
@@ -1484,7 +1490,7 @@ async function findInterns(){
       var raw=await ai('Generate 5 realistic paid internship listings for a '+field+' student'+(where?' near '+where:' in the US')+'. Use real Fortune 500 company names. Return ONLY valid JSON: [{"title":"...","company":"...","location":"City, State","salary":"$XX/hr","description":"2 sentence description"}]',900);
       var jobs=safeParseJSON(raw);
       if(!jobs.length) throw new Error('No results');
-      var fallbackHTML='<div style="margin-top:12px"><div style="background:var(--gold-lt);border:1px solid #F0D080;border-radius:var(--r);padding:.875rem 1rem;font-size:13px;color:#7A4800;margin-bottom:12px">No live Adzuna listings right now — showing AI-generated examples. Deploy to Vercel for real live data.</div>';
+      var fallbackHTML='<div style="margin-top:12px"><div style="background:var(--gold-lt);border:1px solid #F0D080;border-radius:var(--r);padding:.875rem 1rem;font-size:13px;color:#7A4800;margin-bottom:12px">No live listings right now — showing AI-generated examples. Deploy to Vercel for real live data.</div>';
       fallbackHTML+=jobs.map(function(j){
         var liUrl='https://www.linkedin.com/jobs/search/?keywords='+encodeURIComponent(j.title);
         return '<div class="jc"><div class="co">'+j.company+'</div><h4>'+j.title+'</h4><p>'+j.location+' · '+j.salary+'</p><div class="jc-desc">'+j.description+'</div><div class="tgs"><span class="tg" style="background:var(--gold-lt);color:#854F0B">AI example</span><span class="tg m">Internship</span></div><a href="'+liUrl+'" target="_blank" class="apply-btn">Search on LinkedIn</a></div>';
