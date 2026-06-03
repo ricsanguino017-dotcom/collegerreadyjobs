@@ -219,24 +219,31 @@ select option{background:var(--inp);color:var(--inp-c)}
   <h1>Know exactly why<br/>your resume gets rejected<br/>— <span>before recruiters do.</span></h1>
   <p>Your resume gets one chance. AI scores it against any job, shows you exactly what's missing, and rewrites it — in seconds.</p>
   <div class="hero-box">
-    <div style="font-size:13px;font-weight:600;color:var(--text2);margin-bottom:12px;display:flex;align-items:center;gap:7px"><i class="ti ti-target" style="color:var(--blue)"></i>Try the ATS Tailor free — no sign-up needed</div>
-    <div id="hero-zone" onclick="document.getElementById('hero-file').click()" style="border:1.5px dashed var(--border);border-radius:var(--r);padding:1rem;text-align:center;cursor:pointer;margin-bottom:12px;background:var(--surface2);transition:all .2s" onmouseover="this.style.borderColor='#185FA5';this.style.background='#E6F1FF'" onmouseout="this.style.borderColor='';this.style.background='var(--surface2)'">
-      <input type="file" id="hero-file" accept=".pdf,.txt" style="display:none" onchange="heroUpload(this)"/>
-      <i class="ti ti-upload" style="font-size:22px;color:var(--text3);display:block;margin-bottom:5px"></i>
-      <p id="hero-upload-txt" style="font-size:13px;color:var(--text2);font-weight:500">Upload resume (PDF or TXT)</p>
-      <small style="font-size:11px;color:var(--text3)">or paste text in the box below</small>
+    <div style="font-size:13px;font-weight:600;color:var(--text2);margin-bottom:16px;display:flex;align-items:center;gap:7px"><i class="ti ti-target" style="color:var(--blue)"></i>Try the ATS Tailor free — no sign-up needed</div>
+
+    <!-- Single upload zone -->
+    <div id="hero-zone" onclick="document.getElementById('hero-file').click()" style="border:1.5px dashed var(--border);border-radius:var(--r);padding:1.5rem 1rem;text-align:center;cursor:pointer;margin-bottom:8px;background:var(--surface2);transition:all .2s" onmouseover="this.style.borderColor='#185FA5';this.style.background='#E6F1FF'" onmouseout="this.style.borderColor='';this.style.background='var(--surface2)'">
+      <input type="file" id="hero-file" accept=".pdf,.txt,.docx,.doc,.rtf" style="display:none" onchange="heroUpload(this)"/>
+      <i class="ti ti-upload" style="font-size:26px;color:var(--text3);display:block;margin-bottom:8px"></i>
+      <p id="hero-upload-txt" style="font-size:14px;color:var(--text2);font-weight:500">Upload resume (PDF, Word, TXT)</p>
+      <small style="font-size:12px;color:var(--text3);margin-top:4px;display:block">Click to browse your files</small>
     </div>
-    <div style="border:1.5px dashed var(--border);border-radius:var(--r);padding:1rem;text-align:center;cursor:pointer;margin-bottom:12px;background:var(--surface2);transition:all .15s" id="hero-upload-zone" onclick="document.getElementById('hero-file').click()">
-      <input type="file" id="hero-file" accept=".pdf,.txt,.doc,.docx" style="display:none" onchange="heroFileUpload(this)"/>
-      <i class="ti ti-upload" style="font-size:22px;color:var(--text3);display:block;margin-bottom:6px"></i>
-      <p style="font-size:13px;color:var(--text2);font-weight:500" id="hero-upload-txt">Upload your resume (PDF, TXT, DOC)</p>
-      <p style="font-size:11px;color:var(--text3);margin-top:3px">or paste text below</p>
+    <p style="font-size:12px;color:var(--text3);text-align:center;margin-bottom:14px;cursor:pointer" onclick="var w=document.getElementById('h-rv-wrap');w.style.display=w.style.display==='none'?'block':'none';this.textContent=w.style.display==='none'?'or type / paste resume below ↓':'hide resume text ↑'" id="h-paste-toggle">or type / paste resume below ↓</p>
+
+    <!-- Resume textarea — hidden until toggled -->
+    <div id="h-rv-wrap" style="display:none;margin-bottom:12px">
+      <div class="col-lbl">Your resume</div>
+      <textarea class="h-ta" id="h-rv" placeholder="Type or paste your resume here..."></textarea>
     </div>
-    <div class="two-col">
-      <div><div class="col-lbl">Your resume</div><textarea class="h-ta" id="h-rv" placeholder="Paste your resume here — or upload above..."></textarea></div>
-      <div><div class="col-lbl">Job description</div><textarea class="h-ta" id="h-jd" placeholder="Paste the job description..."></textarea></div>
+    <!-- Job description — always full width -->
+    <div style="margin-bottom:14px">
+      <div class="col-lbl">Job description</div>
+      <textarea class="h-ta" id="h-jd" placeholder="Paste the job description..."></textarea>
     </div>
-    <button class="btn bb" id="h-btn" onclick="heroATS()"><i class="ti ti-target"></i>Get my ATS score — free</button>
+
+    <button class="btn bb" id="h-btn" onclick="heroATS()" style="font-size:15px;padding:14px"><i class="ti ti-target"></i>Get my ATS score — free</button>
+    <div style="font-size:12px;color:var(--text3);text-align:center;margin-top:8px">No credit card. No spam.</div>
+
     <div class="ats-box" id="h-ats">
       <div class="ats-top">
         <div class="ats-circle"><div class="ats-big" id="h-sc">--</div><div class="ats-sm">score</div></div>
@@ -253,7 +260,6 @@ select option{background:var(--inp);color:var(--inp-c)}
         <button class="ats-act" onclick="showPage('page-signup')"><i class="ti ti-user-plus"></i>Save report</button>
       </div>
     </div>
-    <div style="font-size:12px;color:var(--text3);text-align:center;margin-top:10px">No credit card. No spam.</div>
   </div>
 </div>
 <div class="trust">
@@ -264,80 +270,7 @@ select option{background:var(--inp);color:var(--inp-c)}
 </div>
 
 
-<!-- STUDENT SUCCESS EXAMPLES -->
-<div style="padding:3rem 2rem;background:var(--surface)">
-  <h2 style="text-align:center;font-size:26px;font-weight:700;margin-bottom:.5rem">Real transformations</h2>
-  <p style="text-align:center;font-size:15px;color:var(--text2);margin-bottom:2.5rem">See what happens when students optimize with AI</p>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;max-width:960px;margin:0 auto">
 
-    <div style="background:var(--bg);border-radius:var(--r-lg);padding:1.5rem;border:1px solid var(--border)">
-      <div style="display:flex;gap:1.5rem;margin-bottom:1rem">
-        <div style="text-align:center;flex:1;background:#FCEBEB;border-radius:var(--r);padding:1rem">
-          <div style="font-size:28px;font-weight:700;color:#A32D2D">54%</div>
-          <div style="font-size:12px;color:#A32D2D;font-weight:600;margin-top:2px">Before</div>
-        </div>
-        <div style="display:flex;align-items:center;font-size:20px;color:var(--text3)">→</div>
-        <div style="text-align:center;flex:1;background:#EAF3DE;border-radius:var(--r);padding:1rem">
-          <div style="font-size:28px;font-weight:700;color:#3B6D11">87%</div>
-          <div style="font-size:12px;color:#3B6D11;font-weight:600;margin-top:2px">After</div>
-        </div>
-      </div>
-      <p style="font-size:14px;font-weight:600;margin-bottom:8px">Finance major → Goldman Sachs Analyst</p>
-      <p style="font-size:12px;color:var(--text2);margin-bottom:10px">Keywords added after optimization:</p>
-      <div style="display:flex;gap:5px;flex-wrap:wrap">
-        <span style="font-size:11px;background:#EAF3DE;color:#3B6D11;padding:3px 8px;border-radius:20px;font-weight:500">Financial Modeling</span>
-        <span style="font-size:11px;background:#EAF3DE;color:#3B6D11;padding:3px 8px;border-radius:20px;font-weight:500">Excel</span>
-        <span style="font-size:11px;background:#EAF3DE;color:#3B6D11;padding:3px 8px;border-radius:20px;font-weight:500">SQL</span>
-        <span style="font-size:11px;background:#EAF3DE;color:#3B6D11;padding:3px 8px;border-radius:20px;font-weight:500">Forecasting</span>
-      </div>
-    </div>
-
-    <div style="background:var(--bg);border-radius:var(--r-lg);padding:1.5rem;border:1px solid var(--border)">
-      <div style="display:flex;gap:1.5rem;margin-bottom:1rem">
-        <div style="text-align:center;flex:1;background:#FCEBEB;border-radius:var(--r);padding:1rem">
-          <div style="font-size:28px;font-weight:700;color:#A32D2D">48%</div>
-          <div style="font-size:12px;color:#A32D2D;font-weight:600;margin-top:2px">Before</div>
-        </div>
-        <div style="display:flex;align-items:center;font-size:20px;color:var(--text3)">→</div>
-        <div style="text-align:center;flex:1;background:#EAF3DE;border-radius:var(--r);padding:1rem">
-          <div style="font-size:28px;font-weight:700;color:#3B6D11">91%</div>
-          <div style="font-size:12px;color:#3B6D11;font-weight:600;margin-top:2px">After</div>
-        </div>
-      </div>
-      <p style="font-size:14px;font-weight:600;margin-bottom:8px">CS major → Google Software Engineer</p>
-      <p style="font-size:12px;color:var(--text2);margin-bottom:10px">Keywords added after optimization:</p>
-      <div style="display:flex;gap:5px;flex-wrap:wrap">
-        <span style="font-size:11px;background:#EAF3DE;color:#3B6D11;padding:3px 8px;border-radius:20px;font-weight:500">Python</span>
-        <span style="font-size:11px;background:#EAF3DE;color:#3B6D11;padding:3px 8px;border-radius:20px;font-weight:500">REST APIs</span>
-        <span style="font-size:11px;background:#EAF3DE;color:#3B6D11;padding:3px 8px;border-radius:20px;font-weight:500">Agile</span>
-        <span style="font-size:11px;background:#EAF3DE;color:#3B6D11;padding:3px 8px;border-radius:20px;font-weight:500">CI/CD</span>
-      </div>
-    </div>
-
-    <div style="background:var(--bg);border-radius:var(--r-lg);padding:1.5rem;border:1px solid var(--border)">
-      <div style="display:flex;gap:1.5rem;margin-bottom:1rem">
-        <div style="text-align:center;flex:1;background:#FCEBEB;border-radius:var(--r);padding:1rem">
-          <div style="font-size:28px;font-weight:700;color:#A32D2D">61%</div>
-          <div style="font-size:12px;color:#A32D2D;font-weight:600;margin-top:2px">Before</div>
-        </div>
-        <div style="display:flex;align-items:center;font-size:20px;color:var(--text3)">→</div>
-        <div style="text-align:center;flex:1;background:#EAF3DE;border-radius:var(--r);padding:1rem">
-          <div style="font-size:28px;font-weight:700;color:#3B6D11">89%</div>
-          <div style="font-size:12px;color:#3B6D11;font-weight:600;margin-top:2px">After</div>
-        </div>
-      </div>
-      <p style="font-size:14px;font-weight:600;margin-bottom:8px">Marketing major → Nike Brand Manager</p>
-      <p style="font-size:12px;color:var(--text2);margin-bottom:10px">Keywords added after optimization:</p>
-      <div style="display:flex;gap:5px;flex-wrap:wrap">
-        <span style="font-size:11px;background:#EAF3DE;color:#3B6D11;padding:3px 8px;border-radius:20px;font-weight:500">Brand Strategy</span>
-        <span style="font-size:11px;background:#EAF3DE;color:#3B6D11;padding:3px 8px;border-radius:20px;font-weight:500">ROI Analysis</span>
-        <span style="font-size:11px;background:#EAF3DE;color:#3B6D11;padding:3px 8px;border-radius:20px;font-weight:500">Consumer Insights</span>
-      </div>
-    </div>
-
-  </div>
-  <p style="text-align:center;font-size:12px;color:var(--text3);margin-top:1.5rem">Sample transformations illustrating what ATS optimization looks like</p>
-</div>
 
 <div style="padding:2.5rem 2rem;background:var(--bg)">
   <h2 style="text-align:center;font-size:26px;font-weight:700;margin-bottom:.5rem">How it works</h2>
@@ -377,12 +310,12 @@ select option{background:var(--inp);color:var(--inp-c)}
   <h2>Simple, student-friendly pricing</h2>
   <p class="ps">Start free. Upgrade when ready.</p>
   <div class="pgrid">
-    <div class="pc"><h3>Free</h3><div class="price-n">$0 <span>/ mo</span></div><ul class="pl"><li><i class="ti ti-check"></i>3 ATS scans/month</li><li><i class="ti ti-check"></i>Before/after view</li><li><i class="ti ti-check"></i>Real job listings</li><li><i class="ti ti-check"></i>Interview prep</li></ul><button class="btn bb" onclick="showPage('page-signup')">Get started free</button></div>
-    <div class="pc fp"><div style="font-size:11px;font-weight:700;color:var(--blue);letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px">⭐ Best for job searching now</div><h3>Weekly</h3><div class="price-n">$4.99 <span>/ week</span></div><ul class="pl"><li><i class="ti ti-check"></i>Everything in free</li><li><i class="ti ti-check"></i>Unlimited ATS scans</li><li><i class="ti ti-check"></i>Full resume rewrite</li><li><i class="ti ti-check"></i>Download PDF reports</li></ul><button class="btn bg-b" onclick="openMo('4.99','week')">Get interview-ready this week</button></div>
-    <div class="pc"><h3>Monthly</h3><div class="price-n">$9.99 <span>/ mo</span></div><ul class="pl"><li><i class="ti ti-check"></i>Everything in weekly</li><li><i class="ti ti-check"></i>ATS score history</li><li><i class="ti ti-check"></i>Priority support</li><li><i class="ti ti-check"></i>Best value</li></ul><button class="btn bb" onclick="openMo('9.99','month')">Get monthly</button></div>
+    <div class="pc"><h3>Free</h3><div class="price-n">$0 <span>/ mo</span></div><ul class="pl"><li><i class="ti ti-check"></i>1 free ATS scan</li><li><i class="ti ti-check"></i>Before/after view</li><li><i class="ti ti-check"></i>Real job listings</li><li><i class="ti ti-check"></i>Interview prep</li></ul><button class="btn bb" onclick="showPage('page-signup')">Get started free</button></div>
+    <div class="pc fp"><div style="font-size:11px;font-weight:700;color:var(--blue);letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px">⭐ Best for job searching now</div><h3>Weekly</h3><div class="price-n">$4.99 <span>/ week</span></div><ul class="pl"><li><i class="ti ti-check"></i>Everything in free</li><li><i class="ti ti-check"></i>Unlimited ATS scans</li><li><i class="ti ti-check"></i>Full resume rewrite</li><li><i class="ti ti-check"></i>Download PDF reports</li></ul><button class="btn bg-b" onclick="openMo('4.99','week')">Get premium access</button></div>
+    <div class="pc"><h3>Monthly</h3><div class="price-n">$14.99 <span>/ mo</span></div><ul class="pl"><li><i class="ti ti-check"></i>Everything in weekly</li><li><i class="ti ti-check"></i>ATS score history</li><li><i class="ti ti-check"></i>Priority support</li><li><i class="ti ti-check"></i>Best value</li></ul><button class="btn bb" onclick="openMo('14.99','month')">Get monthly</button></div>
   </div>
 </div>
-<div class="lp-foot">© 2025 CollegeReadyJobs · <span style="color:var(--blue);cursor:pointer" onclick="showPage('page-signup')">Get started free</span></div>
+<div class="lp-foot">© 2026 CollegeReadyJobs · <span style="color:var(--blue);cursor:pointer" onclick="showPage('page-signup')">Get started free</span></div>
 </div>
 
 <!-- ===== PAGE: SIGN IN ===== -->
@@ -431,8 +364,8 @@ select option{background:var(--inp);color:var(--inp-c)}
   <aside class="sidebar">
     <div class="s-logo"><h2>CollegeReadyJobs</h2><small id="sb-name">Welcome back</small></div>
     <div class="s-sec">Core tools</div>
-    <div class="si active" onclick="goTab('ats',this)"><i class="ti ti-target"></i>ATS Tailor ★</div>
-    <div class="si" onclick="goTab('ip',this)"><i class="ti ti-microphone"></i>Interview prep</div>
+    <div class="si active" onclick="goTab('ats',this)"><i class="ti ti-target"></i>ATS Tailor <span style="font-size:10px;background:var(--gold);color:#3A1F00;padding:2px 6px;border-radius:8px;margin-left:auto;font-weight:700;flex-shrink:0">★ PRO</span></div>
+    <div class="si" onclick="goTab('ip',this)"><i class="ti ti-microphone"></i>Interview prep <span style="font-size:10px;background:var(--gold);color:#3A1F00;padding:2px 6px;border-radius:8px;margin-left:auto;font-weight:700;flex-shrink:0">★ PRO</span> </div>
     <div class="s-sec">Find opportunities</div>
     <div class="si" onclick="goTab('jobs',this)"><i class="ti ti-briefcase"></i>Job finder</div>
     <div class="si" onclick="goTab('interns',this)"><i class="ti ti-school"></i>Internships</div>
@@ -441,58 +374,157 @@ select option{background:var(--inp);color:var(--inp-c)}
     <div class="si" onclick="goTab('saved',this)"><i class="ti ti-bookmark"></i>Saved reports</div>
     <div class="s-sec" onclick="document.getElementById('more-items').style.display=document.getElementById('more-items').style.display==='none'?'block':'none'" style="cursor:pointer;user-select:none">More tools ▾</div>
     <div id="more-items" style="display:none">
-      <div class="si" onclick="goTab('rv',this)"><i class="ti ti-file-text"></i>Resume reviewer</div>
-      <div class="si" onclick="goTab('cl',this)"><i class="ti ti-mail"></i>Cover letter</div>
+      <div class="si" onclick="goTab('rv',this)"><i class="ti ti-file-text"></i>Resume reviewer <span style="font-size:10px;background:var(--gold);color:#3A1F00;padding:2px 6px;border-radius:8px;margin-left:auto;font-weight:700;flex-shrink:0">★ PRO</span></div>
+      <div class="si" onclick="goTab('cl',this)"><i class="ti ti-mail"></i>Cover letter <span style="font-size:10px;background:var(--gold);color:#3A1F00;padding:2px 6px;border-radius:8px;margin-left:auto;font-weight:700;flex-shrink:0">★ PRO</span></div>
+      <div class="si" onclick="goTab('career',this)"><i class="ti ti-bulb"></i>Career matcher</div>
+      <div class="si" onclick="goTab('sim',this)"><i class="ti ti-player-play"></i>Interview sim <span style="font-size:10px;background:var(--gold);color:#3A1F00;padding:2px 6px;border-radius:8px;margin-left:auto;font-weight:700;flex-shrink:0">★ PRO</span></div>
       <div class="si" onclick="goTab('dash',this)"><i class="ti ti-layout-dashboard"></i>Dashboard</div>
       <div class="si" onclick="goTab('pf',this)"><i class="ti ti-user"></i>Profile</div>
     </div>
     <div class="s-spacer"></div>
     <div class="si" onclick="signOut()"><i class="ti ti-logout"></i>Sign out</div>
-    <div class="s-up" onclick="openMo('9.99','month')"><p><i class="ti ti-star" style="font-size:12px;margin-right:4px"></i>Upgrade to premium</p><p>Unlimited ATS + all tools — $9.99/mo</p></div>
+    <div class="s-up" onclick="openMo('14.99','month')"><p><i class="ti ti-star" style="font-size:12px;margin-right:4px"></i>Upgrade to premium</p><p>Unlimited ATS + all tools — $14.99/mo</p></div>
   </aside>
   <main class="main-content">
 
     <div id="tab-ats" class="pg active">
       <p class="pg-t">ATS Resume Tailor</p>
-      <p class="pg-s">Paste your resume + job description. AI scores your ATS compatibility and rewrites your bullets with a before/after comparison.</p>
-      <div class="lkp"><i class="ti ti-star" style="font-size:12px"></i>Premium — unlimited scans $9.99/mo or $4.99/week</div>
-      <div class="upload-zone" id="atz" onclick="document.getElementById('at-file').click()">
-        <input type="file" id="at-file" accept=".pdf,.txt" onchange="parsePDF(this,'at-rv','atz')"/>
-        <i class="ti ti-upload"></i><p>Upload resume PDF</p><small>Or paste text below</small>
+      <p class="pg-s">Upload your resume and paste a job description. AI scores your match, finds missing keywords, and rewrites your bullets.</p>
+      <div style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#FFF8E6,#FFF0CC);border:1px solid #F0D080;border-radius:20px;padding:7px 16px;margin-bottom:16px;font-size:13px;font-weight:500;color:#7A4800">
+        <span style="font-size:14px">⭐</span>
+        <span>1 free scan included</span>
+        <span style="color:#C4891A">·</span>
+        <span style="cursor:pointer;color:var(--blue);font-weight:600;text-decoration:none" onclick="openMo('4.99','week')">Upgrade for unlimited →</span>
       </div>
-      <label class="lbl">Resume text</label>
-      <textarea id="at-rv" placeholder="Paste your resume here..."></textarea>
-      <label class="lbl">Job description</label>
-      <textarea id="at-jd" placeholder="Paste the full job description..."></textarea>
-      <button class="btn bg-b" id="at-btn" onclick="runATS()"><i class="ti ti-target"></i>Analyze &amp; tailor my resume</button>
+
+      <!-- Single upload zone -->
+      <div class="upload-zone" id="atz" onclick="document.getElementById('at-file').click()">
+        <input type="file" id="at-file" accept=".pdf,.txt,.docx,.doc,.rtf" onchange="parsePDF(this,'at-rv','atz')"/>
+        <i class="ti ti-upload"></i>
+        <p>Upload resume (PDF, TXT, DOC)</p>
+        <small>PDF, Word, TXT supported</small>
+      </div>
+      <p style="font-size:12px;color:var(--text3);margin-bottom:10px;cursor:pointer;text-decoration:underline" onclick="document.getElementById('at-rv').style.display=document.getElementById('at-rv').style.display==='none'?'':'none'">Type resume instead</p>
+      <label class="lbl" style="display:none" id="at-rv-lbl">Your resume</label>
+      <textarea id="at-rv" placeholder="Or type your resume text here..." style="display:none"></textarea>
+
+      <!-- Two column layout like screenshot -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+        <div>
+          <label class="lbl">Target role <span style="font-size:11px;color:var(--text3);font-weight:400">(optional — improves accuracy)</span></label>
+          <select id="at-role" style="width:100%;padding:11px 13px;font-size:13px;border:1.5px solid var(--border);border-radius:var(--r);background:var(--inp);color:var(--inp-c);font-family:Inter,sans-serif;margin-bottom:0">
+            <option value="">Any role</option>
+            <optgroup label="Business &amp; Finance">
+              <option>Accounting Associate</option><option>Auditor</option><option>Banking Analyst</option>
+              <option>Budget Analyst</option><option>Business Analyst</option><option>CFO Track</option>
+              <option>Controller</option><option>Corporate Finance Analyst</option><option>Credit Analyst</option>
+              <option>Financial Advisor</option><option>Financial Analyst</option><option>Financial Planner</option>
+              <option>Investment Banking Analyst</option><option>Management Trainee</option>
+              <option>Operations Analyst</option><option>Portfolio Analyst</option><option>Risk Analyst</option>
+              <option>Staff Accountant</option><option>Tax Associate</option><option>Wealth Management Associate</option>
+            </optgroup>
+            <optgroup label="Marketing &amp; Communications">
+              <option>Brand Manager</option><option>Content Marketing Specialist</option>
+              <option>Communications Coordinator</option><option>Copywriter</option>
+              <option>Digital Marketing Analyst</option><option>Email Marketing Specialist</option>
+              <option>Marketing Coordinator</option><option>Media Planner</option>
+              <option>PR Coordinator</option><option>SEO Specialist</option><option>Social Media Manager</option>
+            </optgroup>
+            <optgroup label="Technology">
+              <option>Backend Engineer</option><option>Cybersecurity Analyst</option>
+              <option>Data Analyst</option><option>Data Engineer</option><option>Data Scientist</option>
+              <option>DevOps Engineer</option><option>Frontend Developer</option>
+              <option>Full Stack Developer</option><option>IT Support Specialist</option>
+              <option>Machine Learning Engineer</option><option>Mobile Developer</option>
+              <option>Product Manager</option><option>QA Engineer</option>
+              <option>Software Engineer</option><option>Systems Analyst</option><option>UX Designer</option>
+              <option>Web Developer</option>
+            </optgroup>
+            <optgroup label="Healthcare">
+              <option>Dental Hygienist</option><option>Healthcare Administrator</option>
+              <option>Medical Assistant</option><option>Occupational Therapist</option>
+              <option>Pharmacy Technician</option><option>Physical Therapist</option>
+              <option>Physician Assistant</option><option>Public Health Analyst</option>
+              <option>Registered Nurse</option><option>Social Worker</option>
+            </optgroup>
+            <optgroup label="Engineering">
+              <option>Aerospace Engineer</option><option>Chemical Engineer</option>
+              <option>Civil Engineer</option><option>Electrical Engineer</option>
+              <option>Environmental Engineer</option><option>Industrial Engineer</option>
+              <option>Mechanical Engineer</option><option>Process Engineer</option>
+              <option>Structural Engineer</option>
+            </optgroup>
+            <optgroup label="Operations &amp; Management">
+              <option>Event Coordinator</option><option>Human Resources Coordinator</option>
+              <option>Logistics Coordinator</option><option>Office Manager</option>
+              <option>Operations Coordinator</option><option>Project Coordinator</option>
+              <option>Recruiter</option><option>Supply Chain Analyst</option>
+              <option>Training Coordinator</option>
+            </optgroup>
+            <optgroup label="Sales &amp; Customer">
+              <option>Account Executive</option><option>Business Development Representative</option>
+              <option>Customer Success Manager</option><option>Inside Sales Representative</option>
+              <option>Sales Development Representative</option><option>Sales Representative</option>
+            </optgroup>
+            <optgroup label="Education &amp; Social">
+              <option>Counselor</option><option>Education Coordinator</option>
+              <option>Instructional Designer</option><option>School Administrator</option>
+              <option>Social Work Coordinator</option><option>Teacher</option>
+            </optgroup>
+            <optgroup label="Internships">
+              <option>Accounting Intern</option><option>Business Development Intern</option>
+              <option>Communications Intern</option><option>Data Analysis Intern</option>
+              <option>Engineering Intern</option><option>Finance Intern</option>
+              <option>Graphic Design Intern</option><option>HR Intern</option>
+              <option>IT Intern</option><option>Investment Banking Intern</option>
+              <option>Legal Intern</option><option>Marketing Intern</option>
+              <option>Nursing Intern</option><option>Operations Intern</option>
+              <option>Product Management Intern</option><option>Research Intern</option>
+              <option>Sales Intern</option><option>Software Engineering Intern</option>
+              <option>Supply Chain Intern</option><option>UX Design Intern</option>
+            </optgroup>
+          </select>
+        </div>
+        <div>
+          <label class="lbl">Job description</label>
+          <textarea id="at-jd" placeholder="Paste the job description..." style="min-height:160px;margin-bottom:0"></textarea>
+        </div>
+      </div>
+
+      <button class="btn bg-b" id="at-btn" onclick="runATS()"><i class="ti ti-target"></i>Get my ATS score — free</button>
+
+      <!-- ATS Results -->
       <div class="ats-box" id="at-box">
         <div class="ats-top">
-          <div class="ats-circle"><div class="ats-big" id="at-sc">--</div><div class="ats-sm">score</div></div>
-          <div class="ats-right"><div style="font-size:14px;color:#C8D8F8;font-weight:500" id="at-vd"></div><div class="ats-bar-w"><div class="ats-bar-f" id="at-bar" style="width:0%"></div></div><div class="ats-tags" id="at-tags"></div></div>
+          <div class="ats-circle"><div class="ats-big" id="at-sc">--</div><div class="ats-sm">ATS score</div></div>
+          <div class="ats-right">
+            <div style="font-size:14px;color:#C8D8F8;font-weight:500" id="at-vd"></div>
+            <div class="ats-bar-w"><div class="ats-bar-f" id="at-bar" style="width:0%"></div></div>
+            <div class="ats-tags" id="at-tags"></div>
+          </div>
         </div>
-        <!-- Match breakdown bars -->
         <div id="at-breakdown" style="display:none;margin-top:14px;padding:14px;background:#0D1525;border-radius:var(--r)">
           <p style="font-size:12px;font-weight:600;color:#8899BB;margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em">Match breakdown</p>
           <div id="at-breakdown-bars"></div>
         </div>
         <div class="ats-detail" id="at-txt"></div>
-        <!-- Keyword chips -->
         <div id="at-keywords" style="display:none;margin-top:12px">
           <p style="font-size:12px;font-weight:600;color:#8899BB;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Keyword analysis</p>
           <div id="at-kw-found" style="margin-bottom:8px"></div>
           <div id="at-kw-missing"></div>
         </div>
-        <!-- Top 3 rejection reasons -->
         <div id="at-rejections" style="display:none;margin-top:12px;padding:12px;background:#1A0D0D;border:1px solid #5A1A1A;border-radius:var(--r)">
           <p style="font-size:12px;font-weight:600;color:#E87070;margin-bottom:8px;display:flex;align-items:center;gap:6px"><i class="ti ti-alert-triangle" style="font-size:14px"></i>Top reasons ATS may reject this resume</p>
           <div id="at-rejection-list" style="font-size:13px;color:#F0BDBD;line-height:1.8"></div>
         </div>
-        <div class="ba-wrap" id="at-ba"><div class="ba-title"><i class="ti ti-arrows-exchange"></i>Before vs after — see the improvement</div><div class="ba-grid" id="at-ba-grid"></div></div>
-        <!-- Interview probability -->
         <div id="at-probability" style="display:none;margin-top:14px;padding:14px;background:#0A1A0D;border:1px solid #1A5A30;border-radius:var(--r);text-align:center">
           <p style="font-size:12px;color:#5EC87A;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">Estimated interview readiness</p>
           <div style="font-size:36px;font-weight:700;color:#5EC87A" id="at-prob-score">--</div>
           <p style="font-size:12px;color:#5EC87A;margin-top:2px" id="at-prob-label"></p>
+        </div>
+        <div class="ba-wrap" id="at-ba">
+          <div class="ba-title"><i class="ti ti-arrows-exchange"></i>Before vs after — see the improvement</div>
+          <div class="ba-grid" id="at-ba-grid"></div>
         </div>
         <div class="ats-acts" style="margin-top:14px">
           <button class="ats-act" onclick="copyATS('at-sc','at-txt')"><i class="ti ti-copy"></i>Copy report</button>
@@ -521,37 +553,76 @@ select option{background:var(--inp);color:var(--inp-c)}
       <p class="pg-t">Entry-level job finder</p>
       <p class="pg-s">Real live job listings — actual open positions you can apply to now.</p>
       <div class="live-badge"><div class="live-dot"></div>Live listings from JSearch</div>
-      <label class="lbl">Job title / keywords</label>
-      <input class="inp-f" type="text" id="j-what" placeholder="e.g. financial analyst, marketing coordinator..."/>
+      <label class="lbl">Field / job type</label>
+      <div style="position:relative">
+        <input class="inp-f" type="text" id="j-what" placeholder="e.g. Financial Analyst, Marketing Coordinator..." autocomplete="off" list="j-what-list-dl" oninput="filterField('j-what','j-what-list')" onfocus="showFieldList('j-what-list')" onblur="setTimeout(function(){hideFieldList('j-what-list')},200)" style="margin-bottom:0"/>
+        <div id="j-what-list" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1.5px solid var(--blue);border-radius:0 0 var(--r) var(--r);max-height:220px;overflow-y:auto;z-index:100;box-shadow:var(--shadow)"></div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;margin-bottom:14px;max-height:100px;overflow-y:auto"><span onclick="setField('j-what','Accounting')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Accounting</span><span onclick="setField('j-what','Administrative')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Administrative</span><span onclick="setField('j-what','Advertising')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Advertising</span><span onclick="setField('j-what','Aerospace Engineering')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Aerospace Engineering</span><span onclick="setField('j-what','Analytics')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Analytics</span><span onclick="setField('j-what','Architecture')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Architecture</span><span onclick="setField('j-what','Banking')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Banking</span><span onclick="setField('j-what','Biology')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Biology</span><span onclick="setField('j-what','Brand Management')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Brand Management</span><span onclick="setField('j-what','Business Administration')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Business Administration</span><span onclick="setField('j-what','Business Development')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Business Development</span><span onclick="setField('j-what','Chemical Engineering')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Chemical Engineering</span><span onclick="setField('j-what','Civil Engineering')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Civil Engineering</span><span onclick="setField('j-what','Communications')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Communications</span><span onclick="setField('j-what','Compliance')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Compliance</span><span onclick="setField('j-what','Computer Science')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Computer Science</span><span onclick="setField('j-what','Construction Management')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Construction Management</span><span onclick="setField('j-what','Content Marketing')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Content Marketing</span><span onclick="setField('j-what','Copywriting')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Copywriting</span><span onclick="setField('j-what','Corporate Finance')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Corporate Finance</span></div>
       <label class="lbl">Location</label>
-      <input class="inp-f" type="text" id="j-where" placeholder="e.g. New York, Chicago, Remote..."/>
+      <div style="position:relative">
+        <input class="inp-f" type="text" id="j-where" placeholder="Type or pick a city/state..." autocomplete="off" oninput="filterLocations('j-where','j-where-list')" onfocus="showLocList('j-where-list')" onblur="setTimeout(function(){hideLocList('j-where-list')},200)" style="margin-bottom:0"/>
+        <div id="j-where-list" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1.5px solid var(--blue);border-radius:0 0 var(--r) var(--r);max-height:220px;overflow-y:auto;z-index:100;box-shadow:var(--shadow)"></div>
+      </div>
+      <p style="font-size:12px;font-weight:600;color:var(--text3);margin:8px 0 5px;text-transform:uppercase;letter-spacing:.04em">Popular cities</p>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px"><span onclick="setLoc('j-where','Remote')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Remote</span><span onclick="setLoc('j-where','New York, NY')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">New York, NY</span><span onclick="setLoc('j-where','Los Angeles, CA')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Los Angeles, CA</span><span onclick="setLoc('j-where','Chicago, IL')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Chicago, IL</span><span onclick="setLoc('j-where','Houston, TX')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Houston, TX</span><span onclick="setLoc('j-where','Boston, MA')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Boston, MA</span><span onclick="setLoc('j-where','Atlanta, GA')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Atlanta, GA</span><span onclick="setLoc('j-where','Dallas, TX')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Dallas, TX</span><span onclick="setLoc('j-where','Seattle, WA')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Seattle, WA</span><span onclick="setLoc('j-where','San Francisco, CA')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">San Francisco, CA</span><span onclick="setLoc('j-where','Miami, FL')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Miami, FL</span><span onclick="setLoc('j-where','Washington, DC')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Washington, DC</span><span onclick="setLoc('j-where','Austin, TX')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Austin, TX</span><span onclick="setLoc('j-where','Denver, CO')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Denver, CO</span><span onclick="setLoc('j-where','Philadelphia, PA')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Philadelphia, PA</span></div>
+      <p style="font-size:12px;font-weight:600;color:var(--text3);margin:8px 0 5px;text-transform:uppercase;letter-spacing:.04em">All 50 states</p>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px"><span onclick="setLoc('j-where','Alabama')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Alabama</span><span onclick="setLoc('j-where','Alaska')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Alaska</span><span onclick="setLoc('j-where','Arizona')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Arizona</span><span onclick="setLoc('j-where','Arkansas')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Arkansas</span><span onclick="setLoc('j-where','California')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">California</span><span onclick="setLoc('j-where','Colorado')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Colorado</span><span onclick="setLoc('j-where','Connecticut')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Connecticut</span><span onclick="setLoc('j-where','Delaware')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Delaware</span><span onclick="setLoc('j-where','Florida')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Florida</span><span onclick="setLoc('j-where','Georgia')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Georgia</span><span onclick="setLoc('j-where','Hawaii')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Hawaii</span><span onclick="setLoc('j-where','Idaho')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Idaho</span><span onclick="setLoc('j-where','Illinois')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Illinois</span><span onclick="setLoc('j-where','Indiana')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Indiana</span><span onclick="setLoc('j-where','Iowa')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Iowa</span><span onclick="setLoc('j-where','Kansas')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Kansas</span><span onclick="setLoc('j-where','Kentucky')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Kentucky</span><span onclick="setLoc('j-where','Louisiana')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Louisiana</span><span onclick="setLoc('j-where','Maine')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Maine</span><span onclick="setLoc('j-where','Maryland')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Maryland</span><span onclick="setLoc('j-where','Massachusetts')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Massachusetts</span><span onclick="setLoc('j-where','Michigan')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Michigan</span><span onclick="setLoc('j-where','Minnesota')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Minnesota</span><span onclick="setLoc('j-where','Mississippi')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Mississippi</span><span onclick="setLoc('j-where','Missouri')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Missouri</span><span onclick="setLoc('j-where','Montana')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Montana</span><span onclick="setLoc('j-where','Nebraska')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Nebraska</span><span onclick="setLoc('j-where','Nevada')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Nevada</span><span onclick="setLoc('j-where','New Hampshire')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">New Hampshire</span><span onclick="setLoc('j-where','New Jersey')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">New Jersey</span><span onclick="setLoc('j-where','New Mexico')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">New Mexico</span><span onclick="setLoc('j-where','New York')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">New York</span><span onclick="setLoc('j-where','North Carolina')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">North Carolina</span><span onclick="setLoc('j-where','North Dakota')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">North Dakota</span><span onclick="setLoc('j-where','Ohio')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Ohio</span><span onclick="setLoc('j-where','Oklahoma')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Oklahoma</span><span onclick="setLoc('j-where','Oregon')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Oregon</span><span onclick="setLoc('j-where','Pennsylvania')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Pennsylvania</span><span onclick="setLoc('j-where','Rhode Island')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Rhode Island</span><span onclick="setLoc('j-where','South Carolina')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">South Carolina</span><span onclick="setLoc('j-where','South Dakota')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">South Dakota</span><span onclick="setLoc('j-where','Tennessee')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Tennessee</span><span onclick="setLoc('j-where','Texas')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Texas</span><span onclick="setLoc('j-where','Utah')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Utah</span><span onclick="setLoc('j-where','Vermont')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Vermont</span><span onclick="setLoc('j-where','Virginia')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Virginia</span><span onclick="setLoc('j-where','Washington')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Washington</span><span onclick="setLoc('j-where','West Virginia')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">West Virginia</span><span onclick="setLoc('j-where','Wisconsin')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Wisconsin</span><span onclick="setLoc('j-where','Wyoming')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Wyoming</span><span onclick="setLoc('j-where','Washington DC')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Washington DC</span></div>
       <label class="lbl">Results</label>
-      <select id="j-count"><option value="6">6 results</option><option value="10">10 results</option><option value="15">15 results</option></select>
-      <button class="btn bb" id="jfb" onclick="findJobs()"><i class="ti ti-search"></i>Search live jobs</button>
+      <select id="j-count"><option value="10">10 results</option><option value="20">20 results</option><option value="30">30 results</option><option value="50">50 results</option></select>
+      <button class="btn bb" id="jfb" onclick="findJobs()"><i class="ti ti-search"></i>Search jobs</button>
       <div id="jobs-res"></div>
     </div>
 
     <div id="tab-interns" class="pg">
       <p class="pg-t">Internship finder</p>
-      <p class="pg-s">Real live internship listings.</p>
+      <p class="pg-s">Search live internship listings across the US.</p>
       <div class="live-badge"><div class="live-dot"></div>Live listings from JSearch</div>
-      <label class="lbl">Field / keywords</label>
-      <input class="inp-f" type="text" id="i-what" placeholder="e.g. finance intern, marketing intern..."/>
+      <label class="lbl">Internship field</label>
+      <div style="position:relative">
+        <input class="inp-f" type="text" id="i-what" placeholder="e.g. Finance Intern, Software Engineering Intern..." autocomplete="off" list="i-what-list-dl" oninput="filterField('i-what','i-what-list')" onfocus="showFieldList('i-what-list')" onblur="setTimeout(function(){hideFieldList('i-what-list')},200)" style="margin-bottom:0"/>
+        <div id="i-what-list" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1.5px solid var(--blue);border-radius:0 0 var(--r) var(--r);max-height:220px;overflow-y:auto;z-index:100;box-shadow:var(--shadow)"></div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;margin-bottom:14px;max-height:100px;overflow-y:auto"><span onclick="setField('i-what','Accounting Intern')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Accounting Intern</span><span onclick="setField('i-what','Advertising Intern')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Advertising Intern</span><span onclick="setField('i-what','Architecture Intern')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Architecture Intern</span><span onclick="setField('i-what','Banking Intern')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Banking Intern</span><span onclick="setField('i-what','Biology Research Intern')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Biology Research Intern</span><span onclick="setField('i-what','Brand Marketing Intern')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Brand Marketing Intern</span><span onclick="setField('i-what','Business Development Intern')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Business Development Intern</span><span onclick="setField('i-what','Civil Engineering Intern')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Civil Engineering Intern</span><span onclick="setField('i-what','Communications Intern')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Communications Intern</span><span onclick="setField('i-what','Computer Science Intern')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Computer Science Intern</span><span onclick="setField('i-what','Content Marketing Intern')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Content Marketing Intern</span><span onclick="setField('i-what','Corporate Finance Intern')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Corporate Finance Intern</span><span onclick="setField('i-what','Cybersecurity Intern')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Cybersecurity Intern</span><span onclick="setField('i-what','Data Analysis Intern')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Data Analysis Intern</span><span onclick="setField('i-what','Data Science Intern')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Data Science Intern</span><span onclick="setField('i-what','Digital Marketing Intern')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Digital Marketing Intern</span><span onclick="setField('i-what','Economics Intern')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Economics Intern</span><span onclick="setField('i-what','Education Intern')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Education Intern</span><span onclick="setField('i-what','Electrical Engineering Intern')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Electrical Engineering Intern</span><span onclick="setField('i-what','Environmental Intern')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Environmental Intern</span></div>
       <label class="lbl">Location</label>
-      <input class="inp-f" type="text" id="i-where" placeholder="e.g. New York, Remote..."/>
-      <button class="btn bb" id="ifb" onclick="findInterns()"><i class="ti ti-search"></i>Search live internships</button>
+      <div style="position:relative">
+        <input class="inp-f" type="text" id="i-where" placeholder="Type or pick a city/state..." autocomplete="off" oninput="filterLocations('i-where','i-where-list')" onfocus="showLocList('i-where-list')" onblur="setTimeout(function(){hideLocList('i-where-list')},200)" style="margin-bottom:0"/>
+        <div id="i-where-list" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1.5px solid var(--blue);border-radius:0 0 var(--r) var(--r);max-height:220px;overflow-y:auto;z-index:100;box-shadow:var(--shadow)"></div>
+      </div>
+      <p style="font-size:12px;font-weight:600;color:var(--text3);margin:8px 0 5px;text-transform:uppercase;letter-spacing:.04em">Popular cities</p>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px"><span onclick="setLoc('i-where','Remote')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Remote</span><span onclick="setLoc('i-where','New York, NY')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">New York, NY</span><span onclick="setLoc('i-where','Los Angeles, CA')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Los Angeles, CA</span><span onclick="setLoc('i-where','Chicago, IL')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Chicago, IL</span><span onclick="setLoc('i-where','Houston, TX')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Houston, TX</span><span onclick="setLoc('i-where','Boston, MA')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Boston, MA</span><span onclick="setLoc('i-where','Atlanta, GA')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Atlanta, GA</span><span onclick="setLoc('i-where','Dallas, TX')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Dallas, TX</span><span onclick="setLoc('i-where','Seattle, WA')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Seattle, WA</span><span onclick="setLoc('i-where','San Francisco, CA')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">San Francisco, CA</span><span onclick="setLoc('i-where','Miami, FL')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Miami, FL</span><span onclick="setLoc('i-where','Washington, DC')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Washington, DC</span><span onclick="setLoc('i-where','Austin, TX')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Austin, TX</span><span onclick="setLoc('i-where','Denver, CO')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Denver, CO</span><span onclick="setLoc('i-where','Philadelphia, PA')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Philadelphia, PA</span></div>
+      <p style="font-size:12px;font-weight:600;color:var(--text3);margin:8px 0 5px;text-transform:uppercase;letter-spacing:.04em">All 50 states</p>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px"><span onclick="setLoc('i-where','Alabama')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Alabama</span><span onclick="setLoc('i-where','Alaska')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Alaska</span><span onclick="setLoc('i-where','Arizona')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Arizona</span><span onclick="setLoc('i-where','Arkansas')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Arkansas</span><span onclick="setLoc('i-where','California')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">California</span><span onclick="setLoc('i-where','Colorado')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Colorado</span><span onclick="setLoc('i-where','Connecticut')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Connecticut</span><span onclick="setLoc('i-where','Delaware')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Delaware</span><span onclick="setLoc('i-where','Florida')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Florida</span><span onclick="setLoc('i-where','Georgia')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Georgia</span><span onclick="setLoc('i-where','Hawaii')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Hawaii</span><span onclick="setLoc('i-where','Idaho')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Idaho</span><span onclick="setLoc('i-where','Illinois')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Illinois</span><span onclick="setLoc('i-where','Indiana')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Indiana</span><span onclick="setLoc('i-where','Iowa')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Iowa</span><span onclick="setLoc('i-where','Kansas')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Kansas</span><span onclick="setLoc('i-where','Kentucky')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Kentucky</span><span onclick="setLoc('i-where','Louisiana')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Louisiana</span><span onclick="setLoc('i-where','Maine')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Maine</span><span onclick="setLoc('i-where','Maryland')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Maryland</span><span onclick="setLoc('i-where','Massachusetts')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Massachusetts</span><span onclick="setLoc('i-where','Michigan')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Michigan</span><span onclick="setLoc('i-where','Minnesota')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Minnesota</span><span onclick="setLoc('i-where','Mississippi')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Mississippi</span><span onclick="setLoc('i-where','Missouri')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Missouri</span><span onclick="setLoc('i-where','Montana')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Montana</span><span onclick="setLoc('i-where','Nebraska')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Nebraska</span><span onclick="setLoc('i-where','Nevada')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Nevada</span><span onclick="setLoc('i-where','New Hampshire')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">New Hampshire</span><span onclick="setLoc('i-where','New Jersey')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">New Jersey</span><span onclick="setLoc('i-where','New Mexico')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">New Mexico</span><span onclick="setLoc('i-where','New York')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">New York</span><span onclick="setLoc('i-where','North Carolina')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">North Carolina</span><span onclick="setLoc('i-where','North Dakota')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">North Dakota</span><span onclick="setLoc('i-where','Ohio')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Ohio</span><span onclick="setLoc('i-where','Oklahoma')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Oklahoma</span><span onclick="setLoc('i-where','Oregon')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Oregon</span><span onclick="setLoc('i-where','Pennsylvania')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Pennsylvania</span><span onclick="setLoc('i-where','Rhode Island')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Rhode Island</span><span onclick="setLoc('i-where','South Carolina')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">South Carolina</span><span onclick="setLoc('i-where','South Dakota')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">South Dakota</span><span onclick="setLoc('i-where','Tennessee')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Tennessee</span><span onclick="setLoc('i-where','Texas')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Texas</span><span onclick="setLoc('i-where','Utah')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Utah</span><span onclick="setLoc('i-where','Vermont')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Vermont</span><span onclick="setLoc('i-where','Virginia')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Virginia</span><span onclick="setLoc('i-where','Washington')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Washington</span><span onclick="setLoc('i-where','West Virginia')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">West Virginia</span><span onclick="setLoc('i-where','Wisconsin')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Wisconsin</span><span onclick="setLoc('i-where','Wyoming')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Wyoming</span><span onclick="setLoc('i-where','Washington DC')" style="font-size:11px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);white-space:nowrap" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">Washington DC</span></div>
+      <button class="btn bb" id="ifb" onclick="findInterns()"><i class="ti ti-search"></i>Search internships</button>
       <div id="interns-res"></div>
     </div>
 
     <div id="tab-rv" class="pg">
       <p class="pg-t">Resume reviewer</p>
       <p class="pg-s">Instant AI feedback — strengths, gaps, and one quick win</p>
-      <div class="upload-zone" id="rvz" onclick="document.getElementById('rv-file').click()">
-        <input type="file" id="rv-file" accept=".pdf,.txt" onchange="parsePDF(this,'rv-inp','rvz')"/>
-        <i class="ti ti-upload"></i><p>Upload resume PDF</p><small>Or paste text below</small>
+            <div style="background:linear-gradient(135deg,#1A0E00 0%,#2D1A00 100%);border:1px solid var(--gold-dk);border-radius:var(--r-lg);padding:1.5rem;margin-bottom:1.5rem;position:relative;overflow:hidden">
+        <div style="position:absolute;top:-20px;right:-20px;width:120px;height:120px;background:radial-gradient(circle,rgba(250,199,117,.12) 0%,transparent 70%);pointer-events:none"></div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <div style="width:44px;height:44px;background:var(--gold);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(250,199,117,.3)">
+            <i class="ti ti-file-search" style="font-size:22px;color:#3A1F00"></i>
+          </div>
+          <div>
+            <p style="font-size:16px;font-weight:700;color:var(--gold)">Premium Feature</p>
+            <p style="font-size:12px;color:#C4974A;margin-top:2px">Resume Reviewer · 1 free trial included</p>
+          </div>
+        </div>
+        <p style="font-size:13px;color:#C4974A;line-height:1.7;margin-bottom:1.25rem">Get instant expert AI feedback on your resume — top strengths, specific improvements, and one quick win you can act on today. Used by students who want to know exactly what recruiters think before they apply.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button onclick="openMo('4.99','week')" style="padding:11px 22px;background:var(--gold);border:none;border-radius:var(--r);font-size:14px;font-weight:700;color:#3A1F00;cursor:pointer;font-family:Inter,sans-serif;box-shadow:0 2px 8px rgba(250,199,117,.25)">$4.99 / week</button>
+          <button onclick="openMo('14.99','month')" style="padding:11px 22px;background:transparent;border:1.5px solid #C4974A;border-radius:var(--r);font-size:14px;font-weight:600;color:var(--gold);cursor:pointer;font-family:Inter,sans-serif">$14.99 / month — best value</button>
+        </div>
       </div>
-      <label class="lbl">Resume text</label>
-      <textarea id="rv-inp" placeholder="Paste your resume here..."></textarea>
+      <div class="upload-zone" id="rvz" onclick="document.getElementById('rv-file').click()">
+        <input type="file" id="rv-file" accept=".pdf,.txt,.docx,.doc,.rtf" onchange="parsePDF(this,'rv-inp','rvz')"/>
+        <i class="ti ti-upload"></i><p>Upload resume PDF</p><small>PDF, TXT, DOCX, DOC supported</small>
+      </div>
+      <label class="lbl" id="rv-inp-lbl" style="display:none">Resume text</label>
+      <textarea id="rv-inp" placeholder="Or type your resume text here..." style="display:none"></textarea>
       <label class="lbl">Target role</label>
       <select id="rv-rl"><option>Management trainee</option><option>Financial analyst</option><option>Accounting associate</option><option>Software engineer</option><option>Marketing coordinator</option><option>Data analyst</option><option>Operations associate</option><option>Nurse / healthcare</option><option>Teacher / education</option><option>Sales representative</option><option>General entry-level</option></select>
       <button class="btn bb" id="rvb" onclick="reviewResume()"><i class="ti ti-file-search"></i>Review my resume</button>
@@ -560,7 +631,24 @@ select option{background:var(--inp);color:var(--inp-c)}
 
     <div id="tab-ip" class="pg">
       <p class="pg-t">Interview prep</p>
-      <p class="pg-s">AI-generated practice questions tailored to your role. Run ATS Tailor first for questions based on your actual resume gaps.</p>
+      <p class="pg-s">AI-generated practice questions tailored to your role and interview type.</p>
+            <div style="background:linear-gradient(135deg,#1A0E00 0%,#2D1A00 100%);border:1px solid var(--gold-dk);border-radius:var(--r-lg);padding:1.5rem;margin-bottom:1.5rem;position:relative;overflow:hidden">
+        <div style="position:absolute;top:-20px;right:-20px;width:120px;height:120px;background:radial-gradient(circle,rgba(250,199,117,.12) 0%,transparent 70%);pointer-events:none"></div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <div style="width:44px;height:44px;background:var(--gold);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(250,199,117,.3)">
+            <i class="ti ti-microphone" style="font-size:22px;color:#3A1F00"></i>
+          </div>
+          <div>
+            <p style="font-size:16px;font-weight:700;color:var(--gold)">Premium Feature</p>
+            <p style="font-size:12px;color:#C4974A;margin-top:2px">Interview Prep · 1 free trial included</p>
+          </div>
+        </div>
+        <p style="font-size:13px;color:#C4974A;line-height:1.7;margin-bottom:1.25rem">Get AI-generated practice questions tailored to your exact role — behavioral, technical, and situational. Questions are built around your resume gaps so you walk in prepared for what recruiters will actually ask.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button onclick="openMo('4.99','week')" style="padding:11px 22px;background:var(--gold);border:none;border-radius:var(--r);font-size:14px;font-weight:700;color:#3A1F00;cursor:pointer;font-family:Inter,sans-serif;box-shadow:0 2px 8px rgba(250,199,117,.25)">$4.99 / week</button>
+          <button onclick="openMo('14.99','month')" style="padding:11px 22px;background:transparent;border:1.5px solid #C4974A;border-radius:var(--r);font-size:14px;font-weight:600;color:var(--gold);cursor:pointer;font-family:Inter,sans-serif">$14.99 / month — best value</button>
+        </div>
+      </div>
       <div id="ip-ats-banner" style="display:none;background:var(--blue-lt);border:1px solid #B5D4F4;border-radius:var(--r);padding:1rem;margin-bottom:14px;font-size:13px;color:var(--blue-dk);display:flex;align-items:flex-start;gap:9px">
         <i class="ti ti-target" style="font-size:16px;flex-shrink:0;margin-top:1px"></i>
         <div><strong>Tailored from your ATS scan:</strong> <span id="ip-ats-context"></span></div>
@@ -576,10 +664,27 @@ select option{background:var(--inp);color:var(--inp-c)}
     <div id="tab-cl" class="pg">
       <p class="pg-t">Cover letter builder</p>
       <p class="pg-s">Professional tailored cover letters in seconds</p>
+            <div style="background:linear-gradient(135deg,#1A0E00 0%,#2D1A00 100%);border:1px solid var(--gold-dk);border-radius:var(--r-lg);padding:1.5rem;margin-bottom:1.5rem;position:relative;overflow:hidden">
+        <div style="position:absolute;top:-20px;right:-20px;width:120px;height:120px;background:radial-gradient(circle,rgba(250,199,117,.12) 0%,transparent 70%);pointer-events:none"></div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <div style="width:44px;height:44px;background:var(--gold);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(250,199,117,.3)">
+            <i class="ti ti-mail" style="font-size:22px;color:#3A1F00"></i>
+          </div>
+          <div>
+            <p style="font-size:16px;font-weight:700;color:var(--gold)">Premium Feature</p>
+            <p style="font-size:12px;color:#C4974A;margin-top:2px">Cover Letter Builder · 1 free trial included</p>
+          </div>
+        </div>
+        <p style="font-size:13px;color:#C4974A;line-height:1.7;margin-bottom:1.25rem">Generate professional tailored cover letters in seconds — customized to your background and the exact role you are applying for. Most candidates skip cover letters. Yours will stand out.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button onclick="openMo('4.99','week')" style="padding:11px 22px;background:var(--gold);border:none;border-radius:var(--r);font-size:14px;font-weight:700;color:#3A1F00;cursor:pointer;font-family:Inter,sans-serif;box-shadow:0 2px 8px rgba(250,199,117,.25)">$4.99 / week</button>
+          <button onclick="openMo('14.99','month')" style="padding:11px 22px;background:transparent;border:1.5px solid #C4974A;border-radius:var(--r);font-size:14px;font-weight:600;color:var(--gold);cursor:pointer;font-family:Inter,sans-serif">$14.99 / month — best value</button>
+        </div>
+      </div>
       <label class="lbl">Your background</label>
-      <textarea id="cl-bg" style="min-height:120px" placeholder="e.g. Recent Business Administration grad, finance concentration, 5 years work experience..."></textarea>
+      <textarea id="cl-bg" style="min-height:120px" placeholder="e.g. Recent Finance grad with internship experience in financial analysis, strong Excel and data skills, known for attention to detail..."></textarea>
       <label class="lbl">Role and company</label>
-      <textarea id="cl-rl" style="min-height:90px" placeholder="e.g. Management Trainee at Enterprise Holdings, Hartford CT..."></textarea>
+      <textarea id="cl-rl" style="min-height:90px" placeholder="e.g. Marketing Coordinator at a consumer goods company, New York NY..."></textarea>
       <button class="btn bb" id="clb" onclick="genCover()"><i class="ti ti-mail"></i>Generate cover letter</button>
       <div class="res" id="cl-res"></div>
     </div>
@@ -637,18 +742,179 @@ select option{background:var(--inp);color:var(--inp-c)}
 
     <div id="tab-pf" class="pg">
       <p class="pg-t">My profile</p>
-      <p class="pg-s">Your profile powers all AI recommendations</p>
-      <label class="lbl">Full name</label><input class="inp-f" type="text" id="pf-nm" placeholder="Your full name"/>
-      <label class="lbl">Major</label>
-      <select id="pf-mj"><option>Business Administration</option><option>Finance</option><option>Accounting</option><option>Computer Science</option><option>Marketing</option><option>Data Science</option><option>Engineering</option><option>Nursing</option><option>Psychology</option><option>Communications</option><option>Education</option><option>Criminal Justice</option></select>
-      <label class="lbl">Location</label><input class="inp-f" type="text" id="pf-lc" placeholder="Hartford, CT"/>
+      <p class="pg-s">The more you fill in, the better your AI recommendations get — job matches, interview questions, and career advice are all based on your profile.</p>
+
+      <!-- Progress indicator -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:12px">
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+            <span style="font-size:13px;font-weight:600;color:var(--text)">Profile strength</span>
+            <span style="font-size:13px;font-weight:700;color:var(--blue)" id="pf-score-label">--</span>
+          </div>
+          <div class="pb"><div class="pf" id="pf-strength-bar" style="width:0%"></div></div>
+        </div>
+      </div>
+
+      <!-- Basic info -->
+      <p style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Basic info</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+        <div>
+          <label class="lbl">Full name</label>
+          <input class="inp-f" type="text" id="pf-nm" placeholder="Your full name" oninput="calcPfStrength()"/>
+        </div>
+        <div>
+          <label class="lbl">Email</label>
+          <input class="inp-f" type="email" id="pf-em" placeholder="you@email.com" oninput="calcPfStrength()"/>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+        <div>
+          <label class="lbl">Major</label>
+          <select id="pf-mj" onchange="calcPfStrength()">
+            <optgroup label="Business">
+              <option>Business Administration</option><option>Finance</option><option>Accounting</option>
+              <option>Marketing</option><option>Management</option><option>Economics</option>
+              <option>Entrepreneurship</option><option>Supply Chain Management</option>
+              <option>Human Resources</option><option>International Business</option>
+            </optgroup>
+            <optgroup label="STEM">
+              <option>Computer Science</option><option>Software Engineering</option>
+              <option>Data Science</option><option>Information Technology</option>
+              <option>Cybersecurity</option><option>Electrical Engineering</option>
+              <option>Mechanical Engineering</option><option>Civil Engineering</option>
+              <option>Chemical Engineering</option><option>Biomedical Engineering</option>
+              <option>Mathematics</option><option>Statistics</option><option>Biology</option><option>Chemistry</option>
+            </optgroup>
+            <optgroup label="Health">
+              <option>Nursing</option><option>Pre-Med</option><option>Public Health</option>
+              <option>Health Administration</option><option>Exercise Science</option><option>Nutrition</option>
+            </optgroup>
+            <optgroup label="Social Sciences">
+              <option>Psychology</option><option>Sociology</option><option>Political Science</option>
+              <option>Criminal Justice</option><option>Social Work</option>
+              <option>Communications</option><option>Journalism</option>
+            </optgroup>
+            <optgroup label="Arts &amp; Education">
+              <option>English</option><option>History</option><option>Fine Arts</option>
+              <option>Graphic Design</option><option>Film and Media</option>
+              <option>Education</option><option>Early Childhood Education</option>
+            </optgroup>
+          </select>
+        </div>
+        <div>
+          <label class="lbl">GPA <span style="font-size:11px;color:var(--text3);font-weight:400">(optional)</span></label>
+          <select id="pf-gpa" onchange="calcPfStrength()">
+            <option value="">Select GPA range</option>
+            <option>4.0</option><option>3.9</option><option>3.8</option><option>3.7</option>
+            <option>3.6</option><option>3.5</option><option>3.4</option><option>3.3</option>
+            <option>3.2</option><option>3.1</option><option>3.0</option><option>Below 3.0</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
+        <div>
+          <label class="lbl">University</label>
+          <input class="inp-f" type="text" id="pf-uni" placeholder="Your university name" oninput="calcPfStrength()"/>
+        </div>
+        <div>
+          <label class="lbl">Graduation year</label>
+          <select id="pf-grad" onchange="calcPfStrength()">
+            <option value="">Select year</option>
+            <option>2024</option><option>2025</option><option>2026</option>
+            <option>2027</option><option>2028</option><option>Already graduated</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Career info -->
+      <p style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Career info</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+        <div>
+          <label class="lbl">Target role</label>
+          <input class="inp-f" type="text" id="pf-role" placeholder="e.g. Financial Analyst, Software Engineer" oninput="calcPfStrength()"/>
+        </div>
+        <div>
+          <label class="lbl">Location preference</label>
+          <input class="inp-f" type="text" id="pf-lc" placeholder="e.g. Remote, New York, Open to relocation" oninput="calcPfStrength()"/>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+        <div>
+          <label class="lbl">Work experience</label>
+          <select id="pf-exp" onchange="calcPfStrength()">
+            <option value="">Select level</option>
+            <option>No experience yet</option>
+            <option>Internship(s) only</option>
+            <option>Less than 1 year</option>
+            <option>1-2 years</option>
+            <option>3-5 years</option>
+            <option>5+ years</option>
+          </select>
+        </div>
+        <div>
+          <label class="lbl">Job search status</label>
+          <select id="pf-status" onchange="calcPfStrength()">
+            <option value="">Select status</option>
+            <option>Actively applying</option>
+            <option>Casually browsing</option>
+            <option>Starting soon</option>
+            <option>Just researching</option>
+          </select>
+        </div>
+      </div>
+      <label class="lbl">Key skills <span style="font-size:11px;color:var(--text3);font-weight:400">(helps AI tailor advice)</span></label>
+      <input class="inp-f" type="text" id="pf-skills" placeholder="e.g. Excel, Python, Project Management, Public Speaking" oninput="calcPfStrength()" style="margin-bottom:14px"/>
       <label class="lbl">Career goal</label>
-      <textarea id="pf-gl" style="min-height:110px" placeholder="e.g. Recent Business Administration grad looking for entry-level finance or management trainee roles near Hartford CT..."></textarea>
+      <textarea id="pf-gl" style="min-height:100px" placeholder="e.g. Recent Finance grad looking for entry-level analyst roles. Strong Excel background, want to break into investment banking or corporate finance..." oninput="calcPfStrength()"></textarea>
+
       <button class="btn bb" style="max-width:250px" id="pfb" onclick="saveProfile()"><i class="ti ti-device-floppy"></i>Save &amp; get AI tips</button>
       <div class="res" id="pf-res"></div>
     </div>
 
-  </main>
+  
+    <!-- CAREER MATCHER -->
+    <div id="tab-career" class="pg">
+      <p class="pg-t">Career matcher</p>
+      <p class="pg-s">Upload your resume and AI tells you the top 10 realistic jobs you can get right now — with salary ranges, missing skills, and likelihood scores.</p>
+      <div class="upload-zone" id="cmz" onclick="document.getElementById('cm-file').click()">
+        <input type="file" id="cm-file" accept=".pdf,.txt,.docx,.doc,.rtf" onchange="parsePDF(this,'cm-rv','cmz')"/>
+        <i class="ti ti-upload"></i><p>Upload your resume — PDF, Word, TXT</p><small>PDF, TXT, DOCX, DOC supported</small>
+      </div>
+      <textarea id="cm-rv" placeholder="Or paste your resume text here..." style="display:none;width:100%;min-height:140px;padding:13px 15px;font-size:14px;border:1.5px solid var(--border);border-radius:var(--r);background:var(--inp);color:var(--inp-c);font-family:Inter,sans-serif;resize:vertical;margin-bottom:12px"></textarea>
+      <button class="btn bb" id="cmb" onclick="runCareerMatch()"><i class="ti ti-bulb"></i>Find my best job matches</button>
+      <div id="cm-res" style="margin-top:14px"></div>
+    </div>
+
+    <!-- INTERVIEW SIMULATOR -->
+    <div id="tab-sim" class="pg">
+      <p class="pg-t">Interview simulator</p>
+      <p class="pg-s">Practice a full mock interview with AI feedback on every answer — behavioral, technical, and role-specific.</p>
+      <div style="background:linear-gradient(135deg,#1A0E00 0%,#2D1A00 100%);border:1px solid var(--gold-dk);border-radius:var(--r-lg);padding:1.5rem;margin-bottom:1.5rem;position:relative;overflow:hidden">
+        <div style="position:absolute;top:-20px;right:-20px;width:120px;height:120px;background:radial-gradient(circle,rgba(250,199,117,.12) 0%,transparent 70%);pointer-events:none"></div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <div style="width:44px;height:44px;background:var(--gold);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <i class="ti ti-player-play" style="font-size:22px;color:#3A1F00"></i>
+          </div>
+          <div>
+            <p style="font-size:16px;font-weight:700;color:var(--gold)">Premium Feature</p>
+            <p style="font-size:12px;color:#C4974A;margin-top:2px">Interview Simulator · 1 free trial included</p>
+          </div>
+        </div>
+        <p style="font-size:13px;color:#C4974A;line-height:1.7;margin-bottom:1.25rem">Practice a full mock interview — answer real questions, get AI feedback on every response. Behavioral, technical, and role-specific. Students who practice interviews get offers at 2x the rate.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button onclick="openMo('4.99','week')" style="padding:11px 22px;background:var(--gold);border:none;border-radius:var(--r);font-size:14px;font-weight:700;color:#3A1F00;cursor:pointer;font-family:Inter,sans-serif">$4.99 / week</button>
+          <button onclick="openMo('14.99','month')" style="padding:11px 22px;background:transparent;border:1.5px solid #C4974A;border-radius:var(--r);font-size:14px;font-weight:600;color:var(--gold);cursor:pointer;font-family:Inter,sans-serif">$14.99 / month — best value</button>
+        </div>
+      </div>
+      <label class="lbl">Target role</label>
+      <select id="sim-rl"><option>Financial Analyst</option><option>Software Engineer</option><option>Marketing Coordinator</option><option>Management Trainee</option><option>Accounting Associate</option><option>Data Analyst</option><option>Operations Coordinator</option><option>Nursing / Healthcare</option><option>General entry-level</option></select>
+      <label class="lbl">Interview type</label>
+      <select id="sim-tp"><option>Behavioral (STAR format)</option><option>Technical / skills-based</option><option>Full mock interview</option></select>
+      <button class="btn bb" id="simb" onclick="runSim()"><i class="ti ti-player-play"></i>Start mock interview</button>
+      <div id="sim-res" style="margin-top:14px"></div>
+    </div>
+
+</main>
   <aside class="rc">
     <div class="rp">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
@@ -656,8 +922,8 @@ select option{background:var(--inp);color:var(--inp-c)}
         <div><p style="font-size:14px;font-weight:700" id="rp-nm">Guest</p><p style="font-size:12px;color:var(--text3)" id="rp-mj">No major set</p></div>
       </div>
       <p style="font-size:13px;color:var(--text3);margin-bottom:6px">Profile strength</p>
-      <div class="pb"><div class="pf" id="rp-pb" style="width:20%"></div></div>
-      <p style="font-size:12px;color:var(--text3)" id="rp-pl">20% — complete your profile</p>
+      <div class="pb"><div class="pf" id="rp-pb" style="width:0%"></div></div>
+      <p style="font-size:12px;color:var(--text3)" id="rp-pl">0% — sign in to see your score</p>
     </div>
     <div class="rp"><h4>Recent ATS scans</h4><div id="rp-hist"><p style="font-size:13px;color:var(--text2)">No scans yet</p></div></div>
     <div class="rp">
@@ -677,7 +943,7 @@ select option{background:var(--inp);color:var(--inp-c)}
       <h4>Quick actions</h4>
       <button class="btn" style="padding:10px;font-size:13px;margin-bottom:8px" onclick="goTab('ats',null)"><i class="ti ti-target" style="color:var(--gold-dk)"></i>Run ATS Tailor ★</button>
       <button class="btn" style="padding:10px;font-size:13px;margin-bottom:8px" onclick="goTab('rv',null)"><i class="ti ti-file-text"></i>Review resume</button>
-      <button class="btn bg-b" style="padding:10px;font-size:13px" onclick="openMo('9.99','month')"><i class="ti ti-star"></i>Get premium</button>
+      <button class="btn bg-b" style="padding:10px;font-size:13px" onclick="openMo('14.99','month')"><i class="ti ti-star"></i>Get premium</button>
     </div>
   </aside>
 </div>
@@ -690,14 +956,14 @@ select option{background:var(--inp);color:var(--inp-c)}
     <p class="ms">Unlimited ATS scans, full rewrites, downloads, and all AI tools.</p>
     <div class="ptabs">
       <div class="ptab" id="pt-wk" onclick="selPlan('4.99','week')"><p>$4.99</p><p>per week</p></div>
-      <div class="ptab active" id="pt-mo" onclick="selPlan('9.99','month')"><p>$9.99</p><p>per month</p></div>
+      <div class="ptab active" id="pt-mo" onclick="selPlan('14.99','month')"><p>$14.99</p><p>per month</p></div>
     </div>
-    <div id="mo-txt" style="font-size:14px;color:var(--text2);margin-bottom:14px;line-height:1.6">Unlimited ATS scans, rewrites, downloads — $9.99/month.</div>
+    <div id="mo-txt" style="font-size:14px;color:var(--text2);margin-bottom:14px;line-height:1.6">Unlimited ATS scans, rewrites, downloads — $14.99/month.</div>
     <label class="fl">Email</label><input class="fi" type="email" placeholder="you@email.com"/>
     <label class="fl">Card number</label><input class="fi" type="text" placeholder="1234 5678 9012 3456"/>
     <div class="mrow" style="margin-bottom:14px"><input class="fi" type="text" placeholder="MM / YY" style="margin-bottom:0"/><input class="fi" type="text" placeholder="CVC" style="margin-bottom:0"/></div>
     <p style="font-size:12px;color:var(--text3);text-align:center"><i class="ti ti-lock" style="font-size:12px"></i> Secured by Stripe · Cancel anytime</p>
-    <div class="mbtns"><button class="mc" onclick="closeMo()">Cancel</button><button class="btn bg-b" id="mo-btn" style="flex:2;margin:0;padding:13px" onclick="closeMo();toast('Welcome to Premium! 🎉')">Subscribe — $9.99/mo</button></div>
+    <div class="mbtns"><button class="mc" onclick="closeMo()">Cancel</button><button class="btn bg-b" id="mo-btn" style="flex:2;margin:0;padding:13px" onclick="closeMo();toast('Welcome to Premium! 🎉')">Subscribe — $14.99/mo</button></div>
   </div>
 </div>
 
@@ -757,27 +1023,15 @@ function closeMo(){ document.getElementById('pmo').classList.remove('open'); }
 function selPlan(p,pd){
   document.getElementById('pt-wk').classList.toggle('active', pd==='week');
   document.getElementById('pt-mo').classList.toggle('active', pd==='month');
-  document.getElementById('mo-txt').textContent = pd==='week' ? 'Unlimited ATS scans for 7 days — $4.99.' : 'Unlimited ATS scans, rewrites, downloads — $9.99/month.';
+  document.getElementById('mo-txt').textContent = pd==='week' ? 'Unlimited ATS scans for 7 days — $4.99.' : 'Unlimited ATS scans, rewrites, downloads — $14.99/month.';
   document.getElementById('mo-btn').textContent = 'Subscribe — $'+p+'/'+pd;
 }
 function toast(m){ var t=document.getElementById('tst'); t.textContent=m; t.classList.add('show'); setTimeout(function(){ t.classList.remove('show'); }, 3500); }
 
 // ─── AUTH ───
 function gSignIn(){
-  // Redirect to signup form — full Google OAuth coming soon with Supabase
+  // Silently redirect to signup form
   showPage('page-signup');
-  setTimeout(function(){
-    var existing = document.getElementById('google-note');
-    if(!existing){
-      var note = document.createElement('div');
-      note.id = 'google-note';
-      note.style.cssText = 'background:#E6F1FF;border:1px solid #B5D4F4;border-radius:10px;padding:.875rem 1rem;font-size:13px;color:#0C447C;margin-bottom:1rem;line-height:1.6';
-      note.innerHTML = '<strong>Sign up with your details below.</strong> Full Google sign-in coming soon.';
-      var authBox = document.querySelector('#page-signup .auth-box');
-      var divdr = authBox ? authBox.querySelector('.divdr') : null;
-      if(authBox && divdr) authBox.insertBefore(note, divdr);
-    }
-  }, 50);
 }
 function signIn(){
   var e=document.getElementById('si-em').value.trim();
@@ -820,7 +1074,7 @@ function launch(){
   document.getElementById('rp-av').textContent=U.initials;
   document.getElementById('rp-nm').textContent=U.name;
   document.getElementById('rp-mj').textContent=U.major;
-  document.getElementById('rp-pb').style.width='65%';
+  documupdateProfileStrength();
   document.getElementById('rp-pl').textContent='65% — add resume to boost';
   var mj2j={'Business Administration':'business analyst entry level','Finance':'financial analyst entry level','Accounting':'accountant entry level','Marketing':'marketing coordinator entry level','Computer Science':'software engineer entry level','Data Science':'data analyst entry level'};
   var jw=document.getElementById('j-what'); if(jw&&mj2j[U.major]) jw.value=mj2j[U.major];
@@ -927,7 +1181,7 @@ function heroFileUpload(input){
     txt.textContent='Reading PDF...';
     var fr=new FileReader();
     fr.onload=function(e){
-      if(typeof pdfjsLib==='undefined'){ txt.textContent='PDF.js not loaded — paste text below'; return; }
+      if(typeof pdfjsLib==='undefined'){ txt.textContent='PDF.js not loaded — try a different browser'; return; }
       pdfjsLib.GlobalWorkerOptions.workerSrc='https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
       pdfjsLib.getDocument({data:new Uint8Array(e.target.result)}).promise.then(function(pdf){
         var texts=[],loaded=0,total=pdf.numPages;
@@ -941,12 +1195,12 @@ function heroFileUpload(input){
                   document.getElementById('h-rv').value=result;
                   zone.style.borderColor='var(--green)'; zone.style.background='#EAF3DE';
                   txt.textContent=file.name+' loaded ✓ ('+total+' pages)'; txt.style.color='var(--green)';
-                } else { txt.textContent='Scanned PDF detected — paste text below instead'; }
+                } else { txt.textContent='Scanned PDF — try saving as a text-based PDF'; }
               }
             });
           }); })(p);
         }
-      }).catch(function(){ txt.textContent='Could not read PDF — paste text below'; });
+      }).catch(function(){ txt.textContent='Could not read PDF — try a different file'; });
     };
     fr.readAsArrayBuffer(file);
   } else {
@@ -984,6 +1238,46 @@ function jcard(j){
     '<a href="'+(j.redirect_url||'#')+'" target="_blank" class="apply-btn"><i class="ti ti-external-link" style="font-size:13px"></i>Apply now</a></div>';
 }
 
+function numberedJcard(j, num){
+  var sal='Salary not listed';
+  var company=j.company&&j.company.display_name?j.company.display_name:(j.company||'Company');
+  var location=j.location&&j.location.display_name?j.location.display_name:(j.location||'US');
+  if(j.salary_min&&j.salary_max) sal='$'+Math.round(j.salary_min/1000)+'k – $'+Math.round(j.salary_max/1000)+'k';
+  else if(j.salary_min) sal='From $'+Math.round(j.salary_min/1000)+'k';
+  var desc=j.description?j.description.substring(0,160):'';
+  return '<div class="jc">'+
+    '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">'+
+      '<span style="font-size:11px;font-weight:700;color:var(--text3);background:var(--surface2);padding:2px 8px;border-radius:20px;border:1px solid var(--border)">#'+num+'</span>'+
+      '<div class="co">'+company+'</div>'+
+    '</div>'+
+    '<h4>'+j.title+'</h4>'+
+    '<p>'+location+' · '+sal+'</p>'+
+    (desc?'<div class="jc-desc">'+desc+'</div>':'')+
+    '<div class="tgs"><span class="tg live">Live listing</span>'+(j.contract_time?'<span class="tg">'+j.contract_time+'</span>':'')+'</div>'+
+    '<a href="'+(j.redirect_url||'#')+'" target="_blank" class="apply-btn"><i class="ti ti-external-link" style="font-size:13px"></i>Apply now</a>'+
+  '</div>';
+}
+
+function numberedJcard(j, num){
+  var sal='Salary not listed';
+  var company=j.company&&j.company.display_name?j.company.display_name:(j.company||'Company');
+  var location=j.location&&j.location.display_name?j.location.display_name:(j.location||'US');
+  if(j.salary_min&&j.salary_max) sal='$'+Math.round(j.salary_min/1000)+'k – $'+Math.round(j.salary_max/1000)+'k';
+  else if(j.salary_min) sal='From $'+Math.round(j.salary_min/1000)+'k';
+  var desc=j.description?j.description.substring(0,160):'';
+  return '<div class="jc">'+
+    '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">'+
+      '<span style="font-size:11px;font-weight:700;color:var(--text3);background:var(--surface2);padding:2px 8px;border-radius:20px;border:1px solid var(--border)">#'+num+'</span>'+
+      '<div class="co">'+company+'</div>'+
+    '</div>'+
+    '<h4>'+j.title+'</h4>'+
+    '<p>'+location+' · '+sal+'</p>'+
+    (desc?'<div class="jc-desc">'+desc+'</div>':'')+
+    '<div class="tgs"><span class="tg live">✓ Real listing</span>'+(j.contract_time?'<span class="tg">'+j.contract_time+'</span>':'')+'</div>'+
+    '<a href="'+(j.redirect_url||'#')+'" target="_blank" class="apply-btn"><i class="ti ti-external-link" style="font-size:13px"></i>Apply now</a>'+
+  '</div>';
+}
+
 // ─── PDF PARSING ───
 function parsePDF(input, targetId, zoneId){
   if(!input.files||!input.files[0]) return;
@@ -992,35 +1286,111 @@ function parsePDF(input, targetId, zoneId){
   var target=document.getElementById(targetId);
   zone.querySelector('p').textContent='Reading '+file.name+'...';
 
+  // Hide the textarea — user doesn't need to see the raw text
+  if(target){
+    target.style.display='none';
+    target.setAttribute('data-has-content','false');
+  }
+
   if(file.name.toLowerCase().endsWith('.txt')){
     var r=new FileReader();
-    r.onload=function(e){ target.value=e.target.result; zone.classList.add('ok'); zone.querySelector('p').textContent=file.name+' loaded ✓'; zone.querySelector('small').textContent='Click to change'; };
+    r.onload=function(e){
+      target.value=e.target.result;
+      target.setAttribute('data-has-content','true');
+      zone.classList.add('ok');
+      zone.querySelector('p').textContent=file.name+' ready ✓';
+      zone.querySelector('small').textContent='Click to change file';
+      showResumeLoaded(zoneId, file.name, 'Text file');
+    };
     r.readAsText(file); return;
   }
+
   if(file.name.toLowerCase().endsWith('.pdf')){
+    if(typeof pdfjsLib==='undefined'){ zone.querySelector('p').textContent='PDF.js not loaded — try a different browser'; target.style.display=''; return; }
+    pdfjsLib.GlobalWorkerOptions.workerSrc='https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
     var fr=new FileReader();
     fr.onload=function(e){
-      if(typeof pdfjsLib==='undefined'){ zone.querySelector('p').textContent='PDF.js not loaded — paste text below'; return; }
-      pdfjsLib.GlobalWorkerOptions.workerSrc='https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
       pdfjsLib.getDocument({data:new Uint8Array(e.target.result)}).promise.then(function(pdf){
-        var texts=[], loaded=0, total=pdf.numPages;
+        var texts=[],loaded=0,total=pdf.numPages;
         for(var p=1;p<=total;p++){
           (function(pn){ pdf.getPage(pn).then(function(page){
             page.getTextContent().then(function(tc){
-              texts[pn-1]=tc.items.map(function(item){return item.str}).join(' ');
+              texts[pn-1]=tc.items.map(function(item){return item.str;}).join(' ');
               if(++loaded===total){
-                var txt=texts.join('\n\n').trim();
-                if(txt.length>30){ target.value=txt; zone.classList.add('ok'); zone.querySelector('p').textContent=file.name+' loaded ✓'; zone.querySelector('small').textContent=total+' page(s) parsed'; }
-                else{ zone.querySelector('p').textContent='Scanned PDF — paste text below'; }
+                var result=texts.join(' ').trim();
+                if(result.length>30){
+                  target.value=result;
+                  target.setAttribute('data-has-content','true');
+                  zone.classList.add('ok');
+                  zone.querySelector('p').textContent=file.name+' ready ✓';
+                  zone.querySelector('small').textContent=total+' page(s) parsed — click to change';
+                  showResumeLoaded(zoneId, file.name, total+' page PDF');
+                } else {
+                  zone.querySelector('p').textContent='Scanned PDF — try saving as a text-based PDF';
+                  target.style.display='';
+                }
               }
             });
           }); })(p);
         }
-      }).catch(function(){ zone.querySelector('p').textContent='Could not read PDF — paste text below'; });
+      }).catch(function(){ zone.querySelector('p').textContent='Could not read PDF — try a different file'; target.style.display=''; });
     };
     fr.readAsArrayBuffer(file); return;
   }
-  zone.querySelector('p').textContent='Upload PDF or TXT files only';
+
+  // DOC/RTF — server-side parsing via /api/parse-resume if available
+  if(file.name.toLowerCase().endsWith('.doc')||file.name.toLowerCase().endsWith('.rtf')){
+    zone.querySelector('p').textContent='Uploading '+file.name+'...';
+    var fd=new FormData(); fd.append('resume', file);
+    fetch('/api/parse-resume',{method:'POST',body:fd})
+      .then(function(r){return r.json();})
+      .then(function(d){
+        if(d.text&&d.text.length>30){
+          target.value=d.text;
+          target.setAttribute('data-has-content','true');
+          zone.classList.add('ok');
+          showResumeLoaded(zoneId, file.name, 'Document parsed');
+        } else {
+          zone.querySelector('p').textContent='Could not parse — try saving as PDF first';
+        }
+      })
+      .catch(function(){
+        zone.querySelector('p').textContent='Could not parse — try saving as PDF';
+      });
+    return;
+  }
+  zone.querySelector('p').textContent=file.name+' — unsupported format';
+}
+
+function showResumeLoaded(zoneId, filename, detail){
+  // Show a clean confirmation card below the upload zone
+  var existingCard=document.getElementById(zoneId+'-card');
+  if(existingCard) existingCard.remove();
+  var card=document.createElement('div');
+  card.id=zoneId+'-card';
+  card.style.cssText='background:#EAF3DE;border:1px solid #C0DD97;border-radius:var(--r);padding:.875rem 1rem;margin-bottom:14px;display:flex;align-items:center;gap:10px;font-size:13px;color:#3B6D11';
+  card.innerHTML='<i class="ti ti-file-check" style="font-size:22px;flex-shrink:0"></i>'+
+    '<div><p style="font-weight:600;margin-bottom:2px">'+filename+' loaded</p>'+
+    '<p style="font-size:12px;opacity:.8">'+detail+' — ready to analyze</p></div>'+
+    '<button onclick="clearResume(this.parentElement.dataset.zone)" style="margin-left:auto;background:none;border:none;cursor:pointer;color:#3B6D11;font-size:12px;font-weight:600;padding:4px 8px;border-radius:6px;border:1px solid #C0DD97">Remove</button>';
+  var zone=document.getElementById(zoneId);
+  zone.parentNode.insertBefore(card, zone.nextSibling);
+}
+
+function clearResume(zoneId){
+  var card=document.getElementById(zoneId+'-card');
+  if(card) card.remove();
+  var zone=document.getElementById(zoneId);
+  zone.classList.remove('ok');
+  zone.querySelector('p').textContent=zone.id==='atz'?'Upload resume PDF, TXT or DOCX':'Upload resume PDF or TXT';
+  zone.querySelector('small').textContent='PDF, Word, TXT supported';
+  // Find associated textarea and clear it
+  var input=zone.querySelector('input[type=file]');
+  if(input) input.value='';
+  // Find target textarea
+  var targetId=input?input.getAttribute('onchange').match(/'([^']+)'/)?.[1]:'';
+  var target=document.getElementById(targetId);
+  if(target){ target.value=''; target.style.display='none'; target.setAttribute('data-has-content','false'); }
 }
 
 // ─── ATS SCORE ───
@@ -1087,8 +1457,11 @@ async function heroATS(){
 async function runATS(){
   var rv=document.getElementById('at-rv').value.trim();
   var jd=document.getElementById('at-jd').value.trim();
-  if(!rv){ alert('Please paste your resume.'); return; }
+  if(!rv){ alert('Please upload or enter your resume.'); return; }
   if(!jd){ alert('Please paste the job description.'); return; }
+  var scanCount=parseInt(localStorage.getItem('crj_scan_count')||'0');
+  var isPremium=localStorage.getItem('crj_premium')==='true';
+  if(!isPremium && scanCount>=1){ openMo('4.99','week'); toast('You used your free scan — upgrade for unlimited'); return; }
   var btn=document.getElementById('at-btn');
   btn.disabled=true; btn.innerHTML='<span class="sp"></span>Analyzing...';
   document.getElementById('at-box').style.display='block';
@@ -1124,6 +1497,10 @@ async function runATS(){
     // Store for interview prep link
     atsScanResults = {score:sc, text:mainText, jd:jd};
     // Save to persistent history
+    // Increment scan counter
+    var cnt=parseInt(localStorage.getItem('crj_scan_count')||'0');
+    localStorage.setItem('crj_scan_count', cnt+1);
+    updateProfileStrength();
     savedReports.unshift({score:sc, time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}), date:new Date().toLocaleDateString(), text:mainText});
     if(savedReports.length>20) savedReports.pop();
     localStorage.setItem('crj_reports', JSON.stringify(savedReports));
@@ -1163,53 +1540,70 @@ async function loadDash(){
 async function findJobs(){
   var what=document.getElementById('j-what').value.trim();
   var where=document.getElementById('j-where').value.trim();
-  var count=document.getElementById('j-count').value;
+  var count=document.getElementById('j-count').value||10;
   if(!what){ alert('Please enter job keywords.'); return; }
-  var btn=document.getElementById('jfb'), c=document.getElementById('jobs-res');
-  btn.disabled=true; btn.innerHTML='<span class="sp"></span>Searching...'; c.innerHTML='';
+  var btn=document.getElementById('jfb'), el=document.getElementById('jobs-res');
+  btn.disabled=true; btn.innerHTML='<span class="sp"></span>Searching...'; el.innerHTML='';
   try{
-    var params=new URLSearchParams({what:what,count:count||6,type:'job'});
+    var params=new URLSearchParams({what:what,count:count,type:'job'});
     if(where) params.append('where',where);
     var resp=await fetch('/api/jobs?'+params);
     var d=await resp.json();
-    c.innerHTML='<div style="margin-top:12px"><p style="font-size:13px;color:var(--text3);margin-bottom:10px">'+((d.results||[]).length)+' live results</p>'+(d.results||[]).map(jcard).join('')+'</div>';
-  }catch(e){ c.innerHTML='<p style="color:var(--text2);font-size:14px;margin-top:12px">Could not load jobs. Check your internet.</p>'; }
-  btn.disabled=false; btn.innerHTML='<i class="ti ti-search"></i>Search live jobs';
+    var results=d.results||[];
+    if(!results.length){
+      el.innerHTML='<p style="color:var(--text2);font-size:14px;margin-top:12px">No results found. Try different keywords or location.</p>';
+    } else {
+      var html='<div style="margin-top:12px">';
+      html+='<p style="font-size:13px;font-weight:600;color:var(--text2);margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border)">'+results.length+' results for "'+what+'"'+(where?' in '+where:'')+'</p>';
+      html+=results.map(function(j,i){ return numberedJcard(j,i+1); }).join('');
+      html+='</div>';
+      el.innerHTML=html;
+    }
+  }catch(e){ el.innerHTML='<p style="color:var(--text2);font-size:14px;margin-top:12px">Could not load jobs. Try again.</p>'; }
+  btn.disabled=false; btn.innerHTML='<i class="ti ti-search"></i>Search jobs';
 }
 
 // ─── INTERNSHIPS ───
 async function findInterns(){
   var field=document.getElementById('i-what').value.trim()||'intern';
   var where=document.getElementById('i-where').value.trim();
-  var btn=document.getElementById('ifb'), c=document.getElementById('interns-res');
-  btn.disabled=true; btn.innerHTML='<span class="sp"></span>Searching...'; c.innerHTML='';
+  var btn=document.getElementById('ifb'), el=document.getElementById('interns-res');
+  btn.disabled=true; btn.innerHTML='<span class="sp"></span>Searching...'; el.innerHTML='';
   try{
-    // Try "intern" search first, fall back to AI-generated if no results
-    var params=new URLSearchParams({what:field.toLowerCase().includes('intern')?field:field+' internship',count:6,type:'internship'});
+    var what=field.toLowerCase().includes('intern')?field:field+' internship';
+    var params=new URLSearchParams({what:what,count:20,type:'internship'});
     if(where) params.append('where',where);
     var resp=await fetch('/api/jobs?'+params);
-    var d=await resp.json();
-    if(d.results&&d.results.length){
-      c.innerHTML='<div style="margin-top:12px"><p style="font-size:13px;color:var(--text3);margin-bottom:10px">'+d.results.length+' live internship listings</p>'+d.results.map(jcard).join('')+'</div>';
+    var data=await resp.json();
+    var results=data.results||[];
+    if(results.length){
+      var html='<div style="margin-top:12px">';
+      html+='<p style="font-size:13px;font-weight:600;color:var(--text2);margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border)">Showing '+results.length+' internship listings'+(where?' in '+where:'')+'</p>';
+      html+=results.map(function(j,i){ return numberedJcard(j,i+1); }).join('');
+      html+='</div>';
+      el.innerHTML=html;
     } else {
-      // Fallback: use AI to generate realistic internship listings
-      c.innerHTML='<p style="color:var(--text2);font-size:14px;margin-top:10px;display:flex;align-items:center;gap:8px"><span class="sp sp-b"></span>No live listings found — generating AI examples...</p>';
-      var raw=await ai('Generate 5 realistic paid internship listings for a '+field+' student'+(where?' near '+where:' in the US')+'. Use real Fortune 500 company names. Return ONLY valid JSON: [{"title":"...","company":"...","location":"City, State","salary":"$XX/hr","salary_min":null,"salary_max":null,"description":"Brief job desc","redirect_url":"https://www.linkedin.com/jobs","contract_time":"internship"}]',900);
-      var jobs=JSON.parse(raw.replace(/```json|```/g,'').trim());
-      c.innerHTML='<div style="margin-top:12px"><div style="background:var(--gold-lt);border:1px solid #F0D080;border-radius:var(--r);padding:.75rem 1rem;font-size:13px;color:#7A4800;margin-bottom:12px">No live listings right now — showing AI-generated examples. Check back daily for real openings.</div>'+jobs.map(function(j){ return '<div class="jc"><div class="co">'+j.company+'</div><h4>'+j.title+'</h4><p>'+j.location+' · '+j.salary+'</p><div class="jc-desc">'+j.description+'</div><div class="tgs"><span class="tg" style="background:var(--gold-lt);color:#7A4800;border-color:#F0D080">AI example</span><span class="tg m">Internship</span></div><a href="'+j.redirect_url+'" target="_blank" class="apply-btn"><i class="ti ti-external-link" style="font-size:13px"></i>Search on LinkedIn</a></div>'; }).join('')+'</div>';
+      el.innerHTML='<p style="color:var(--text2);font-size:14px;margin-top:10px;display:flex;align-items:center;gap:8px"><span class="sp sp-b"></span>No live listings — generating AI examples...</p>';
+      var raw=await ai('Generate 10 realistic paid internship listings for a '+field+' student'+(where?' near '+where:' in the US')+'. Use real Fortune 500 names. Return ONLY valid JSON: [{"title":"...","company":"...","location":"City, State","salary":"$XX/hr","description":"2 sentence description"}]',1200);
+      var jobs=safeParseJSON(raw);
+      var html2='<div style="margin-top:12px"><div style="background:var(--gold-lt);border:1px solid #F0D080;border-radius:var(--r);padding:.875rem 1rem;font-size:13px;color:#7A4800;margin-bottom:12px">No live listings right now — showing AI-generated examples.</div>';
+      html2+=jobs.map(function(j,i){ var url='https://www.linkedin.com/jobs/search/?keywords='+encodeURIComponent(j.title); return '<div class="jc"><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span style="font-size:11px;font-weight:700;color:var(--text3);background:var(--surface2);padding:2px 8px;border-radius:20px">#'+(i+1)+'</span><div class="co">'+j.company+'</div></div><h4>'+j.title+'</h4><p>'+j.location+' · '+j.salary+'</p><div class="jc-desc">'+j.description+'</div><div class="tgs"><span class="tg" style="background:var(--gold-lt);color:#854F0B">AI example</span></div><a href="'+url+'" target="_blank" class="apply-btn">Search on LinkedIn</a></div>'; }).join('');
+      html2+='</div>';
+      el.innerHTML=html2;
     }
-  }catch(e){
-    c.innerHTML='<p style="color:var(--text2);font-size:14px;margin-top:12px">Could not load internships. Check your internet connection and try again.</p>';
-    console.error(e);
-  }
+  }catch(e){ if(e.message!=='No API key') el.innerHTML='<p style="color:var(--text2);font-size:14px;margin-top:12px">Something went wrong. Try again.</p>'; }
   btn.disabled=false; btn.innerHTML='<i class="ti ti-search"></i>Search internships';
 }
 
 // ─── RESUME REVIEWER ───
 async function reviewResume(){
+  var isPremium=localStorage.getItem('crj_premium')==='true';
+  var rvUsed=localStorage.getItem('crj_rv_used')==='true';
+  if(!isPremium && rvUsed){ openMo('4.99','week'); toast('Upgrade to premium for unlimited resume reviews'); return; }
+  if(!isPremium) localStorage.setItem('crj_rv_used','true');
   var rv=document.getElementById('rv-inp').value.trim();
   var rl=document.getElementById('rv-rl').value;
-  if(!rv){ alert('Please paste your resume.'); return; }
+  if(!rv){ alert('Please upload or enter your resume.'); return; }
   var btn=document.getElementById('rvb'), res=document.getElementById('rv-res');
   btn.disabled=true; btn.innerHTML='<span class="sp"></span>Reviewing...';
   res.style.display='block'; res.textContent='Analyzing...';
@@ -1220,6 +1614,10 @@ async function reviewResume(){
 
 // ─── INTERVIEW PREP ───
 async function getQs(){
+  var isPremium=localStorage.getItem('crj_premium')==='true';
+  var ipUsed=localStorage.getItem('crj_ip_used')==='true';
+  if(!isPremium && ipUsed){ openMo('4.99','week'); toast('Upgrade to premium for unlimited interview prep'); return; }
+  if(!isPremium) localStorage.setItem('crj_ip_used','true');
   var rl=document.getElementById('ip-rl').value;
   var tp=document.getElementById('ip-tp').value;
   var btn=document.getElementById('ipb'), c=document.getElementById('ip-res');
@@ -1235,6 +1633,10 @@ async function getQs(){
 
 // ─── COVER LETTER ───
 async function genCover(){
+  var isPremium=localStorage.getItem('crj_premium')==='true';
+  var clUsed=localStorage.getItem('crj_cl_used')==='true';
+  if(!isPremium && clUsed){ openMo('4.99','week'); toast('Upgrade to premium for unlimited cover letters'); return; }
+  if(!isPremium) localStorage.setItem('crj_cl_used','true');
   var bg=document.getElementById('cl-bg').value.trim();
   var rl=document.getElementById('cl-rl').value.trim();
   if(!bg||!rl){ alert('Please fill in both fields.'); return; }
@@ -1261,13 +1663,17 @@ async function saveProfile(){
   var nm=document.getElementById('pf-nm').value.trim();
   var gl=document.getElementById('pf-gl').value.trim();
   var mj=document.getElementById('pf-mj').value;
+  var role=document.getElementById('pf-role')?document.getElementById('pf-role').value.trim():'';
+  var exp=document.getElementById('pf-exp')?document.getElementById('pf-exp').value:'';
+  var skills=document.getElementById('pf-skills')?document.getElementById('pf-skills').value.trim():'';
+  var uni=document.getElementById('pf-uni')?document.getElementById('pf-uni').value.trim():'';
   if(!nm){ alert('Please enter your name.'); return; }
   var btn=document.getElementById('pfb'), res=document.getElementById('pf-res');
   btn.disabled=true; btn.innerHTML='<span class="sp"></span>Saving...';
   res.style.display='block'; res.textContent='Generating...';
   try{
     res.textContent=await ai('Career advisor. Student: '+nm+', Major: '+mj+', Goal: '+(gl||'find entry-level job')+'. Give: 1.Top 3 job search strategies 2.Two actions next 7 days 3.One tip for '+mj+' grads.',800);
-    if(U){ U.name=nm; U.major=mj; document.getElementById('rp-nm').textContent=nm; document.getElementById('rp-av').textContent=nm.substring(0,2).toUpperCase(); document.getElementById('rp-mj').textContent=mj; document.getElementById('rp-pb').style.width='90%'; document.getElementById('rp-pl').textContent='90% complete!'; document.getElementById('sb-name').textContent=nm; }
+    if(U){ U.name=nm; U.major=mj; document.getElementById('rp-nm').textContent=nm; document.getElementById('rp-av').textContent=nm.substring(0,2).toUpperCase(); document.getElementById('rp-mj').textContent=mj; null; updateProfileStrength(); var _dummy='90% complete!'; document.getElementById('sb-name').textContent=nm; }
     toast('Profile saved! ✓');
   }catch(e){ if(e.message!=='No API key') res.textContent='Error: '+e.message; }
   btn.disabled=false; btn.innerHTML='<i class="ti ti-device-floppy"></i>Save &amp; get AI tips';
@@ -1345,6 +1751,7 @@ function addApp(){
   document.getElementById('new-loc').value='';
   renderTracker();
   updateDashStats();
+  updateProfileStrength();
   toast(company+' added!');
 }
 
@@ -1398,6 +1805,10 @@ function prepFromATS(){
 // Override getQs to use ATS context if available
 var _origGetQs = typeof getQs === 'function' ? getQs : null;
 async function getQs(){
+  var isPremium=localStorage.getItem('crj_premium')==='true';
+  var ipUsed=localStorage.getItem('crj_ip_used')==='true';
+  if(!isPremium && ipUsed){ openMo('4.99','week'); toast('Upgrade to premium for unlimited interview prep'); return; }
+  if(!isPremium) localStorage.setItem('crj_ip_used','true');
   var rl=document.getElementById('ip-rl').value;
   var tp=document.getElementById('ip-tp').value;
   var btn=document.getElementById('ipb'), container=document.getElementById('ip-res');
@@ -1446,7 +1857,7 @@ function heroUpload(input){
     txt.textContent='Reading PDF...';
     var fr=new FileReader();
     fr.onload=function(e){
-      if(typeof pdfjsLib==='undefined'){ txt.textContent='PDF.js not loaded — paste text below'; return; }
+      if(typeof pdfjsLib==='undefined'){ txt.textContent='PDF.js not loaded — try a different browser'; return; }
       pdfjsLib.GlobalWorkerOptions.workerSrc='https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
       pdfjsLib.getDocument({data:new Uint8Array(e.target.result)}).promise.then(function(pdf){
         var texts=[],loaded=0,total=pdf.numPages;
@@ -1457,12 +1868,12 @@ function heroUpload(input){
               if(++loaded===total){
                 var result=texts.join(' ').trim();
                 if(result.length>30){ document.getElementById('h-rv').value=result; zone.style.borderColor='var(--green)'; zone.style.background='#EAF3DE'; txt.textContent=file.name+' ('+total+'p) loaded'; txt.style.color='var(--green)'; }
-                else { txt.textContent='Scanned PDF — paste text below instead'; }
+                else { txt.textContent='Scanned PDF — try saving as a text-based PDF'; }
               }
             });
           }); })(p);
         }
-      }).catch(function(){ txt.textContent='Could not read PDF — paste text below'; });
+      }).catch(function(){ txt.textContent='Could not read PDF — try a different file'; });
     };
     fr.readAsArrayBuffer(file);
   }
@@ -1627,6 +2038,265 @@ function addApp(){
     // Already updated
   }
 })();
+
+
+// ─── CAREER MATCHER ───
+async function runCareerMatch(){
+  var rv = document.getElementById('cm-rv').value.trim();
+  if(!rv){ alert('Please upload or paste your resume.'); return; }
+  var btn = document.getElementById('cmb'), el = document.getElementById('cm-res');
+  btn.disabled=true; btn.innerHTML='<span class="sp"></span>Analyzing your resume...';
+  el.innerHTML='<p style="color:var(--text2);font-size:14px;display:flex;align-items:center;gap:8px"><span class="sp sp-b"></span>Finding your best job matches...</p>';
+  try{
+    var prompt='Career advisor. Analyze this resume and return the top 10 realistic entry-level jobs this person can get based on their actual skills. Be realistic not aspirational. Return ONLY valid JSON: [{"title":"...","likelihood":"High/Medium/Low","salary":"$XX,000-$XX,000","match_pct":85,"missing_skills":["skill1","skill2"],"reason":"1 sentence why they fit"}] RESUME: '+rv;
+    var raw = await ai(prompt, 1400);
+    var jobs = safeParseJSON(raw);
+    if(!jobs.length) throw new Error('No matches returned');
+    el.innerHTML = '<p style="font-size:14px;font-weight:600;color:var(--text2);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">Your top '+jobs.length+' realistic job matches</p>'+
+      jobs.map(function(j,i){
+        var col = j.likelihood==='High'?'#3B6D11':j.likelihood==='Medium'?'#EF9F27':'#A32D2D';
+        var bg = j.likelihood==='High'?'#EAF3DE':j.likelihood==='Medium'?'var(--gold-lt)':'#FCEBEB';
+        var missingHTML = j.missing_skills&&j.missing_skills.length ? '<div style="margin-top:8px"><p style="font-size:11px;color:var(--text3);font-weight:600;margin-bottom:4px">MISSING SKILLS — add these:</p>'+j.missing_skills.map(function(s){ return '<span style="display:inline-block;font-size:11px;background:#2A0D0D;color:#E87070;padding:2px 8px;border-radius:20px;margin:2px;border:1px solid #5A1A1A">+ '+s+'</span>'; }).join('')+'</div>' : '';
+        return '<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.125rem;margin-bottom:10px">'+
+          '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:6px">'+
+            '<div style="display:flex;align-items:center;gap:8px">'+
+              '<span style="font-size:11px;font-weight:700;color:var(--text3);background:var(--surface2);padding:2px 8px;border-radius:20px;border:1px solid var(--border)">#'+(i+1)+'</span>'+
+              '<h4 style="font-size:15px;font-weight:600">'+j.title+'</h4>'+
+            '</div>'+
+            '<div style="display:flex;align-items:center;gap:6px;flex-shrink:0">'+
+              '<span style="font-size:12px;font-weight:700;color:'+col+';background:'+bg+';padding:4px 10px;border-radius:20px">'+j.likelihood+' match</span>'+
+              '<span style="font-size:13px;font-weight:700;color:var(--blue)">'+j.match_pct+'%</span>'+
+            '</div>'+
+          '</div>'+
+          '<p style="font-size:13px;color:var(--text2);margin-bottom:4px">'+j.salary+'</p>'+
+          '<p style="font-size:13px;color:var(--text2);font-style:italic">'+j.reason+'</p>'+
+          missingHTML+
+        '</div>';
+      }).join('');
+  }catch(e){ if(e.message!=='No API key') el.innerHTML='<p style="color:var(--text2);font-size:14px">Something went wrong. Try again.</p>'; }
+  btn.disabled=false; btn.innerHTML='<i class="ti ti-bulb"></i>Find my best job matches';
+}
+
+// ─── INTERVIEW SIMULATOR ───
+var simHistory = [];
+var simQuestion = '';
+
+async function runSim(){
+  var isPremium=localStorage.getItem('crj_premium')==='true';
+  var simUsed=localStorage.getItem('crj_sim_used')==='true';
+  if(!isPremium && simUsed){ openMo('4.99','week'); toast('Upgrade for unlimited interview simulations'); return; }
+  if(!isPremium) localStorage.setItem('crj_sim_used','true');
+  var rl=document.getElementById('sim-rl').value;
+  var tp=document.getElementById('sim-tp').value;
+  var btn=document.getElementById('simb'), el=document.getElementById('sim-res');
+  btn.disabled=true; btn.innerHTML='<span class="sp"></span>Starting...';
+  simHistory=[];
+  try{
+    var raw = await ai('You are conducting a '+tp+' interview for a '+rl+' role for a recent college grad. Ask one strong opening interview question. Just ask it, no preamble.', 300);
+    simQuestion = raw.trim();
+    el.innerHTML = renderSimUI(simQuestion);
+  }catch(e){ if(e.message!=='No API key') el.innerHTML='<p style="color:var(--text2)">Something went wrong. Try again.</p>'; }
+  btn.disabled=false; btn.innerHTML='<i class="ti ti-player-play"></i>Start mock interview';
+}
+
+function renderSimUI(question){
+  return '<div style="background:#080C1A;border:1.5px solid var(--blue);border-radius:var(--r-lg);padding:1.5rem">'+
+    '<div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem">'+
+      '<div style="width:36px;height:36px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-user" style="color:#fff;font-size:16px"></i></div>'+
+      '<div><p style="font-size:12px;color:#8899BB;font-weight:600">INTERVIEWER</p></div>'+
+    '</div>'+
+    '<p style="font-size:15px;color:#C8D8F8;line-height:1.7;margin-bottom:1.25rem">'+question+'</p>'+
+    (simHistory.length ? simHistory.map(function(h){ return '<div style="margin-bottom:1rem;padding:12px;background:#0D1525;border-radius:var(--r)"><p style="font-size:11px;color:#8899BB;font-weight:600;margin-bottom:6px">YOUR PREVIOUS ANSWER</p><p style="font-size:13px;color:#C8D8F8;line-height:1.6">'+h.answer+'</p></div><div style="padding:12px;background:#0A1A0D;border:1px solid #1A5A30;border-radius:var(--r);margin-bottom:1rem"><p style="font-size:11px;color:#5EC87A;font-weight:600;margin-bottom:6px">AI FEEDBACK</p><p style="font-size:13px;color:#BDEFC9;line-height:1.6">'+h.feedback+'</p></div>'; }).join('') : '')+
+    '<textarea id="sim-answer" placeholder="Type your answer here..." style="width:100%;min-height:120px;padding:12px 14px;font-size:14px;border:1.5px solid #2E3A60;border-radius:var(--r);background:#0D1525;color:#C8D8F8;font-family:Inter,sans-serif;resize:vertical;margin-bottom:10px"></textarea>'+
+    '<button onclick="submitSimAnswer()" class="btn bb" style="margin:0"><i class="ti ti-send"></i>Submit answer & get feedback</button>'+
+  '</div>';
+}
+
+async function submitSimAnswer(){
+  var answer = document.getElementById('sim-answer').value.trim();
+  if(!answer){ alert('Please type your answer first.'); return; }
+  var el = document.getElementById('sim-res');
+  el.innerHTML = '<p style="color:var(--text2);font-size:14px;display:flex;align-items:center;gap:8px"><span class="sp sp-b"></span>Evaluating your answer...</p>';
+  try{
+    var feedbackRaw = await ai('Interviewer feedback. Question: "'+simQuestion+'" Answer: "'+answer+'" Give 2-3 sentence feedback: what was good, what to improve, and a stronger example answer. Be direct and encouraging.', 500);
+    simHistory.push({question:simQuestion, answer:answer, feedback:feedbackRaw.trim()});
+    // Ask next question
+    var nextRaw = await ai('Interview follow-up. Previous question: "'+simQuestion+'" Candidate said: "'+answer.substring(0,200)+'" Ask the next logical interview question. Just the question, no commentary.', 200);
+    simQuestion = nextRaw.trim();
+    el.innerHTML = renderSimUI(simQuestion);
+    el.scrollIntoView({behavior:'smooth'});
+  }catch(e){ if(e.message!=='No API key') el.innerHTML='<p style="color:var(--text2)">Something went wrong. Try again.</p>'; }
+}
+
+
+// ─── FIELD PICKER ───
+var ALL_JOB_FIELDS = ['Accounting','Administrative','Advertising','Aerospace Engineering','Analytics','Architecture','Banking','Biology','Brand Management','Business Administration','Business Development','Chemical Engineering','Civil Engineering','Communications','Compliance','Computer Science','Construction Management','Content Marketing','Copywriting','Corporate Finance','Criminal Justice','Customer Success','Cybersecurity','Data Analysis','Data Science','Digital Marketing','Economics','Education','Electrical Engineering','Environmental Science','Event Planning','Finance','Financial Analysis','Financial Planning','Graphic Design','Healthcare Administration','Human Resources','Industrial Engineering','Information Technology','Insurance','Investment Banking','Journalism','Legal','Logistics','Management Consulting','Management Trainee','Manufacturing','Marketing','Mechanical Engineering','Media','Nursing','Operations','Pharmaceutical','Physical Therapy','Political Science','Product Management','Project Management','Psychology','Public Health','Public Relations','Real Estate','Research','Sales','Social Work','Software Engineering','Supply Chain','Tax','Teaching','UX Design','Wealth Management','Web Development'];
+
+var ALL_INTERN_FIELDS = ['Accounting Intern','Advertising Intern','Architecture Intern','Banking Intern','Biology Research Intern','Brand Marketing Intern','Business Development Intern','Civil Engineering Intern','Communications Intern','Computer Science Intern','Content Marketing Intern','Corporate Finance Intern','Cybersecurity Intern','Data Analysis Intern','Data Science Intern','Digital Marketing Intern','Economics Intern','Education Intern','Electrical Engineering Intern','Environmental Intern','Event Planning Intern','Finance Intern','Graphic Design Intern','Healthcare Intern','HR Intern','Information Technology Intern','Investment Banking Intern','Journalism Intern','Legal Intern','Logistics Intern','Management Intern','Marketing Intern','Mechanical Engineering Intern','Media Intern','Nursing Intern','Operations Intern','Pharmaceutical Intern','Product Management Intern','Project Management Intern','Psychology Intern','Public Health Intern','Public Relations Intern','Real Estate Intern','Research Intern','Sales Intern','Social Work Intern','Software Engineering Intern','Supply Chain Intern','Tax Intern','UX Design Intern','Web Development Intern'];
+
+function setField(inputId, val){
+  document.getElementById(inputId).value = val;
+  hideFieldList(inputId+'-list');
+}
+function showFieldList(listId){
+  var inputId = listId.replace('-list','');
+  var input = document.getElementById(inputId);
+  var list = document.getElementById(listId);
+  if(!list||!input) return;
+  var fields = inputId.startsWith('i-') ? ALL_INTERN_FIELDS : ALL_JOB_FIELDS;
+  var val = input.value.trim().toLowerCase();
+  var filtered = val ? fields.filter(function(f){ return f.toLowerCase().includes(val); }) : fields;
+  renderFieldList(list, filtered, inputId);
+  list.style.display = filtered.length ? 'block' : 'none';
+}
+function hideFieldList(listId){
+  var list = document.getElementById(listId);
+  if(list) list.style.display = 'none';
+}
+function filterField(inputId, listId){
+  var fields = inputId.startsWith('i-') ? ALL_INTERN_FIELDS : ALL_JOB_FIELDS;
+  var val = document.getElementById(inputId).value.trim().toLowerCase();
+  var list = document.getElementById(listId);
+  if(!list) return;
+  var filtered = val ? fields.filter(function(f){ return f.toLowerCase().includes(val); }) : fields;
+  renderFieldList(list, filtered, inputId);
+  list.style.display = filtered.length ? 'block' : 'none';
+}
+function renderFieldList(list, items, inputId){
+  list.innerHTML = '';
+  items.slice(0,15).forEach(function(f){
+    var d = document.createElement('div');
+    d.textContent = f;
+    d.style.cssText = 'padding:10px 14px;font-size:13px;cursor:pointer;color:var(--text);border-bottom:1px solid var(--border)';
+    d.onmouseover = function(){ this.style.background='var(--blue-lt)'; };
+    d.onmouseout = function(){ this.style.background=''; };
+    d.onclick = function(){ setField(inputId, f); };
+    list.appendChild(d);
+  });
+}
+
+// ─── LOCATION PICKER ───
+var ALL_LOCATIONS = [
+  'Remote','National',
+  // Cities
+  'New York, NY','Los Angeles, CA','Chicago, IL','Houston, TX','Phoenix, AZ',
+  'Philadelphia, PA','San Antonio, TX','San Diego, CA','Dallas, TX','San Jose, CA',
+  'Austin, TX','Jacksonville, FL','Fort Worth, TX','Columbus, OH','San Francisco, CA',
+  'Charlotte, NC','Indianapolis, IN','Seattle, WA','Denver, CO','Washington, DC',
+  'Nashville, TN','Oklahoma City, OK','El Paso, TX','Boston, MA','Portland, OR',
+  'Las Vegas, NV','Memphis, TN','Atlanta, GA','Baltimore, MD','Milwaukee, WI',
+  'Miami, FL','Tampa, FL','Orlando, FL','Minneapolis, MN','Cleveland, OH',
+  'Pittsburgh, PA','Richmond, VA','Cincinnati, OH','Kansas City, MO','St. Louis, MO',
+  'New Haven, CT','Bridgeport, CT','Stamford, CT',
+  // States
+  'Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut',
+  'Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa',
+  'Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan',
+  'Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire',
+  'New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio',
+  'Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota',
+  'Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia',
+  'Wisconsin','Wyoming'
+];
+
+function setLoc(inputId, val){
+  document.getElementById(inputId).value = val;
+  hideLocList(inputId+'-list');
+}
+
+function showLocList(listId){
+  var input = document.getElementById(listId.replace('-list',''));
+  var list = document.getElementById(listId);
+  if(!list) return;
+  var val = input.value.trim().toLowerCase();
+  var filtered = val ? ALL_LOCATIONS.filter(function(l){ return l.toLowerCase().includes(val); }) : ALL_LOCATIONS;
+  renderLocList(list, filtered, listId.replace('-list',''));
+  list.style.display = filtered.length ? 'block' : 'none';
+}
+
+function hideLocList(listId){
+  var list = document.getElementById(listId);
+  if(list) list.style.display = 'none';
+}
+
+function filterLocations(inputId, listId){
+  var val = document.getElementById(inputId).value.trim().toLowerCase();
+  var list = document.getElementById(listId);
+  if(!list) return;
+  var filtered = val ? ALL_LOCATIONS.filter(function(l){ return l.toLowerCase().includes(val); }) : ALL_LOCATIONS;
+  renderLocList(list, filtered, inputId);
+  list.style.display = filtered.length ? 'block' : 'none';
+}
+
+function renderLocList(list, items, inputId){
+  list.innerHTML = items.slice(0,20).map(function(loc){
+    var d=document.createElement('div');
+    d.textContent=loc;
+    d.style.cssText='padding:10px 14px;font-size:13px;cursor:pointer;color:var(--text);border-bottom:1px solid var(--border)';
+    d.onmouseover=function(){this.style.background='var(--blue-lt)'};
+    d.onmouseout=function(){this.style.background=''};
+    d.onclick=function(){setLoc(inputId,loc);};
+    return d.outerHTML;
+  }).join('');
+  // Re-attach click handlers since outerHTML loses them
+  Array.from(list.children).forEach(function(el,i){
+    el.onclick=function(){setLoc(inputId,items[i]);};
+    el.onmouseover=function(){this.style.background='var(--blue-lt)'};
+    el.onmouseout=function(){this.style.background=''};
+  });
+}
+
+
+// ─── PROFILE PAGE STRENGTH ───
+function calcPfStrength(){
+  var score = 0;
+  var fields = ['pf-nm','pf-em','pf-mj','pf-uni','pf-grad','pf-role','pf-lc','pf-exp','pf-status','pf-skills','pf-gl','pf-gpa'];
+  var weights = [12, 12, 8, 8, 6, 12, 6, 8, 6, 10, 6, 6];
+  fields.forEach(function(id, i){
+    var el = document.getElementById(id);
+    if(!el) return;
+    var val = el.value ? el.value.trim() : '';
+    if(val && val.length > 0) score += weights[i];
+  });
+  score = Math.min(score, 100);
+  var bar = document.getElementById('pf-strength-bar');
+  var lbl = document.getElementById('pf-score-label');
+  if(bar){ bar.style.width=score+'%'; bar.style.background=score>=80?'#3B6D11':score>=50?'var(--blue)':'#EF9F27'; }
+  if(lbl){ lbl.textContent=score+'%'; }
+  return score;
+}
+
+// ─── PROFILE STRENGTH ───
+function updateProfileStrength(){
+  var score = 0;
+  var tips = [];
+  // Name — 20pts
+  if(U && U.name && U.name.length > 1){ score += 20; } else { tips.push('Add your name'); }
+  // Major — 20pts
+  if(U && U.major && U.major !== 'Business Administration'){ score += 20; }
+  else if(U && U.major){ score += 10; tips.push('Confirm your major'); }
+  // Email — 15pts
+  if(U && U.email && U.email.includes('@')){ score += 15; } else { tips.push('Add your email'); }
+  // ATS scan done — 20pts
+  var scans = parseInt(localStorage.getItem('crj_scan_count')||'0');
+  if(scans > 0){ score += 20; } else { tips.push('Run your first ATS scan'); }
+  // Applications tracked — 15pts
+  var apps = JSON.parse(localStorage.getItem('crj_tracker')||'[]');
+  if(apps.length > 0){ score += 15; } else { tips.push('Add an application to tracker'); }
+  // Profile goal saved — 10pts
+  var goal = document.getElementById('pf-gl') ? document.getElementById('pf-gl').value.trim() : '';
+  if(goal.length > 20){ score += 10; } else { tips.push('Set your career goal'); }
+
+  score = Math.min(score, 100);
+  var pb = document.getElementById('rp-pb');
+  var pl = document.getElementById('rp-pl');
+  if(pb) pb.style.width = score + '%';
+  if(pb) pb.style.background = score >= 80 ? '#3B6D11' : score >= 50 ? 'var(--blue)' : '#EF9F27';
+  if(pl){
+    var tip = tips.length > 0 ? tips[0] : 'Profile complete!';
+    pl.textContent = score + '% — ' + tip;
+  }
+}
 
 </script>
 </body>
