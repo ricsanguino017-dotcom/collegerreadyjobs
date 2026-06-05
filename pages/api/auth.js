@@ -1,7 +1,14 @@
 // pages/api/auth.js
-// Handles sign up, sign in, sign out via Supabase Auth
+import { createClient } from '@supabase/supabase-js'
 
-import { supabase, supabaseAdmin } from '../../lib/supabase'
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+)
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+)
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' })
@@ -9,22 +16,23 @@ export default async function handler(req, res) {
   const { action, email, password, name, major } = req.body
 
   if (action === 'signup') {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { data: { name, major } }
-    })
+    // 1. Create auth user
+    const { data, error } = await supabase.auth.signUp({ email, password, options: { data: { name, major } } })
     if (error) return res.status(400).json({ error: error.message })
+    if (!data.user) return res.status(400).json({ error: 'Could not create account' })
 
-    // Save extra profile data
-    if (data.user) {
+    // 2. Try to save profile — don't fail signup if this errors
+    try {
       await supabaseAdmin.from('profiles').upsert({
         id: data.user.id,
-        name,
+        name: name || email.split('@')[0],
         major: major || 'Business Administration',
         updated_at: new Date().toISOString()
-      })
+      }, { onConflict: 'id' })
+    } catch(e) {
+      console.error('Profile save error (non-fatal):', e)
     }
+
     return res.status(200).json({ user: data.user, session: data.session })
   }
 
@@ -32,28 +40,19 @@ export default async function handler(req, res) {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) return res.status(400).json({ error: error.message })
 
-    // Fetch profile
-    const { data: profile } = await supabaseAdmin
-      .from('profiles')
-      .select('*')
-      .eq('id', data.user.id)
-      .single()
+    // Fetch profile — don't fail if missing
+    let profile = {}
+    try {
+      const { data: p } = await supabaseAdmin.from('profiles').select('*').eq('id', data.user.id).single()
+      if (p) profile = p
+    } catch(e) {}
 
     return res.status(200).json({ user: data.user, session: data.session, profile })
   }
 
   if (action === 'signout') {
-    await supabase.auth.signOut()
+    try { await supabase.auth.signOut() } catch(e) {}
     return res.status(200).json({ success: true })
-  }
-
-  if (action === 'me') {
-    const token = req.headers.authorization?.split(' ')[1]
-    if (!token) return res.status(401).json({ error: 'No token' })
-    const { data: { user }, error } = await supabaseAdmin.auth.getUser(token)
-    if (error || !user) return res.status(401).json({ error: 'Invalid session' })
-    const { data: profile } = await supabaseAdmin.from('profiles').select('*').eq('id', user.id).single()
-    return res.status(200).json({ user, profile })
   }
 
   return res.status(400).json({ error: 'Unknown action' })
