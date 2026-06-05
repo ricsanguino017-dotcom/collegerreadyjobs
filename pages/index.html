@@ -200,8 +200,142 @@ select option{background:var(--inp);color:var(--inp-c)}
 .mc{flex:1;padding:12px;border:1.5px solid var(--border);border-radius:var(--r);background:transparent;font-size:14px;cursor:pointer;color:var(--text2);font-family:'Inter',sans-serif}
 .toast{position:fixed;bottom:2rem;right:2rem;background:var(--text);color:#fff;padding:12px 20px;border-radius:var(--r);font-size:14px;font-weight:600;z-index:999;opacity:0;transform:translateY(8px);transition:all .3s;pointer-events:none}
 .toast.show{opacity:1;transform:translateY(0)}
-@media(max-width:900px){.app-layout{grid-template-columns:1fr}.rc,.sidebar{display:none}}
+
+/* ── MOBILE LAYOUT ── */
+@media(max-width:768px){
+
+  /* App layout — single column, no sidebar or right panel */
+  .app-layout{ grid-template-columns:1fr !important; }
+  .rc{ display:none !important; }
+
+  /* Sidebar becomes bottom nav on mobile */
+  .sidebar{
+    position:fixed;bottom:0;left:0;right:0;top:auto;
+    height:auto;width:100%;
+    flex-direction:row;overflow-x:auto;overflow-y:hidden;
+    border-right:none;border-top:1px solid var(--border);
+    z-index:100;padding:0;
+    background:var(--surface);
+    box-shadow:0 -2px 12px rgba(0,0,0,.08);
+  }
+  .s-logo{ display:none; }
+  .s-sec{ display:none; }
+  .s-spacer{ display:none; }
+  .s-up{ display:none; }
+  #more-items{ display:flex !important; flex-direction:row; }
+
+  /* Sidebar items become tab bar buttons */
+  .si{
+    flex-direction:column;
+    padding:8px 10px;
+    font-size:10px;
+    gap:3px;
+    border-left:none !important;
+    border-top:3px solid transparent;
+    border-bottom:none;
+    min-width:60px;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    flex-shrink:0;
+    white-space:nowrap;
+  }
+  .si.active{
+    border-top-color:var(--blue);
+    border-left:none !important;
+    background:var(--blue-lt);
+  }
+  .si i{ font-size:20px; }
+  /* Hide PRO badges on mobile nav */
+  .si span[style*="background:var(--gold)"]{ display:none !important; }
+
+  /* Main content — add bottom padding for nav bar */
+  .main-content{ padding-bottom:70px; }
+  .pg{ padding:1rem; max-width:100%; }
+
+  /* Nav */
+  .nav{ padding:.75rem 1rem; }
+  .nav-logo{ font-size:16px; }
+  .nav-btns .btn-ol{ display:none; }
+  .nav-btns .btn-sl{ padding:8px 14px; font-size:13px; }
+
+  /* Hero */
+  .hero{ padding:2rem 1rem; }
+  .hero h1{ font-size:26px; }
+  .hero p{ font-size:15px; }
+  .hero-box{ padding:1.25rem; }
+  .h-ta{ min-height:90px; font-size:14px; }
+
+  /* ATS results */
+  .ats-top{ flex-direction:column; align-items:flex-start; gap:.75rem; }
+  .ats-circle{ width:70px; height:70px; }
+  .ats-big{ font-size:22px; }
+  .ats-acts{ flex-wrap:wrap; gap:6px; }
+  .ats-act{ flex:1; min-width:calc(50% - 6px); font-size:12px; padding:9px 8px; }
+  .ba-grid{ grid-template-columns:1fr; }
+
+  /* Auth pages */
+  .auth-wrap{ padding:1rem; }
+  .auth-box{ padding:1.5rem 1.25rem; }
+
+  /* Stats grid */
+  .stats{ grid-template-columns:1fr 1fr; gap:10px; }
+  .sc-n{ font-size:22px; }
+
+  /* Job cards */
+  .jc{ padding:1rem; }
+  .tgs{ flex-wrap:wrap; }
+
+  /* Pricing */
+  .pgrid{ grid-template-columns:1fr; }
+  .pc.fp::before{ font-size:11px; }
+
+  /* Forms */
+  .form-row, [style*="grid-template-columns:1fr 1fr"]{ 
+    display:block !important; 
+  }
+  [style*="grid-template-columns:1fr 1fr"] > div{
+    margin-bottom:10px;
+  }
+
+  /* Features grid */
+  .feats{ grid-template-columns:1fr; }
+  .steps{ grid-template-columns:1fr 1fr; }
+
+  /* Tracker */
+  .tr-card-top{ flex-direction:column; gap:8px; }
+
+  /* Modal */
+  .mb{ padding:1.5rem 1.25rem; }
+  .ptabs{ grid-template-columns:1fr 1fr; }
+  .mbtns{ flex-direction:column; }
+
+  /* Premium banners */
+  [style*="display:flex;gap:10px;flex-wrap:wrap"] button{
+    width:100%;
+  }
+
+  /* Right panel in ATS */
+  .ats-box{ padding:1rem; }
+
+  /* Signup/signin forms */
+  .fi{ font-size:16px; } /* prevents iOS zoom */
+  .inp-f{ font-size:16px; }
+  textarea{ font-size:16px; }
+  select{ font-size:16px; }
+
+}
+
+/* Small phones */
+@media(max-width:380px){
+  .hero h1{ font-size:22px; }
+  .si{ min-width:52px; padding:7px 6px; font-size:9px; }
+  .si i{ font-size:18px; }
+  .stats{ grid-template-columns:1fr 1fr; }
+}
+
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -372,11 +506,11 @@ select option{background:var(--inp);color:var(--inp-c)}
     <div class="s-sec">My progress</div>
     <div class="si" onclick="goTab('tk',this)"><i class="ti ti-checklist"></i>App tracker</div>
     <div class="si" onclick="goTab('saved',this)"><i class="ti ti-bookmark"></i>Saved reports</div>
-    <div class="s-sec" onclick="document.getElementById('more-items').style.display=document.getElementById('more-items').style.display==='none'?'block':'none'" style="cursor:pointer;user-select:none">More tools ▾</div>
-    <div id="more-items" style="display:none">
+    <div class="s-sec">More tools</div>
+    <div id="more-items">
       <div class="si" onclick="goTab('rv',this)"><i class="ti ti-file-text"></i>Resume reviewer <span style="font-size:10px;background:var(--gold);color:#3A1F00;padding:2px 6px;border-radius:8px;margin-left:auto;font-weight:700;flex-shrink:0">★ PRO</span></div>
       <div class="si" onclick="goTab('cl',this)"><i class="ti ti-mail"></i>Cover letter <span style="font-size:10px;background:var(--gold);color:#3A1F00;padding:2px 6px;border-radius:8px;margin-left:auto;font-weight:700;flex-shrink:0">★ PRO</span></div>
-      <div class="si" onclick="goTab('career',this)"><i class="ti ti-bulb"></i>Career matcher</div>
+      <div class="si" onclick="goTab('career',this)"><i class="ti ti-bulb"></i>Career matcher <span style="font-size:10px;background:var(--gold);color:#3A1F00;padding:2px 6px;border-radius:8px;margin-left:auto;font-weight:700;flex-shrink:0">★ PRO</span></div>
       <div class="si" onclick="goTab('sim',this)"><i class="ti ti-player-play"></i>Interview sim <span style="font-size:10px;background:var(--gold);color:#3A1F00;padding:2px 6px;border-radius:8px;margin-left:auto;font-weight:700;flex-shrink:0">★ PRO</span></div>
       <div class="si" onclick="goTab('dash',this)"><i class="ti ti-layout-dashboard"></i>Dashboard</div>
       <div class="si" onclick="goTab('pf',this)"><i class="ti ti-user"></i>Profile</div>
@@ -876,6 +1010,23 @@ select option{background:var(--inp);color:var(--inp-c)}
     <div id="tab-career" class="pg">
       <p class="pg-t">Career matcher</p>
       <p class="pg-s">Upload your resume and AI tells you the top 10 realistic jobs you can get right now — with salary ranges, missing skills, and likelihood scores.</p>
+      <div style="background:linear-gradient(135deg,#1A0E00 0%,#2D1A00 100%);border:1px solid var(--gold-dk);border-radius:var(--r-lg);padding:1.5rem;margin-bottom:1.5rem;position:relative;overflow:hidden">
+        <div style="position:absolute;top:-20px;right:-20px;width:120px;height:120px;background:radial-gradient(circle,rgba(250,199,117,.12) 0%,transparent 70%);pointer-events:none"></div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <div style="width:44px;height:44px;background:var(--gold);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(250,199,117,.3)">
+            <i class="ti ti-bulb" style="font-size:22px;color:#3A1F00"></i>
+          </div>
+          <div>
+            <p style="font-size:16px;font-weight:700;color:var(--gold)">Premium Feature</p>
+            <p style="font-size:12px;color:#C4974A;margin-top:2px">Career Matcher · 1 free trial included</p>
+          </div>
+        </div>
+        <p style="font-size:13px;color:#C4974A;line-height:1.7;margin-bottom:1.25rem">Upload your resume and AI returns your top 10 realistic job matches — with salary ranges, likelihood scores, and the exact skills you need to add to qualify for each role.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button onclick="openMo('4.99','week')" style="padding:11px 22px;background:var(--gold);border:none;border-radius:var(--r);font-size:14px;font-weight:700;color:#3A1F00;cursor:pointer;font-family:Inter,sans-serif">$4.99 / week</button>
+          <button onclick="openMo('14.99','month')" style="padding:11px 22px;background:transparent;border:1.5px solid #C4974A;border-radius:var(--r);font-size:14px;font-weight:600;color:var(--gold);cursor:pointer;font-family:Inter,sans-serif">$14.99 / month — best value</button>
+        </div>
+      </div>
       <div class="upload-zone" id="cmz" onclick="document.getElementById('cm-file').click()">
         <input type="file" id="cm-file" accept=".pdf,.txt,.docx,.doc,.rtf" onchange="parsePDF(this,'cm-rv','cmz')"/>
         <i class="ti ti-upload"></i><p>Upload your resume — PDF, Word, TXT</p><small>PDF, TXT, DOCX, DOC supported</small>
@@ -988,11 +1139,19 @@ select option{background:var(--inp);color:var(--inp-c)}
 
 <script>
 // ─── STATE ───
-// API keys are server-side only — no keys in frontend
+var API_KEY = localStorage.getItem('crj_key') || '';
 var U = null;
-var atsScanResults = null; // stores last ATS scan for interview prep link
+var SESSION = null; // Supabase JWT session token
+var atsScanResults = null;
 var trackerApps = JSON.parse(localStorage.getItem('crj_tracker') || '[]');
 var savedReports = JSON.parse(localStorage.getItem('crj_reports') || '[]');
+
+// Helper — auth headers for protected API calls
+function authHeaders(){
+  var h = {'Content-Type':'application/json'};
+  if(SESSION) h['Authorization'] = 'Bearer '+SESSION;
+  return h;
+}
 
 // Render daily tips on page load
 document.addEventListener('DOMContentLoaded', function(){
@@ -1033,38 +1192,69 @@ function gSignIn(){
   // Silently redirect to signup form
   showPage('page-signup');
 }
-function signIn(){
+async function signIn(){
   var e=document.getElementById('si-em').value.trim();
-  var n=document.getElementById('si-nm')?document.getElementById('si-nm').value.trim():'';
+  var p=document.getElementById('si-pw').value;
   var emailOK=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
   if(!e){ alert('Please enter your email.'); return; }
-  if(!emailOK){ alert('Please enter a valid email address (e.g. you@gmail.com).'); return; }
-  if(!n){ alert('Please enter your full name.'); return; }
-  n=n.charAt(0).toUpperCase()+n.slice(1);
-  var saved=JSON.parse(localStorage.getItem('crj_user_'+e)||'null');
-  if(saved){ U=saved; launch(); return; }
-  U={name:n, major:'Business Administration', initials:n.substring(0,2).toUpperCase(), email:e};
-  localStorage.setItem('crj_user_'+e, JSON.stringify(U));
-  localStorage.setItem('crj_user', JSON.stringify(U));
-  launch();
+  if(!emailOK){ alert('Please enter a valid email address.'); return; }
+  if(!p){ alert('Please enter your password.'); return; }
+  var btn=document.querySelector('#page-signin .btn-auth');
+  if(btn){ btn.disabled=true; btn.textContent='Signing in...'; }
+  try{
+    var res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'signin',email:e,password:p})});
+    var d=await res.json();
+    if(d.error){ alert(d.error); if(btn){btn.disabled=false;btn.textContent='Sign in';} return; }
+    SESSION=d.session&&d.session.access_token?d.session.access_token:null;
+    if(SESSION) localStorage.setItem('crj_session',SESSION);
+    var prof=d.profile||{};
+    var nm=prof.name||e.split('@')[0];
+    U={name:nm,major:prof.major||'Business Administration',initials:nm.substring(0,2).toUpperCase(),email:e,id:d.user&&d.user.id?d.user.id:null};
+    localStorage.setItem('crj_user',JSON.stringify(U));
+    await loadCloudData();
+    launch();
+  }catch(err){
+    console.error(err);
+    alert('Something went wrong. Try again.');
+    if(btn){btn.disabled=false;btn.textContent='Sign in';}
+  }
 }
-function signUp(){
+async function signUp(){
   var n=document.getElementById('su-nm').value.trim();
   var e=document.getElementById('su-em').value.trim();
   var p=document.getElementById('su-pw').value;
   var m=document.getElementById('su-mj').value;
-  var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  var emailRegex=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if(!n){ alert('Please enter your full name.'); return; }
   if(!e){ alert('Please enter your email.'); return; }
-  if(!emailRegex.test(e)){ alert('Please enter a valid email address (e.g. you@gmail.com).'); return; }
+  if(!emailRegex.test(e)){ alert('Please enter a valid email address.'); return; }
   if(!p||p.length<6){ alert('Please create a password with at least 6 characters.'); return; }
   if(!m){ alert('Please select your major.'); return; }
-  U={name:n, major:m, initials:n.substring(0,2).toUpperCase(), email:e};
-  localStorage.setItem('crj_user', JSON.stringify(U));
-  localStorage.setItem('crj_user_'+e, JSON.stringify(U));
-  launch();
+  var btn=document.querySelector('#page-signup .btn-auth');
+  if(btn){ btn.disabled=true; btn.textContent='Creating account...'; }
+  try{
+    var res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'signup',email:e,password:p,name:n,major:m})});
+    var d=await res.json();
+    if(d.error){ alert(d.error); if(btn){btn.disabled=false;btn.textContent='Create free account';} return; }
+    SESSION=d.session?.access_token||null;
+    if(SESSION) localStorage.setItem('crj_session',SESSION);
+    U={name:n,major:m,initials:n.substring(0,2).toUpperCase(),email:e,id:d.user?.id};
+    localStorage.setItem('crj_user',JSON.stringify(U));
+    toast('Account created! Welcome to CollegeReadyJobs');
+    launch();
+  }catch(err){
+    alert('Something went wrong. Try again.');
+    if(btn){btn.disabled=false;btn.textContent='Create free account';}
+  }
 }
-function signOut(){ U=null; saved=[]; showPage('page-landing'); }
+async function signOut(){
+  try{ await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'signout'})}); }catch(e){}
+  U=null; SESSION=null;
+  localStorage.removeItem('crj_user');
+  localStorage.removeItem('crj_session');
+  showPage('page-landing');
+  toast('Signed out');
+}
 
 function launch(){
   showPage('page-app');
@@ -1510,30 +1700,78 @@ async function runATS(){
   btn.disabled=false; btn.innerHTML='<i class="ti ti-target"></i>Analyze &amp; tailor my resume';
 }
 
-function svReport(){ updateSaved(); toast('Report saved ✓'); }
+function svReport(){
+  if(!atsScanResults){ toast('Run an ATS scan first'); return; }
+  var sc = document.getElementById('at-sc').textContent;
+  var txt = document.getElementById('at-txt').textContent;
+  if(!sc || sc === '--'){ toast('No scan results to save'); return; }
+  var report = {score:parseInt(sc)||0, date:new Date().toLocaleDateString(), time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}), text:txt};
+  savedReports.unshift(report);
+  if(savedReports.length>20) savedReports.pop();
+  localStorage.setItem('crj_reports', JSON.stringify(savedReports));
+  saveReportToCloud(report.score, report.text); // sync to Supabase
+  updateSaved();
+  renderSaved();
+  toast('Report saved ✓');
+}
 function dlReport(){
   var blob=new Blob(['CollegeReadyJobs ATS Report\nScore: '+document.getElementById('at-sc').textContent+'\nDate: '+new Date().toLocaleDateString()+'\n\n'+document.getElementById('at-txt').textContent],{type:'text/plain'});
   var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='ATS-Report.txt'; a.click();
   toast('Downloaded ✓');
 }
 function copyATS(scId,txtId){
-  if(navigator.clipboard) navigator.clipboard.writeText('CollegeReadyJobs ATS Report\nScore: '+document.getElementById(scId).textContent+'\n\n'+document.getElementById(txtId).textContent);
-  toast('Copied ✓');
+  var text='CollegeReadyJobs ATS Report\nScore: '+document.getElementById(scId).textContent+'\n\n'+document.getElementById(txtId).textContent;
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(function(){ toast('Report copied!'); }).catch(function(){ fallbackCopy(text); });
+  } else { fallbackCopy(text); }
+}
+function fallbackCopy(text){
+  var ta=document.createElement('textarea');
+  ta.value=text; ta.style.cssText='position:fixed;opacity:0;top:0;left:0';
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand('copy'); toast('Report copied!'); }catch(e){ toast('Copy failed — use Download instead'); }
+  document.body.removeChild(ta);
 }
 
 // ─── DASHBOARD ───
 async function loadDash(){
   var mj=U?U.major:'Business Administration';
-  var mj2j={'Business Administration':'business analyst','Finance':'financial analyst','Accounting':'accountant','Marketing':'marketing coordinator','Computer Science':'software engineer','Data Science':'data analyst','Nursing':'nurse','Psychology':'counselor','Engineering':'engineer','Communications':'communications','Education':'teacher','Criminal Justice':'criminal justice'};
-  var what=(mj2j[mj]||mj)+' entry level';
-  var c=document.getElementById('dash-jobs');
-  c.innerHTML='<p style="color:var(--text2);font-size:14px;display:flex;align-items:center;gap:8px"><span class="sp sp-b"></span>Loading...</p>';
+  var mj2j={'Business Administration':'business analyst','Finance':'financial analyst','Accounting':'accountant','Marketing':'marketing coordinator','Computer Science':'software engineer','Data Science':'data analyst','Nursing':'registered nurse','Psychology':'counselor','Engineering':'engineer','Communications':'communications coordinator','Education':'teacher','Criminal Justice':'criminal justice','Mechanical Engineering':'mechanical engineer','Electrical Engineering':'electrical engineer','Cybersecurity':'cybersecurity analyst','Human Resources':'HR coordinator','Supply Chain Management':'supply chain analyst','Graphic Design':'graphic designer','Nursing':'registered nurse'};
+  var what=(mj2j[mj]||mj.toLowerCase())+' entry level';
+  // Get location from profile if set
+  var loc='';
+  var pfLoc=document.getElementById('pf-lc');
+  if(pfLoc&&pfLoc.value.trim()) loc=pfLoc.value.trim();
+  else if(U&&U.location) loc=U.location;
+  var el=document.getElementById('dash-jobs');
+  el.innerHTML='<p style="color:var(--text2);font-size:14px;display:flex;align-items:center;gap:8px"><span class="sp sp-b"></span>Finding '+(mj||'')+(loc?' jobs near '+loc:' jobs for you')+'...</p>';
+  // Update header
+  var dashTitle=document.getElementById('dash-title');
+  if(dashTitle&&loc) dashTitle.textContent=dashTitle.textContent.split(' — ')[0]+' — '+loc;
   try{
-    var params=new URLSearchParams({what:what,count:4,type:'job'});
+    var params=new URLSearchParams({what:what,count:6,type:'job'});
+    if(loc) params.append('where',loc);
     var resp=await fetch('/api/jobs?'+params);
     var d=await resp.json();
-    c.innerHTML=(d.results&&d.results.length)?d.results.map(jcard).join(''):'<p style="color:var(--text2);font-size:14px">No results — try the job finder.</p>';
-  }catch(e){ c.innerHTML='<p style="color:var(--text2);font-size:14px">Could not load jobs. Check your internet connection.</p>'; }
+    if(d.results&&d.results.length){
+      var header='<p style="font-size:13px;font-weight:600;color:var(--text2);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)">'+d.results.length+' '+mj+' jobs'+(loc?' near '+loc:'')+' — entry level</p>';
+      el.innerHTML=header+d.results.map(numberedJcard?function(j,i){return numberedJcard(j,i+1);}:jcard).join('');
+    } else {
+      // Try without location if no results
+      if(loc){
+        var params2=new URLSearchParams({what:what,count:6,type:'job'});
+        var resp2=await fetch('/api/jobs?'+params2);
+        var d2=await resp2.json();
+        if(d2.results&&d2.results.length){
+          el.innerHTML='<p style="font-size:12px;color:var(--text3);margin-bottom:10px">No results near '+loc+' — showing national listings</p>'+d2.results.map(jcard).join('');
+        } else {
+          el.innerHTML='<p style="color:var(--text2);font-size:14px">No results right now — try the Job finder tab for more options.</p>';
+        }
+      } else {
+        el.innerHTML='<p style="color:var(--text2);font-size:14px">No results right now — try the Job finder tab for more options.</p>';
+      }
+    }
+  }catch(e){ el.innerHTML='<p style="color:var(--text2);font-size:14px">Could not load jobs. <button onclick="loadDash()" style="color:var(--blue);background:none;border:none;cursor:pointer;font-weight:600;font-size:14px">Retry</button></p>'; }
 }
 
 // ─── JOB FINDER ───
@@ -1692,12 +1930,7 @@ function safeParseJSON(raw){
 }
 
 // ─── AUTO-LOGIN ───
-(function(){
-  var saved = localStorage.getItem('crj_user');
-  if(saved){ try{ U=JSON.parse(saved); launch(); }catch(e){} }
-  renderDailyTips();
-  updateSalary('Business Administration');
-})();
+// Auto-login handled by Supabase session
 
 // ─── PERSIST savedReports render ───
 function renderSaved(){
@@ -1791,7 +2024,7 @@ function renderTracker(){
 
 // ─── ATS → INTERVIEW PREP LINK ───
 function prepFromATS(){
-  if(!atsScanResults) return;
+  if(!atsScanResults){ toast('Run an ATS scan first'); return; }
   var banner=document.getElementById('ip-ats-banner');
   var ctx=document.getElementById('ip-ats-context');
   if(banner){
@@ -2042,6 +2275,10 @@ function addApp(){
 
 // ─── CAREER MATCHER ───
 async function runCareerMatch(){
+  var isPremium = localStorage.getItem('crj_premium')==='true';
+  var cmUsed = localStorage.getItem('crj_cm_used')==='true';
+  if(!isPremium && cmUsed){ openMo('4.99','week'); toast('Upgrade for unlimited career matching'); return; }
+  if(!isPremium) localStorage.setItem('crj_cm_used','true');
   var rv = document.getElementById('cm-rv').value.trim();
   if(!rv){ alert('Please upload or paste your resume.'); return; }
   var btn = document.getElementById('cmb'), el = document.getElementById('cm-res');
@@ -2297,6 +2534,67 @@ function updateProfileStrength(){
     pl.textContent = score + '% — ' + tip;
   }
 }
+
+
+// ─── CLOUD DATA SYNC ───
+async function loadCloudData(){
+  if(!SESSION) return;
+  var h = authHeaders();
+  try{
+    // Load tracker from Supabase
+    var tr=await fetch('/api/tracker',{headers:h});
+    var td=await tr.json();
+    if(td.applications&&td.applications.length){
+      trackerApps=td.applications.map(function(a){
+        return {id:a.id,company:a.company,role:a.role,location:a.location,status:a.status,date:a.created_at?new Date(a.created_at).toLocaleDateString():'',appliedDate:a.applied_date,notes:a.notes||''};
+      });
+      localStorage.setItem('crj_tracker',JSON.stringify(trackerApps));
+    }
+    // Load reports from Supabase
+    var rp=await fetch('/api/reports',{headers:h});
+    var rd=await rp.json();
+    if(rd.reports&&rd.reports.length){
+      savedReports=rd.reports.map(function(r){
+        return {id:r.id,score:r.score,text:r.text,date:new Date(r.created_at).toLocaleDateString(),time:new Date(r.created_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})};
+      });
+      localStorage.setItem('crj_reports',JSON.stringify(savedReports));
+    }
+  }catch(e){ console.warn('Cloud sync failed, using local data'); }
+}
+
+// ─── SAVE REPORT TO CLOUD ───
+async function saveReportToCloud(score, text){
+  if(!SESSION) return;
+  try{
+    await fetch('/api/reports',{method:'POST',headers:authHeaders(),body:JSON.stringify({score:score,text:text,jobTitle:'ATS Scan'})});
+  }catch(e){ console.warn('Could not save to cloud'); }
+}
+
+// ─── SAVE APP TO CLOUD ───
+async function saveAppToCloud(app){
+  if(!SESSION) return;
+  try{
+    var res=await fetch('/api/tracker',{method:'POST',headers:authHeaders(),body:JSON.stringify({company:app.company,role:app.role,location:app.location,status:app.status,appliedDate:app.appliedDate})});
+    var d=await res.json();
+    // Update local app with cloud ID
+    if(d.application&&d.application.id){
+      var idx=trackerApps.findIndex(function(a){return a.id===app.id;});
+      if(idx>-1){ trackerApps[idx].cloudId=d.application.id; localStorage.setItem('crj_tracker',JSON.stringify(trackerApps)); }
+    }
+  }catch(e){ console.warn('Could not save app to cloud'); }
+}
+
+// ─── AUTO-LOGIN from saved session ───
+(function(){
+  var savedSession=localStorage.getItem('crj_session');
+  var savedUser=localStorage.getItem('crj_user');
+  if(savedSession&&savedUser){
+    SESSION=savedSession;
+    try{ U=JSON.parse(savedUser); launch(); }catch(e){}
+  }
+  renderDailyTips();
+  updateSalary('Business Administration');
+})();
 
 </script>
 </body>
