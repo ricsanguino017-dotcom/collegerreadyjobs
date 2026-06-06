@@ -198,6 +198,8 @@ select option{background:var(--inp);color:var(--inp-c)}
 .mrow .fi{margin-bottom:0}
 .mbtns{display:flex;gap:10px;margin-top:14px}
 .mc{flex:1;padding:12px;border:1.5px solid var(--border);border-radius:var(--r);background:transparent;font-size:14px;cursor:pointer;color:var(--text2);font-family:'Inter',sans-serif}
+.ob-dot{width:8px;height:8px;border-radius:50%;background:var(--border)}
+.ob-dot.active{background:var(--blue);width:20px;border-radius:4px;transition:width .3s}
 .toast{position:fixed;bottom:2rem;right:2rem;background:var(--text);color:#fff;padding:12px 20px;border-radius:var(--r);font-size:14px;font-weight:600;z-index:999;opacity:0;transform:translateY(8px);transition:all .3s;pointer-events:none}
 .toast.show{opacity:1;transform:translateY(0)}
 
@@ -463,6 +465,9 @@ select option{background:var(--inp);color:var(--inp-c)}
   <label class="fl">Email</label><input class="fi" type="email" id="si-em" placeholder="you@email.com"/>
   <label class="fl">Password</label><input class="fi" type="password" id="si-pw" placeholder="••••••••"/>
   <button class="btn-auth" onclick="signIn()">Sign in</button>
+  <div style="text-align:center;margin-top:8px">
+    <a onclick="showPage('page-forgot')" style="font-size:13px;color:var(--text3);cursor:pointer">Forgot your password?</a>
+  </div>
   <div class="af">No account? <a onclick="showPage('page-signup')">Create one free</a></div>
 </div></div>
 </div>
@@ -826,8 +831,14 @@ select option{background:var(--inp);color:var(--inp-c)}
     </div>
 
     <div id="tab-saved" class="pg">
-      <p class="pg-t">Saved reports</p>
-      <p class="pg-s">Your ATS scan history for this session</p>
+      <p class="pg-t">Saved ATS reports</p>
+      <p class="pg-s">Track your ATS score progress over time — every scan you save appears here.</p>
+      <!-- Score history chart -->
+      <div id="score-chart-wrap" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.25rem;margin-bottom:1.5rem">
+        <p style="font-size:14px;font-weight:600;margin-bottom:4px">Score progress</p>
+        <p style="font-size:12px;color:var(--text3);margin-bottom:14px">Your ATS scores over time</p>
+        <canvas id="score-chart" height="120"></canvas>
+      </div>
       <div id="saved-list"><p style="font-size:14px;color:var(--text2)">No saved reports yet — run an ATS scan and click Save</p></div>
     </div>
 
@@ -1139,6 +1150,25 @@ select option{background:var(--inp);color:var(--inp-c)}
 
 <div class="toast" id="tst"></div>
 
+<!-- ONBOARDING MODAL -->
+<div class="mo" id="onboard-mo" style="display:none">
+  <div class="mb" style="max-width:480px">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div style="font-size:40px;margin-bottom:8px" id="ob-icon">🎯</div>
+      <h3 id="ob-title" style="font-size:20px;margin-bottom:6px">Welcome to CollegeReadyJobs</h3>
+      <p class="ms" id="ob-text" style="margin-bottom:0">Your AI-powered job search toolkit. Let's get you started in 3 quick steps.</p>
+    </div>
+    <!-- Step indicators -->
+    <div style="display:flex;justify-content:center;gap:8px;margin-bottom:1.5rem">
+      <div class="ob-dot active" id="ob-dot-0"></div>
+      <div class="ob-dot" id="ob-dot-1"></div>
+      <div class="ob-dot" id="ob-dot-2"></div>
+    </div>
+    <button class="btn bb" id="ob-next-btn" onclick="obNext()" style="margin-bottom:8px">Get started →</button>
+    <button class="btn" onclick="closeOnboard()" style="font-size:13px;color:var(--text3);border:none;padding:8px">Skip for now</button>
+  </div>
+</div>
+
 <script>
 // ─── STATE ───
 var API_KEY = localStorage.getItem('crj_key') || '';
@@ -1166,7 +1196,7 @@ document.addEventListener('DOMContentLoaded', function(){
 var U = null, saved = [];
 
 function showPage(id){
-  ['page-landing','page-signin','page-signup','page-app'].forEach(function(p){
+  ['page-landing','page-signin','page-signup','page-forgot','page-app'].forEach(function(p){
     document.getElementById(p).classList.toggle('hide', p !== id);
   });
   window.scrollTo(0,0);
@@ -2748,6 +2778,157 @@ function shareReport(){
   } else {
     toast('Score: '+score+' — share collegerreadyjobs.vercel.app');
   }
+}
+
+
+// ─── FORGOT PASSWORD ───
+async function forgotPassword(){
+  var e = document.getElementById('forgot-em').value.trim();
+  var msgEl = document.getElementById('forgot-msg');
+  if(!e){ alert('Please enter your email.'); return; }
+  var btn = document.querySelector('#page-forgot .btn-auth');
+  if(btn){ btn.disabled=true; btn.textContent='Sending...'; }
+  try{
+    var res = await fetch('/api/auth', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({action:'reset', email:e})
+    });
+    var d = await res.json();
+    msgEl.style.display = 'block';
+    if(d.error){
+      msgEl.style.background = '#FCEBEB';
+      msgEl.style.color = '#A32D2D';
+      msgEl.textContent = d.error;
+    } else {
+      msgEl.style.background = '#EAF3DE';
+      msgEl.style.color = '#3B6D11';
+      msgEl.textContent = 'Reset link sent! Check your email inbox.';
+    }
+  }catch(err){
+    msgEl.style.display='block';
+    msgEl.style.background='#FCEBEB';
+    msgEl.style.color='#A32D2D';
+    msgEl.textContent='Something went wrong. Try again.';
+  }
+  if(btn){ btn.disabled=false; btn.textContent='Send reset link'; }
+}
+
+// ─── ATS SCORE CHART ───
+function renderScoreChart(){
+  var wrap = document.getElementById('score-chart-wrap');
+  var canvas = document.getElementById('score-chart');
+  if(!wrap||!canvas||!savedReports.length) return;
+  if(savedReports.length < 2){ wrap.style.display='none'; return; }
+  wrap.style.display = 'block';
+  var scores = savedReports.slice().reverse().slice(-10); // last 10, chronological
+  var labels = scores.map(function(r,i){ return r.date||('Scan '+(i+1)); });
+  var data = scores.map(function(r){ return r.score; });
+  var ctx = canvas.getContext('2d');
+  var w = canvas.width = canvas.offsetWidth || 600;
+  var h = canvas.height = 120;
+  ctx.clearRect(0,0,w,h);
+  var pad = 30;
+  var chartW = w - pad*2;
+  var chartH = h - pad;
+  var min = Math.max(0, Math.min.apply(null,data) - 10);
+  var max = Math.min(100, Math.max.apply(null,data) + 10);
+  var range = max - min || 1;
+  // Grid lines
+  ctx.strokeStyle = '#E2E6EF';
+  ctx.lineWidth = 1;
+  [0,25,50,75,100].forEach(function(v){
+    if(v<min||v>max) return;
+    var y = pad + chartH - ((v-min)/range)*chartH;
+    ctx.beginPath(); ctx.moveTo(pad,y); ctx.lineTo(w-pad,y); ctx.stroke();
+    ctx.fillStyle='#9CA3AF'; ctx.font='10px Inter,sans-serif'; ctx.fillText(v+'%',2,y+4);
+  });
+  // Line
+  ctx.strokeStyle = '#185FA5';
+  ctx.lineWidth = 2.5;
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  data.forEach(function(v,i){
+    var x = pad + (i/(data.length-1||1))*chartW;
+    var y = pad + chartH - ((v-min)/range)*chartH;
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+  // Fill under line
+  ctx.fillStyle = 'rgba(24,95,165,0.08)';
+  ctx.beginPath();
+  data.forEach(function(v,i){
+    var x = pad + (i/(data.length-1||1))*chartW;
+    var y = pad + chartH - ((v-min)/range)*chartH;
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  });
+  ctx.lineTo(pad+chartW, pad+chartH);
+  ctx.lineTo(pad, pad+chartH);
+  ctx.closePath(); ctx.fill();
+  // Dots + labels
+  data.forEach(function(v,i){
+    var x = pad + (i/(data.length-1||1))*chartW;
+    var y = pad + chartH - ((v-min)/range)*chartH;
+    ctx.beginPath();
+    ctx.arc(x,y,5,0,Math.PI*2);
+    ctx.fillStyle = v>=80?'#3B6D11':v>=60?'#185FA5':'#A32D2D';
+    ctx.fill();
+    ctx.strokeStyle='#fff'; ctx.lineWidth=2; ctx.stroke();
+    ctx.fillStyle='#0D1117'; ctx.font='bold 11px Inter,sans-serif';
+    ctx.textAlign='center';
+    ctx.fillText(v+'%', x, y-10);
+  });
+}
+
+// Update renderSaved to also render chart
+var _origRenderSaved = renderSaved;
+function renderSaved(){
+  _origRenderSaved();
+  setTimeout(renderScoreChart, 100);
+}
+
+// ─── ONBOARDING FLOW ───
+var obStep = 0;
+var obSteps = [
+  {icon:'👋', title:'Welcome to CollegeReadyJobs!', text:'Your AI-powered job search toolkit. Let us show you the 3 most important features to get started.'},
+  {icon:'🎯', title:'Step 1 — Run your free ATS scan', text:'Upload your resume and paste a job description. AI scores your match and rewrites your bullets. You get 1 free scan right now.'},
+  {icon:'💼', title:'Step 2 — Search real job listings', text:'Browse live entry-level jobs filtered by your major. Use the Job finder or Internships tab to find open positions you can apply to today.'},
+  {icon:'🚀', title:'All done!', text:'Track every application, prep for interviews, and upgrade to premium for unlimited scans. Good luck — you have got this!'},
+];
+
+function showOnboarding(){
+  obStep = 0;
+  updateObStep();
+  document.getElementById('onboard-mo').classList.add('open');
+}
+
+function updateObStep(){
+  var step = obSteps[obStep];
+  document.getElementById('ob-icon').textContent = step.icon;
+  document.getElementById('ob-title').textContent = step.title;
+  document.getElementById('ob-text').textContent = step.text;
+  document.getElementById('ob-next-btn').textContent = obStep < obSteps.length-1 ? 'Next →' : 'Start exploring!';
+  // Update dots
+  for(var i=0;i<3;i++){
+    var dot = document.getElementById('ob-dot-'+i);
+    if(dot) dot.classList.toggle('active', i===obStep);
+  }
+}
+
+function obNext(){
+  if(obStep < obSteps.length-1){
+    obStep++;
+    updateObStep();
+  } else {
+    closeOnboard();
+    goTab('ats', null);
+  }
+}
+
+function closeOnboard(){
+  document.getElementById('onboard-mo').classList.remove('open');
+  document.getElementById('onboard-mo').style.display = 'none';
+  localStorage.setItem('crj_onboarded', 'true');
 }
 
 </script>
