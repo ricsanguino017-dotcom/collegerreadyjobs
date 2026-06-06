@@ -465,9 +465,7 @@ select option{background:var(--inp);color:var(--inp-c)}
   <label class="fl">Email</label><input class="fi" type="email" id="si-em" placeholder="you@email.com"/>
   <label class="fl">Password</label><input class="fi" type="password" id="si-pw" placeholder="••••••••"/>
   <button class="btn-auth" onclick="signIn()">Sign in</button>
-  <div style="text-align:center;margin-top:8px">
-    <a onclick="showPage('page-forgot')" style="font-size:13px;color:var(--text3);cursor:pointer">Forgot your password?</a>
-  </div>
+
   <div class="af">No account? <a onclick="showPage('page-signup')">Create one free</a></div>
 </div></div>
 </div>
@@ -1196,7 +1194,7 @@ document.addEventListener('DOMContentLoaded', function(){
 var U = null, saved = [];
 
 function showPage(id){
-  ['page-landing','page-signin','page-signup','page-forgot','page-app'].forEach(function(p){
+  ['page-landing','page-signin','page-signup','page-app'].forEach(function(p){
     document.getElementById(p).classList.toggle('hide', p !== id);
   });
   window.scrollTo(0,0);
