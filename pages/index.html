@@ -522,7 +522,7 @@ select option{background:var(--inp);color:var(--inp-c)}
   </aside>
   <main class="main-content">
 
-    <div id="tab-ats" class="pg active">
+    <div id="tab-ats" class="pg">
       <p class="pg-t">ATS Resume Tailor</p>
       <p class="pg-s">Upload your resume and paste a job description. AI scores your match, finds missing keywords, and rewrites your bullets.</p>
       <div style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#FFF8E6,#FFF0CC);border:1px solid #F0D080;border-radius:20px;padding:7px 16px;margin-bottom:16px;font-size:13px;font-weight:500;color:#7A4800">
@@ -1259,13 +1259,13 @@ async function signOut(){
 
 function launch(){
   showPage('page-app');
-  // Restore last active tab
-  var lastTab = localStorage.getItem('crj_active_tab');
-  if(lastTab && document.getElementById('tab-'+lastTab)){
-    setTimeout(function(){
-      goTab(lastTab, null);
-    }, 100);
-  }
+  // Restore last active tab — fallback to ATS
+  var lastTab = localStorage.getItem('crj_active_tab') || 'ats';
+  setTimeout(function(){
+    var tabEl = document.getElementById('tab-'+lastTab);
+    if(tabEl){ goTab(lastTab, null); }
+    else { goTab('ats', null); }
+  }, 150);
   var hr=new Date().getHours();
   document.getElementById('dash-title').textContent=(hr<12?'Good morning':hr<17?'Good afternoon':'Good evening')+', '+U.name;
   document.getElementById('sb-name').textContent=U.name;
@@ -2682,6 +2682,14 @@ async function saveAppToCloud(app){
   }catch(e){ console.warn('Auto-login error:', e); }
 })();
 
+
+// Save tab on any page navigation
+window.addEventListener('popstate', function(){
+  var lastTab = localStorage.getItem('crj_active_tab');
+  if(lastTab && document.getElementById('page-app') && !document.getElementById('page-app').classList.contains('hide')){
+    goTab(lastTab, null);
+  }
+});
 </script>
 </body>
 </html>
