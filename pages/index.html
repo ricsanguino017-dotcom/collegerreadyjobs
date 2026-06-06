@@ -1905,6 +1905,20 @@ async function saveProfile(){
   var exp=document.getElementById('pf-exp')?document.getElementById('pf-exp').value:'';
   var skills=document.getElementById('pf-skills')?document.getElementById('pf-skills').value.trim():'';
   var uni=document.getElementById('pf-uni')?document.getElementById('pf-uni').value.trim():'';
+  var loc=document.getElementById('pf-lc')?document.getElementById('pf-lc').value.trim():'';
+  var grad=document.getElementById('pf-grad')?document.getElementById('pf-grad').value:'';
+  var gpa=document.getElementById('pf-gpa')?document.getElementById('pf-gpa').value:'';
+  var status=document.getElementById('pf-status')?document.getElementById('pf-status').value:'';
+  // Save to localStorage immediately
+  if(U){ U.name=nm; U.major=mj; U.location=loc; localStorage.setItem('crj_user',JSON.stringify(U)); }
+  // Save to Supabase if logged in
+  if(SESSION){
+    fetch('/api/profile',{method:'POST',headers:authHeaders(),body:JSON.stringify({
+      name:nm,major:mj,location:loc,careerGoal:gl,targetRole:role,
+      skills:skills,university:uni,graduationYear:grad,
+      experienceLevel:exp,jobStatus:status,gpa:gpa
+    })}).catch(function(e){ console.warn('Profile cloud save failed:', e); });
+  }
   if(!nm){ alert('Please enter your name.'); return; }
   var btn=document.getElementById('pfb'), res=document.getElementById('pf-res');
   btn.disabled=true; btn.innerHTML='<span class="sp"></span>Saving...';
@@ -2541,6 +2555,21 @@ async function loadCloudData(){
   if(!SESSION) return;
   var h = authHeaders();
   try{
+    // Load profile
+    var pr=await fetch('/api/profile',{headers:h});
+    var pd=await pr.json();
+    if(pd.profile&&U){
+      if(pd.profile.name) U.name=pd.profile.name;
+      if(pd.profile.major) U.major=pd.profile.major;
+      if(pd.profile.location) U.location=pd.profile.location;
+      localStorage.setItem('crj_user',JSON.stringify(U));
+      // Fill profile form fields
+      var fields={name:'pf-nm',major:'pf-mj',location:'pf-lc',career_goal:'pf-gl',target_role:'pf-role',skills:'pf-skills',university:'pf-uni',graduation_year:'pf-grad',experience_level:'pf-exp',job_status:'pf-status',gpa:'pf-gpa'};
+      Object.keys(fields).forEach(function(key){
+        var el=document.getElementById(fields[key]);
+        if(el&&pd.profile[key]) el.value=pd.profile[key];
+      });
+    }
     // Load tracker from Supabase
     var tr=await fetch('/api/tracker',{headers:h});
     var td=await tr.json();
@@ -2586,14 +2615,39 @@ async function saveAppToCloud(app){
 
 // ─── AUTO-LOGIN from saved session ───
 (function(){
-  var savedSession=localStorage.getItem('crj_session');
-  var savedUser=localStorage.getItem('crj_user');
-  if(savedSession&&savedUser){
-    SESSION=savedSession;
-    try{ U=JSON.parse(savedUser); launch(); }catch(e){}
-  }
   renderDailyTips();
   updateSalary('Business Administration');
+  var savedSession=localStorage.getItem('crj_session');
+  var savedUser=localStorage.getItem('crj_user');
+  if(!savedSession||!savedUser) return;
+  try{
+    var u=JSON.parse(savedUser);
+    SESSION=savedSession;
+    U=u;
+    // Verify session is still valid
+    fetch('/api/auth',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+savedSession},
+      body:JSON.stringify({action:'me'})
+    }).then(function(r){return r.json();})
+    .then(function(d){
+      if(d.error){
+        // Session expired — clear and stay on landing
+        localStorage.removeItem('crj_session');
+        localStorage.removeItem('crj_user');
+        SESSION=null; U=null;
+      } else {
+        // Valid session — update user data and launch
+        if(d.profile&&d.profile.name) U.name=d.profile.name;
+        if(d.profile&&d.profile.major) U.major=d.profile.major;
+        launch();
+      }
+    })
+    .catch(function(){
+      // Network error — launch with cached data anyway
+      launch();
+    });
+  }catch(e){ console.warn('Auto-login failed:', e); }
 })();
 
 </script>
