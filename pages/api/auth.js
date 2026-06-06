@@ -6,6 +6,14 @@ export default async function handler(req, res) {
 
   const { action, email, password, name, major } = req.body
 
+  // Log env vars presence (not values)
+  console.log('Env check:', {
+    hasUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+    hasAnon: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    hasService: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+    url: process.env.NEXT_PUBLIC_SUPABASE_URL?.substring(0, 30)
+  })
+
   if (action === 'signup') {
     try {
       const supabase = createClient(
@@ -19,26 +27,10 @@ export default async function handler(req, res) {
         options: { data: { name, major } }
       })
 
-      console.log('Signup result:', JSON.stringify({ data: data?.user?.id, error }))
+      console.log('Signup error:', error?.message, 'User:', data?.user?.id)
 
       if (error) return res.status(400).json({ error: error.message })
-      if (!data?.user) return res.status(400).json({ error: 'No user returned from Supabase' })
-
-      // Try profile save separately — non-blocking
-      try {
-        const admin = createClient(
-          process.env.NEXT_PUBLIC_SUPABASE_URL,
-          process.env.SUPABASE_SERVICE_ROLE_KEY
-        )
-        await admin.from('profiles').upsert({
-          id: data.user.id,
-          name: name || email.split('@')[0],
-          major: major || 'Business Administration',
-          updated_at: new Date().toISOString()
-        })
-      } catch(profileErr) {
-        console.error('Profile error (non-fatal):', profileErr.message)
-      }
+      if (!data?.user) return res.status(400).json({ error: 'No user returned' })
 
       return res.status(200).json({
         user: { id: data.user.id, email: data.user.email },
@@ -46,8 +38,8 @@ export default async function handler(req, res) {
       })
 
     } catch(err) {
-      console.error('Signup crash:', err.message)
-      return res.status(500).json({ error: 'Server error: ' + err.message })
+      console.error('Crash:', err.message)
+      return res.status(500).json({ error: err.message })
     }
   }
 
@@ -59,20 +51,9 @@ export default async function handler(req, res) {
       )
       const { data, error } = await supabase.auth.signInWithPassword({ email, password })
       if (error) return res.status(400).json({ error: error.message })
-
-      let profile = {}
-      try {
-        const admin = createClient(
-          process.env.NEXT_PUBLIC_SUPABASE_URL,
-          process.env.SUPABASE_SERVICE_ROLE_KEY
-        )
-        const { data: p } = await admin.from('profiles').select('*').eq('id', data.user.id).single()
-        if (p) profile = p
-      } catch(e) {}
-
-      return res.status(200).json({ user: data.user, session: data.session, profile })
+      return res.status(200).json({ user: data.user, session: data.session, profile: {} })
     } catch(err) {
-      return res.status(500).json({ error: 'Server error: ' + err.message })
+      return res.status(500).json({ error: err.message })
     }
   }
 
@@ -80,5 +61,5 @@ export default async function handler(req, res) {
     return res.status(200).json({ success: true })
   }
 
-  return res.status(400).json({ error: 'Unknown action: ' + action })
+  return res.status(400).json({ error: 'Unknown action' })
 }
