@@ -662,9 +662,10 @@ select option{background:var(--inp);color:var(--inp-c)}
           <div class="ba-grid" id="at-ba-grid"></div>
         </div>
         <div class="ats-acts" style="margin-top:14px">
-          <button class="ats-act" onclick="copyATS('at-sc','at-txt')"><i class="ti ti-copy"></i>Copy report</button>
+          <button class="ats-act" onclick="copyATS('at-sc','at-txt')"><i class="ti ti-copy"></i>Copy</button>
           <button class="ats-act" onclick="dlReport()"><i class="ti ti-download"></i>Download</button>
           <button class="ats-act" onclick="svReport()"><i class="ti ti-bookmark"></i>Save</button>
+          <button class="ats-act" onclick="shareReport()"><i class="ti ti-share"></i>Share</button>
           <button class="ats-act" onclick="prepFromATS()"><i class="ti ti-microphone"></i>Prep interview</button>
         </div>
       </div>
@@ -1216,7 +1217,7 @@ async function signIn(){
     launch();
   }catch(err){
     console.error(err);
-    alert('Something went wrong. Try again.');
+    alert(getAIError(e));
     if(btn){btn.disabled=false;btn.textContent='Sign in';}
   }
 }
@@ -1244,7 +1245,7 @@ async function signUp(){
     toast('Account created! Welcome to CollegeReadyJobs');
     launch();
   }catch(err){
-    alert('Something went wrong. Try again.');
+    alert(getAIError(e));
     if(btn){btn.disabled=false;btn.textContent='Create free account';}
   }
 }
@@ -1635,7 +1636,7 @@ async function heroATS(){
   if(!rv){ alert('Please paste your resume.'); return; }
   if(!jd){ alert('Please paste the job description.'); return; }
   var btn=document.getElementById('h-btn');
-  btn.disabled=true; btn.innerHTML='<span class="sp"></span>Analyzing...';
+  startLoading('at-btn', ['Analyzing your resume...','Checking keyword matches...','Finding missing skills...','Writing improved bullets...','Almost done...'], 2000);
   document.getElementById('h-ats').style.display='block';
   document.getElementById('h-sc').textContent='...';
   document.getElementById('h-detail').textContent='Analyzing...';
@@ -1660,8 +1661,8 @@ async function runATS(){
   var scanCount=parseInt(localStorage.getItem('crj_scan_count')||'0');
   var isPremium=localStorage.getItem('crj_premium')==='true';
   if(!isPremium && scanCount>=1){ openMo('4.99','week'); toast('You used your free scan — upgrade for unlimited'); return; }
+  startLoading('at-btn',['Analyzing resume...','Checking keyword matches...','Finding missing skills...','Writing improved bullets...','Almost done...'],2000);
   var btn=document.getElementById('at-btn');
-  btn.disabled=true; btn.innerHTML='<span class="sp"></span>Analyzing...';
   document.getElementById('at-box').style.display='block';
   document.getElementById('at-sc').textContent='...';
   document.getElementById('at-txt').textContent='Analyzing...';
@@ -1704,8 +1705,8 @@ async function runATS(){
     localStorage.setItem('crj_reports', JSON.stringify(savedReports));
     updateSaved();
     updateDashStats();
-  }catch(e){ if(e.message!=='No API key') document.getElementById('at-txt').textContent='Error: '+e.message; }
-  btn.disabled=false; btn.innerHTML='<i class="ti ti-target"></i>Analyze &amp; tailor my resume';
+  }catch(e){ if(e.message!=='No API key'){ document.getElementById('at-box').style.display='block'; document.getElementById('at-txt').textContent=getAIError(e); } }
+  stopLoading('at-btn', '<i class="ti ti-target"></i>Analyze &amp; tailor my resume');
 }
 
 function svReport(){
@@ -1851,11 +1852,11 @@ async function reviewResume(){
   var rl=document.getElementById('rv-rl').value;
   if(!rv){ alert('Please upload or enter your resume.'); return; }
   var btn=document.getElementById('rvb'), res=document.getElementById('rv-res');
-  btn.disabled=true; btn.innerHTML='<span class="sp"></span>Reviewing...';
+  startLoading('rvb', ['Reviewing your resume...','Checking for strengths...','Finding improvements...','Almost done...'], 2200);
   res.style.display='block'; res.textContent='Analyzing...';
   try{ res.textContent=await ai('Expert career coach. Review this resume for a '+rl+' role.\n1. OVERALL IMPRESSION\n2. TOP 3 STRENGTHS\n3. TOP 3 IMPROVEMENTS\n4. ONE QUICK WIN\n\nRESUME:\n'+rv,1000); }
-  catch(e){ if(e.message!=='No API key') res.textContent='Error: '+e.message; }
-  btn.disabled=false; btn.innerHTML='<i class="ti ti-file-search"></i>Review my resume';
+  catch(e){ if(e.message!=='No API key') res.textContent=getAIError(e); }
+  stopLoading('rvb', '<i class="ti ti-file-search"></i>Review my resume');
 }
 
 // ─── INTERVIEW PREP ───
@@ -1867,14 +1868,14 @@ async function getQs(){
   var rl=document.getElementById('ip-rl').value;
   var tp=document.getElementById('ip-tp').value;
   var btn=document.getElementById('ipb'), c=document.getElementById('ip-res');
-  btn.disabled=true; btn.innerHTML='<span class="sp"></span>Generating...';
+  startLoading('ipb', ['Generating questions...','Tailoring to your role...','Building coaching tips...'], 2000);
   c.innerHTML='<p style="color:var(--text2);font-size:14px">Generating...</p>';
   try{
     var raw=await ai('Generate 6 '+tp+' interview questions for a '+rl+' role. 2-sentence tip each. Return ONLY JSON: [{"question":"...","tip":"..."}]',1000);
     var qs=JSON.parse(raw.replace(/```json|```/g,'').trim());
     c.innerHTML=qs.map(function(q,i){ return '<div class="qi"><strong>'+(i+1)+'. '+q.question+'</strong><span><i class="ti ti-bulb" style="color:var(--blue);font-size:14px;margin-right:5px;vertical-align:-2px"></i>'+q.tip+'</span></div>'; }).join('');
   }catch(e){ if(e.message!=='No API key') c.innerHTML='<p style="color:var(--text2)">Error: '+e.message+'</p>'; }
-  btn.disabled=false; btn.innerHTML='<i class="ti ti-microphone"></i>Generate practice questions';
+  stopLoading('ipb', '<i class="ti ti-microphone"></i>Generate practice questions');
 }
 
 // ─── COVER LETTER ───
@@ -1887,11 +1888,11 @@ async function genCover(){
   var rl=document.getElementById('cl-rl').value.trim();
   if(!bg||!rl){ alert('Please fill in both fields.'); return; }
   var btn=document.getElementById('clb'), res=document.getElementById('cl-res');
-  btn.disabled=true; btn.innerHTML='<span class="sp"></span>Writing...';
+  startLoading('clb', ['Writing your cover letter...','Personalizing to the role...','Polishing the language...'], 2200);
   res.style.display='block'; res.textContent='Writing...';
   try{ res.textContent=await ai('Write a professional cover letter for a recent grad.\nBackground: '+bg+'\nRole: '+rl+'\n3 paragraphs. Start "Dear Hiring Manager," end "Sincerely,\n[Your Name]"',900); }
-  catch(e){ if(e.message!=='No API key') res.textContent='Error: '+e.message; }
-  btn.disabled=false; btn.innerHTML='<i class="ti ti-mail"></i>Generate cover letter';
+  catch(e){ if(e.message!=='No API key') res.textContent=getAIError(e); }
+  stopLoading('clb', '<i class="ti ti-mail"></i>Generate cover letter');
 }
 
 // ─── TRACKER ───
@@ -1900,7 +1901,7 @@ async function tkAdvice(){
   btn.disabled=true; btn.innerHTML='<span class="sp"></span>Analyzing...';
   res.style.display='block'; res.textContent='Getting next steps...';
   try{ res.textContent=await ai('Career coach. Applications: 1.Enterprise Holdings MT-Applied 3 days ago 2.Webster Bank FA-Interview 3.Travelers-Pending 4.PwC-Rejected. Give: 1.Next action each 2.Handle rejection 3.Interview prep 4.One overall improvement. Be direct.',900); }
-  catch(e){ if(e.message!=='No API key') res.textContent='Error: '+e.message; }
+  catch(e){ if(e.message!=='No API key') res.textContent=getAIError(e); }
   btn.disabled=false; btn.innerHTML='<i class="ti ti-sparkles"></i>Get AI next-step advice';
 }
 
@@ -2076,7 +2077,7 @@ async function getQs(){
   var rl=document.getElementById('ip-rl').value;
   var tp=document.getElementById('ip-tp').value;
   var btn=document.getElementById('ipb'), container=document.getElementById('ip-res');
-  btn.disabled=true; btn.innerHTML='<span class="sp"></span>Generating...';
+  startLoading('ipb', ['Generating questions...','Tailoring to your role...','Building coaching tips...'], 2000);
   container.innerHTML='<p style="color:var(--text2);font-size:14px">Generating your questions...</p>';
   try{
     var atsCtx='';
@@ -2089,7 +2090,7 @@ async function getQs(){
       return '<div class="qi"><strong>'+(i+1)+'. '+q.question+'</strong><span><i class="ti ti-bulb" style="color:var(--blue);font-size:14px;margin-right:5px;vertical-align:-2px"></i>'+q.tip+'</span>'+atsTag+'</div>';
     }).join('');
   }catch(e){ if(e.message!=='No API key') container.innerHTML='<p style="color:var(--text2)">Something went wrong. Try again.</p>'; }
-  btn.disabled=false; btn.innerHTML='<i class="ti ti-microphone"></i>Generate practice questions';
+  stopLoading('ipb', '<i class="ti ti-microphone"></i>Generate practice questions');
 }
 
 // ─── TRACKER AI ADVICE (uses real apps) ───
@@ -2102,7 +2103,7 @@ async function tkAdvice(){
       ?trackerApps.slice(0,8).map(function(a){return a.company+' ('+a.role+') — '+STATUS_LABELS[a.status];}).join(', ')
       :'No applications yet';
     res.textContent=await ai('Career coach for recent grads. Applications: '+summary+' Give: 1. Specific next action for each active application 2. How to handle any rejections 3. How to prep for any interviews 4. One overall job search improvement. Be direct and specific.',900);
-  }catch(e){ if(e.message!=='No API key') res.textContent='Something went wrong. Try again.'; }
+  }catch(e){ if(e.message!=='No API key') res.textContent=getAIError(e); }
   btn.disabled=false; btn.innerHTML='<i class="ti ti-sparkles"></i>Get AI next-step advice';
 }
 
@@ -2313,7 +2314,7 @@ async function runCareerMatch(){
   var rv = document.getElementById('cm-rv').value.trim();
   if(!rv){ alert('Please upload or paste your resume.'); return; }
   var btn = document.getElementById('cmb'), el = document.getElementById('cm-res');
-  btn.disabled=true; btn.innerHTML='<span class="sp"></span>Analyzing your resume...';
+  startLoading('cmb', ['Analyzing your resume...','Matching to job market...','Calculating likelihood scores...','Finding skill gaps...'], 2500);
   el.innerHTML='<p style="color:var(--text2);font-size:14px;display:flex;align-items:center;gap:8px"><span class="sp sp-b"></span>Finding your best job matches...</p>';
   try{
     var prompt='Career advisor. Analyze this resume and return the top 10 realistic entry-level jobs this person can get based on their actual skills. Be realistic not aspirational. Return ONLY valid JSON: [{"title":"...","likelihood":"High/Medium/Low","salary":"$XX,000-$XX,000","match_pct":85,"missing_skills":["skill1","skill2"],"reason":"1 sentence why they fit"}] RESUME: '+rv;
@@ -2342,7 +2343,7 @@ async function runCareerMatch(){
         '</div>';
       }).join('');
   }catch(e){ if(e.message!=='No API key') el.innerHTML='<p style="color:var(--text2);font-size:14px">Something went wrong. Try again.</p>'; }
-  btn.disabled=false; btn.innerHTML='<i class="ti ti-bulb"></i>Find my best job matches';
+  stopLoading('cmb', '<i class="ti ti-bulb"></i>Find my best job matches');
 }
 
 // ─── INTERVIEW SIMULATOR ───
@@ -2690,6 +2691,65 @@ window.addEventListener('popstate', function(){
     goTab(lastTab, null);
   }
 });
+
+// ─── ANIMATED LOADING STATES ───
+var _loadingIntervals = {};
+
+function startLoading(btnId, messages, interval){
+  var btn = document.getElementById(btnId);
+  if(!btn) return;
+  var i = 0;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="sp"></span> ' + messages[0];
+  _loadingIntervals[btnId] = setInterval(function(){
+    i = (i + 1) % messages.length;
+    btn.innerHTML = '<span class="sp"></span> ' + messages[i];
+  }, interval || 2500);
+}
+
+function stopLoading(btnId, originalHTML){
+  var btn = document.getElementById(btnId);
+  if(_loadingIntervals[btnId]) clearInterval(_loadingIntervals[btnId]);
+  delete _loadingIntervals[btnId];
+  if(btn){ btn.disabled = false; btn.innerHTML = originalHTML; }
+}
+
+// ─── SMART ERROR MESSAGES ───
+function getAIError(err){
+  if(!err) return 'Something went wrong. Please try again.';
+  var msg = err.message || err.toString();
+  if(msg.includes('rate') || msg.includes('429')) return 'Our AI is a little busy right now — wait a few seconds and try again.';
+  if(msg.includes('quota') || msg.includes('credit') || msg.includes('billing')) return 'Our AI service is temporarily unavailable. Please try again shortly.';
+  if(msg.includes('401') || msg.includes('auth') || msg.includes('key')) return 'Service temporarily unavailable. Please try again or contact support.';
+  if(msg.includes('500') || msg.includes('server')) return 'Something went wrong on our end. Try again in a moment.';
+  if(msg.includes('network') || msg.includes('fetch') || msg.includes('Failed to fetch')) return 'No internet connection. Check your connection and try again.';
+  if(msg.includes('timeout')) return 'This is taking longer than usual. Try again.';
+  if(msg.includes('No API key') || msg.includes('No token')) return 'Service temporarily unavailable. Please try again.';
+  return 'Something went wrong. Please try again.';
+}
+
+// ─── SHARE ATS REPORT ───
+function shareReport(){
+  var score = document.getElementById('at-sc').textContent;
+  var txt = document.getElementById('at-txt').textContent;
+  if(!score || score==='--'){ toast('Run a scan first'); return; }
+  // Build shareable text
+  var shareText = 'I just scored '+score+' on my ATS resume check with CollegeReadyJobs!\n\nCheck yours free at collegerreadyjobs.vercel.app';
+  if(navigator.share){
+    navigator.share({
+      title: 'My ATS Resume Score — CollegeReadyJobs',
+      text: shareText,
+      url: 'https://collegerreadyjobs.vercel.app'
+    }).then(function(){ toast('Shared!'); }).catch(function(){});
+  } else if(navigator.clipboard){
+    navigator.clipboard.writeText(shareText).then(function(){
+      toast('Share link copied! Paste it anywhere.');
+    });
+  } else {
+    toast('Score: '+score+' — share collegerreadyjobs.vercel.app');
+  }
+}
+
 </script>
 </body>
 </html>
