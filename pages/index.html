@@ -1247,7 +1247,7 @@ async function signIn(){
     launch();
   }catch(err){
     console.error(err);
-    alert(getAIError(e));
+    alert('Could not connect. Check your internet and try again.');
     if(btn){btn.disabled=false;btn.textContent='Sign in';}
   }
 }
