@@ -2602,41 +2602,54 @@ function updateProfileStrength(){
 async function loadCloudData(){
   if(!SESSION) return;
   var h = authHeaders();
+  // Load each piece independently so one failure doesn't break everything
   try{
-    // Load profile
-    var pr=await fetch('/api/profile',{headers:h});
-    var pd=await pr.json();
-    if(pd.profile&&U){
-      if(pd.profile.name) U.name=pd.profile.name;
-      if(pd.profile.major) U.major=pd.profile.major;
-      if(pd.profile.location) U.location=pd.profile.location;
-      localStorage.setItem('crj_user',JSON.stringify(U));
-      // Fill profile form fields
-      var fields={name:'pf-nm',major:'pf-mj',location:'pf-lc',career_goal:'pf-gl',target_role:'pf-role',skills:'pf-skills',university:'pf-uni',graduation_year:'pf-grad',experience_level:'pf-exp',job_status:'pf-status',gpa:'pf-gpa'};
-      Object.keys(fields).forEach(function(key){
-        var el=document.getElementById(fields[key]);
-        if(el&&pd.profile[key]) el.value=pd.profile[key];
-      });
+    var pr = await fetch('/api/profile', {headers:h});
+    if(pr.ok){
+      var pd = await pr.json();
+      if(pd.profile && U){
+        if(pd.profile.name) U.name = pd.profile.name;
+        if(pd.profile.major) U.major = pd.profile.major;
+        if(pd.profile.location) U.location = pd.profile.location;
+        localStorage.setItem('crj_user', JSON.stringify(U));
+        var fields = {name:'pf-nm', major:'pf-mj', location:'pf-lc', career_goal:'pf-gl', target_role:'pf-role', skills:'pf-skills', university:'pf-uni', graduation_year:'pf-grad', experience_level:'pf-exp', job_status:'pf-status', gpa:'pf-gpa'};
+        Object.keys(fields).forEach(function(key){
+          var el = document.getElementById(fields[key]);
+          if(el && pd.profile[key]) el.value = pd.profile[key];
+        });
+      }
     }
-    // Load tracker from Supabase
-    var tr=await fetch('/api/tracker',{headers:h});
-    var td=await tr.json();
-    if(td.applications&&td.applications.length){
-      trackerApps=td.applications.map(function(a){
-        return {id:a.id,company:a.company,role:a.role,location:a.location,status:a.status,date:a.created_at?new Date(a.created_at).toLocaleDateString():'',appliedDate:a.applied_date,notes:a.notes||''};
-      });
-      localStorage.setItem('crj_tracker',JSON.stringify(trackerApps));
+  }catch(e){ console.warn('Profile load failed:', e.message); }
+
+  try{
+    var tr = await fetch('/api/tracker', {headers:h});
+    if(tr.ok){
+      var td = await tr.json();
+      if(td.applications && td.applications.length){
+        trackerApps = td.applications.map(function(a){
+          return {id:a.id, company:a.company, role:a.role, location:a.location, status:a.status, date:a.created_at?new Date(a.created_at).toLocaleDateString():'', appliedDate:a.applied_date, notes:a.notes||''};
+        });
+        localStorage.setItem('crj_tracker', JSON.stringify(trackerApps));
+        renderTracker();
+        updateDashStats();
+      }
     }
-    // Load reports from Supabase
-    var rp=await fetch('/api/reports',{headers:h});
-    var rd=await rp.json();
-    if(rd.reports&&rd.reports.length){
-      savedReports=rd.reports.map(function(r){
-        return {id:r.id,score:r.score,text:r.text,date:new Date(r.created_at).toLocaleDateString(),time:new Date(r.created_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})};
-      });
-      localStorage.setItem('crj_reports',JSON.stringify(savedReports));
+  }catch(e){ console.warn('Tracker load failed:', e.message); }
+
+  try{
+    var rp = await fetch('/api/reports', {headers:h});
+    if(rp.ok){
+      var rd = await rp.json();
+      if(rd.reports && rd.reports.length){
+        savedReports = rd.reports.map(function(r){
+          return {id:r.id, score:r.score, text:r.text, date:new Date(r.created_at).toLocaleDateString(), time:new Date(r.created_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})};
+        });
+        localStorage.setItem('crj_reports', JSON.stringify(savedReports));
+        renderSaved();
+        updateDashStats();
+      }
     }
-  }catch(e){ console.warn('Cloud sync failed, using local data'); }
+  }catch(e){ console.warn('Reports load failed:', e.message); }
 }
 
 // ─── SAVE REPORT TO CLOUD ───
@@ -2673,7 +2686,7 @@ async function saveAppToCloud(app){
     SESSION=savedSession;
     U=u;
     // Launch immediately with cached data — don't wait for network
-    launch();
+    try{ launch(); }catch(e){ console.error('Launch error:', e); showPage('page-landing'); }
     // Then verify session in background and sync data
     fetch('/api/auth',{
       method:'POST',
