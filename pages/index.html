@@ -256,8 +256,9 @@ select option{background:var(--inp);color:var(--inp-c)}
   /* Nav */
   .nav{ padding:.75rem 1rem; }
   .nav-logo{ font-size:16px; }
-  .nav-btns .btn-ol{ display:none; }
-  .nav-btns .btn-sl{ padding:8px 14px; font-size:13px; }
+  .nav-btns .btn-ol{ display:block; padding:7px 12px; font-size:13px; }
+  .nav-btns .btn-sl{ padding:7px 12px; font-size:12px; }
+  .nav-btns .btn-ol{ padding:7px 10px; font-size:12px; }
 
   /* Hero */
   .hero{ padding:2rem 1rem; }
@@ -1258,6 +1259,13 @@ async function signOut(){
 
 function launch(){
   showPage('page-app');
+  // Restore last active tab
+  var lastTab = localStorage.getItem('crj_active_tab');
+  if(lastTab && document.getElementById('tab-'+lastTab)){
+    setTimeout(function(){
+      goTab(lastTab, null);
+    }, 100);
+  }
   var hr=new Date().getHours();
   document.getElementById('dash-title').textContent=(hr<12?'Good morning':hr<17?'Good afternoon':'Good evening')+', '+U.name;
   document.getElementById('sb-name').textContent=U.name;
@@ -1910,7 +1918,16 @@ async function saveProfile(){
   var gpa=document.getElementById('pf-gpa')?document.getElementById('pf-gpa').value:'';
   var status=document.getElementById('pf-status')?document.getElementById('pf-status').value:'';
   // Save to localStorage immediately
-  if(U){ U.name=nm; U.major=mj; U.location=loc; localStorage.setItem('crj_user',JSON.stringify(U)); }
+  if(U){ 
+    U.name=nm; U.major=mj; U.location=loc; U.targetRole=role;
+    U.initials=nm.substring(0,2).toUpperCase();
+    localStorage.setItem('crj_user',JSON.stringify(U)); 
+    // Update displayed name everywhere
+    var nmEl=document.getElementById('rp-nm'); if(nmEl) nmEl.textContent=nm;
+    var sbEl=document.getElementById('sb-name'); if(sbEl) sbEl.textContent=nm;
+    var avEl=document.getElementById('rp-av'); if(avEl) avEl.textContent=U.initials;
+    var mjEl=document.getElementById('rp-mj'); if(mjEl) mjEl.textContent=mj;
+  }
   // Save to Supabase if logged in
   if(SESSION){
     fetch('/api/profile',{method:'POST',headers:authHeaders(),body:JSON.stringify({
@@ -2624,7 +2641,9 @@ async function saveAppToCloud(app){
     var u=JSON.parse(savedUser);
     SESSION=savedSession;
     U=u;
-    // Verify session is still valid
+    // Launch immediately with cached data — don't wait for network
+    launch();
+    // Then verify session in background and sync data
     fetch('/api/auth',{
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+savedSession},
@@ -2632,22 +2651,35 @@ async function saveAppToCloud(app){
     }).then(function(r){return r.json();})
     .then(function(d){
       if(d.error){
-        // Session expired — clear and stay on landing
+        // Session truly expired — sign out cleanly
         localStorage.removeItem('crj_session');
         localStorage.removeItem('crj_user');
         SESSION=null; U=null;
+        showPage('page-landing');
+        toast('Session expired — please sign in again');
       } else {
-        // Valid session — update user data and launch
-        if(d.profile&&d.profile.name) U.name=d.profile.name;
-        if(d.profile&&d.profile.major) U.major=d.profile.major;
-        launch();
+        // Update with fresh data from server
+        if(d.profile){
+          if(d.profile.name) U.name=d.profile.name;
+          if(d.profile.major) U.major=d.profile.major;
+          if(d.profile.location) U.location=d.profile.location;
+          localStorage.setItem('crj_user',JSON.stringify(U));
+          // Update displayed name
+          var nm=document.getElementById('rp-nm');
+          var sb=document.getElementById('sb-name');
+          var av=document.getElementById('rp-av');
+          if(nm) nm.textContent=U.name;
+          if(sb) sb.textContent=U.name;
+          if(av) av.textContent=U.initials||U.name.substring(0,2).toUpperCase();
+        }
+        loadCloudData();
       }
     })
     .catch(function(){
-      // Network error — launch with cached data anyway
-      launch();
+      // Network error — already launched with cache, that's fine
+      console.warn('Session verify failed — using cached data');
     });
-  }catch(e){ console.warn('Auto-login failed:', e); }
+  }catch(e){ console.warn('Auto-login error:', e); }
 })();
 
 </script>
