@@ -140,7 +140,7 @@ select option{background:var(--inp);color:var(--inp-c)}
 .atag.good{background:#0D2A1A;color:#5EC87A}
 .atag.warn{background:#2A1F08;color:#EF9F27}
 .atag.bad{background:#2A0D0D;color:#E87070}
-.ats-detail{font-size:14px;color:#C8D8F8;line-height:1.85;white-space:pre-wrap;margin-top:12px}
+.ats-detail{font-size:14px;color:#C8D8F8;line-height:1.85;margin-top:12px}
 .ba-wrap{display:none;margin-top:14px}
 .ba-title{font-size:13px;font-weight:600;color:#C8D8F8;margin-bottom:10px;display:flex;align-items:center;gap:7px}
 .ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -448,7 +448,7 @@ select option{background:var(--inp);color:var(--inp-c)}
   <p class="ps">Start free. Upgrade when ready.</p>
   <div class="pgrid">
     <div class="pc"><h3>Free</h3><div class="price-n">$0 <span>/ mo</span></div><ul class="pl"><li><i class="ti ti-check"></i>1 free ATS scan</li><li><i class="ti ti-check"></i>Before/after view</li><li><i class="ti ti-check"></i>Real job listings</li><li><i class="ti ti-check"></i>Interview prep</li></ul><button class="btn bb" onclick="showPage('page-signup')">Get started free</button></div>
-    <div class="pc fp"><div style="font-size:11px;font-weight:700;color:var(--blue);letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px">⭐ Best for job searching now</div><h3>Weekly</h3><div class="price-n">$4.99 <span>/ week</span></div><ul class="pl"><li><i class="ti ti-check"></i>Everything in free</li><li><i class="ti ti-check"></i>Unlimited ATS scans</li><li><i class="ti ti-check"></i>Full resume rewrite</li><li><i class="ti ti-check"></i>Download PDF reports</li></ul><button class="btn bg-b" onclick="openMo('4.99','week')">Get premium access</button></div>
+    <div class="pc fp" style="transform:scale(1.03);box-shadow:0 8px 30px rgba(24,95,165,.2)"><div style="font-size:11px;font-weight:700;color:var(--blue);letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px">⭐ Best for job searching now</div><h3>Weekly</h3><div class="price-n">$4.99 <span>/ week</span></div><ul class="pl"><li><i class="ti ti-check"></i>Everything in free</li><li><i class="ti ti-check"></i>Unlimited ATS scans</li><li><i class="ti ti-check"></i>Full resume rewrite</li><li><i class="ti ti-check"></i>Download PDF reports</li></ul><button class="btn bg-b" onclick="openMo('4.99','week')">Get premium access</button></div>
     <div class="pc"><h3>Monthly</h3><div class="price-n">$14.99 <span>/ mo</span></div><ul class="pl"><li><i class="ti ti-check"></i>Everything in weekly</li><li><i class="ti ti-check"></i>ATS score history</li><li><i class="ti ti-check"></i>Priority support</li><li><i class="ti ti-check"></i>Best value</li></ul><button class="btn bb" onclick="openMo('14.99','month')">Get monthly</button></div>
   </div>
 </div>
@@ -520,7 +520,7 @@ select option{background:var(--inp);color:var(--inp-c)}
       <div class="si" onclick="goTab('pf',this)"><i class="ti ti-user"></i>Profile</div>
     </div>
     <div class="s-spacer"></div>
-    <div class="si" onclick="signOut()"><i class="ti ti-logout"></i>Sign out</div>
+    <div class="si" onclick="signOut()" style="color:#E87070;margin-top:4px"><i class="ti ti-logout" style="color:#E87070"></i>Sign out</div>
     <div class="s-up" onclick="openMo('14.99','month')"><p><i class="ti ti-star" style="font-size:12px;margin-right:4px"></i>Upgrade to premium</p><p>Unlimited ATS + all tools — $14.99/mo</p></div>
   </aside>
   <main class="main-content">
@@ -544,7 +544,8 @@ select option{background:var(--inp);color:var(--inp-c)}
       </div>
       <p style="font-size:12px;color:var(--text3);margin-bottom:10px;cursor:pointer;text-decoration:underline" onclick="document.getElementById('at-rv').style.display=document.getElementById('at-rv').style.display==='none'?'':'none'">Type resume instead</p>
       <label class="lbl" style="display:none" id="at-rv-lbl">Your resume</label>
-      <textarea id="at-rv" placeholder="Or type your resume text here..." style="display:none"></textarea>
+      <textarea id="at-rv" placeholder="Or type your resume text here..." style="display:none" oninput="updateWordCount(this,'at-wc')"></textarea>
+      <p id="at-wc" style="font-size:11px;color:var(--text3);text-align:right;margin-top:2px;display:none"></p>
 
       <!-- Two column layout like screenshot -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
@@ -684,7 +685,7 @@ select option{background:var(--inp);color:var(--inp-c)}
         <div class="sc"><div class="sc-n" id="scan-ct">0</div><div class="sc-l">Scans done</div></div>
       </div>
       <div class="sec-l">Live job matches for you</div>
-      <div id="dash-jobs"><p style="color:var(--text2);font-size:14px;display:flex;align-items:center;gap:8px"><span class="sp sp-b"></span>Loading live jobs...</p></div>
+      <div id="dash-jobs"><p style="color:var(--text2);font-size:14px;display:flex;align-items:center;gap:8px"><span class="sp sp-b"></span>Loading jobs matched to your major...</p></div>
       <button class="btn bb" style="max-width:200px;margin-top:12px;font-size:14px" onclick="loadDash()"><i class="ti ti-refresh"></i>Refresh</button>
     </div>
 
@@ -825,7 +826,20 @@ select option{background:var(--inp);color:var(--inp-c)}
       <label class="lbl">Role and company</label>
       <textarea id="cl-rl" style="min-height:90px" placeholder="e.g. Marketing Coordinator at a consumer goods company, New York NY..."></textarea>
       <button class="btn bb" id="clb" onclick="genCover()"><i class="ti ti-mail"></i>Generate cover letter</button>
-      <div class="res" id="cl-res"></div>
+
+      <!-- Rich result area -->
+      <div id="cl-res-wrap" style="display:none;margin-top:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+          <p style="font-size:14px;font-weight:600;color:var(--text)">Your cover letter</p>
+          <div style="display:flex;gap:8px">
+            <button onclick="copyCoverLetter()" class="btn btn-sm" style="padding:8px 14px;font-size:13px;margin:0;gap:6px"><i class="ti ti-copy"></i>Copy</button>
+            <button onclick="genCover()" class="btn btn-sm" style="padding:8px 14px;font-size:13px;margin:0;gap:6px"><i class="ti ti-refresh"></i>Regenerate</button>
+            <button onclick="dlCoverLetter()" class="btn btn-sm" style="padding:8px 14px;font-size:13px;margin:0;gap:6px"><i class="ti ti-download"></i>Download</button>
+          </div>
+        </div>
+        <div id="cl-res" class="res" style="display:block;white-space:pre-wrap;font-family:Georgia,serif;font-size:14px;line-height:1.9;padding:1.5rem"></div>
+        <p style="font-size:12px;color:var(--text3);margin-top:8px;text-align:center">Tip — personalize the opening line and any specific details before sending</p>
+      </div>
     </div>
 
     <div id="tab-saved" class="pg">
@@ -1013,6 +1027,7 @@ select option{background:var(--inp);color:var(--inp-c)}
       <textarea id="pf-gl" style="min-height:100px" placeholder="e.g. Recent Finance grad looking for entry-level analyst roles. Strong Excel background, want to break into investment banking or corporate finance..." oninput="calcPfStrength()"></textarea>
 
       <button class="btn bb" style="max-width:250px" id="pfb" onclick="saveProfile()"><i class="ti ti-device-floppy"></i>Save &amp; get AI tips</button>
+      <span id="pf-saved-check" style="display:none;font-size:13px;color:#3B6D11;font-weight:600;margin-left:10px"><i class="ti ti-check"></i> Saved!</span>
       <div class="res" id="pf-res"></div>
     </div>
 
@@ -1452,37 +1467,46 @@ async function ai(prompt, tokens){
 // Job search uses /api/jobs backend route directly
 function jcard(j){
   var sal='Salary not listed';
-  // Handle /api/jobs backend format
   var company = j.company&&j.company.display_name ? j.company.display_name : (j.company||'Company');
   var location = j.location&&j.location.display_name ? j.location.display_name : (j.location||'US');
   if(j.salary_min&&j.salary_max) sal='$'+Math.round(j.salary_min/1000)+'k – $'+Math.round(j.salary_max/1000)+'k';
   else if(j.salary_min) sal='From $'+Math.round(j.salary_min/1000)+'k';
   var desc=j.description?j.description.substring(0,160):'';
-  return '<div class="jc"><div class="co">'+company+
-    '</div><h4>'+j.title+'</h4><p>'+location+' · '+sal+'</p>'+
-    (desc?'<div class="jc-desc">'+desc+'</div>':'')+
+  var co=company.replace(/'/g,"\\'"); var ti=j.title.replace(/'/g,"\\'"); var lo=location.replace(/'/g,"\\'");
+  return '<div class="jc">'+
+    '<div class="co">'+company+'</div>'+
+    '<h4>'+j.title+'</h4>'+
+    '<p style="font-size:13px;color:var(--text2);margin-bottom:6px">'+location+' · <strong style="color:var(--blue)">'+sal+'</strong></p>'+
+    (desc?'<div class="jc-desc">'+desc+'...</div>':'')+
     '<div class="tgs"><span class="tg live">✓ Real listing</span><span class="tg m">Entry-level</span></div>'+
-    '<a href="'+(j.redirect_url||'#')+'" target="_blank" class="apply-btn"><i class="ti ti-external-link" style="font-size:13px"></i>Apply now</a></div>';
+    '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">'+
+      '<a href="'+(j.redirect_url||'#')+'" target="_blank" class="apply-btn" style="flex:1;text-align:center"><i class="ti ti-external-link" style="font-size:13px"></i>Apply now</a>'+
+      '<button onclick="saveJobToTracker(\''+co+'\',\''+ti+'\',\''+lo+'\')" style="padding:9px 14px;border:1.5px solid var(--border);border-radius:var(--r);background:var(--surface);color:var(--text2);font-size:13px;cursor:pointer;font-family:Inter,sans-serif;display:flex;align-items:center;gap:5px;white-space:nowrap" onmouseover="this.style.borderColor=\'var(--blue)\';this.style.color=\'var(--blue)\'" onmouseout="this.style.borderColor=\'var(--border)\';this.style.color=\'var(--text2)\'"><i class="ti ti-bookmark"></i>Save job</button>'+
+    '</div>'+
+  '</div>';
 }
 
 function numberedJcard(j, num){
   var sal='Salary not listed';
   var company=j.company&&j.company.display_name?j.company.display_name:(j.company||'Company');
   var location=j.location&&j.location.display_name?j.location.display_name:(j.location||'US');
-  if(j.salary_min&&j.salary_max) sal='$'+Math.round(j.salary_min/1000)+'k – $'+Math.round(j.salary_max/1000)+'k';
+  if(j.salary_min&&j.salary_max) sal='$'+Math.round(j.salary_min/1000)+'k-$'+Math.round(j.salary_max/1000)+'k';
   else if(j.salary_min) sal='From $'+Math.round(j.salary_min/1000)+'k';
   var desc=j.description?j.description.substring(0,160):'';
-  return '<div class="jc">'+
-    '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">'+
-      '<span style="font-size:11px;font-weight:700;color:var(--text3);background:var(--surface2);padding:2px 8px;border-radius:20px;border:1px solid var(--border)">#'+num+'</span>'+
-      '<div class="co">'+company+'</div>'+
-    '</div>'+
+  var co=company.replace(/'/g,"\'");
+  var ti=j.title.replace(/'/g,"\'");
+  var lo=location.replace(/'/g,"\'");
+  return '<div class="jc" style="position:relative">'+
+    '<span style="position:absolute;top:12px;right:12px;background:var(--blue);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px">#'+num+'</span>'+
+    '<div class="co">'+company+'</div>'+
     '<h4>'+j.title+'</h4>'+
-    '<p>'+location+' · '+sal+'</p>'+
-    (desc?'<div class="jc-desc">'+desc+'</div>':'')+
-    '<div class="tgs"><span class="tg live">Live listing</span>'+(j.contract_time?'<span class="tg">'+j.contract_time+'</span>':'')+'</div>'+
-    '<a href="'+(j.redirect_url||'#')+'" target="_blank" class="apply-btn"><i class="ti ti-external-link" style="font-size:13px"></i>Apply now</a>'+
-  '</div>';
+    '<p style="font-size:13px;color:var(--text2);margin-bottom:6px">'+location+' | <strong style="color:var(--blue)">'+sal+'</strong></p>'+
+    (desc?'<div class="jc-desc">'+desc+'...</div>':'')+
+    '<div class="tgs"><span class="tg live">Real listing</span><span class="tg m">Entry-level</span></div>'+
+    '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">'+
+    '<a href="'+(j.redirect_url||'#')+'" target="_blank" class="apply-btn" style="flex:1;text-align:center">Apply now</a>'+
+    '<button onclick="saveJobToTracker(\''+co+'\',\''+ti+'\',\''+lo+'\')" style="padding:9px 14px;border:1.5px solid var(--border);border-radius:var(--r);background:var(--surface);color:var(--text2);font-size:13px;cursor:pointer;font-family:Inter,sans-serif">Save job</button>'+
+    '</div></div>';
 }
 
 function numberedJcard(j, num){
@@ -1719,7 +1743,24 @@ async function runATS(){
     var probLabel=document.getElementById('at-prob-label');
     if(probEl){ probEl.style.display='block'; probScore.textContent=prob+'%'; probLabel.textContent=prob>=80?'Strong — likely to pass ATS screening':prob>=60?'Moderate — improvements will help significantly':'Low — significant optimization needed'; }
     var bm=raw.match(/BULLETS_JSON:\s*(\[[\s\S]*?\])/);
-    document.getElementById('at-txt').textContent=raw.replace(/SCORE:\s*\d+\n?/,'').replace(/SKILLS_MATCH:[^\n]*\n/g,'').replace(/EXPERIENCE_MATCH:[^\n]*\n/g,'').replace(/EDUCATION_MATCH:[^\n]*\n/g,'').replace(/FORMAT_SCORE:[^\n]*\n/g,'').replace(/MATCHED_KEYWORDS:[^\n]*\n/g,'').replace(/MISSING_KEYWORDS:[^\n]*\n/g,'').replace(/REJECTION_REASONS:[\s\S]*?(?=REWRITTEN)/,'').replace(/BULLETS_JSON:[\s\S]*/,'').trim();
+    // Extract rewritten bullets section
+    var rewrittenMatch = raw.match(/REWRITTEN SECTION:\s*([\s\S]+?)(?=BULLETS_JSON|$)/);
+    var rewrittenText = rewrittenMatch ? rewrittenMatch[1].trim() : '';
+    var atTxt = document.getElementById('at-txt');
+    if(rewrittenText){
+      var bullets = rewrittenText.split('\n').filter(function(l){ return l.trim() && l.indexOf('REWRITTEN')===-1; });
+      var html = '<div style="margin-top:4px">';
+      html += '<p style="font-size:12px;font-weight:700;color:#8899BB;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">AI-rewritten bullets — ready to copy</p>';
+      html += bullets.map(function(b){
+        var line = b.trim().replace(/^[-*\.0-9]+\s*/,'');
+        if(!line) return '';
+        return '<div style="background:#0D2A1A;border:1px solid #1A5A30;border-radius:8px;padding:10px 14px;margin-bottom:8px;font-size:13px;color:#BDEFC9;line-height:1.65;display:flex;gap:10px;align-items:flex-start"><i class=\"ti ti-check\" style=\"color:#5EC87A;font-size:14px;flex-shrink:0;margin-top:1px\"></i><span>'+line+'</span></div>';
+      }).join('');
+      html += '</div>';
+      atTxt.innerHTML = html;
+    } else {
+      atTxt.textContent = '';
+    }
     if(bm){ try{ renderBA('at-ba-grid','at-ba',safeParseJSON(bm[1])); }catch(e){} }
     // Store for interview prep link
     atsScanResults = {score:sc, text:mainText, jd:jd};
@@ -1802,10 +1843,10 @@ async function loadDash(){
         if(d2.results&&d2.results.length){
           el.innerHTML='<p style="font-size:12px;color:var(--text3);margin-bottom:10px">No results near '+loc+' — showing national listings</p>'+d2.results.map(jcard).join('');
         } else {
-          el.innerHTML='<p style="color:var(--text2);font-size:14px">No results right now — try the Job finder tab for more options.</p>';
+          el.innerHTML='<div style="text-align:center;padding:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r)"><p style="font-size:24px;margin-bottom:6px">&#128269;</p><p style="font-size:14px;font-weight:600;margin-bottom:4px">No jobs found near your location</p><p style="font-size:13px;color:var(--text2);margin-bottom:10px">Update your location in Profile or browse all listings</p><button onclick="goTab(\'jobs\',null)" class="btn bb" style="margin:0 auto;display:inline-flex;font-size:13px">Browse job finder</button></div>';
         }
       } else {
-        el.innerHTML='<p style="color:var(--text2);font-size:14px">No results right now — try the Job finder tab for more options.</p>';
+        el.innerHTML='<div style="text-align:center;padding:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r)"><p style="font-size:24px;margin-bottom:6px">&#128269;</p><p style="font-size:14px;font-weight:600;margin-bottom:4px">No jobs found near your location</p><p style="font-size:13px;color:var(--text2);margin-bottom:10px">Update your location in Profile or browse all listings</p><button onclick="goTab(\'jobs\',null)" class="btn bb" style="margin:0 auto;display:inline-flex;font-size:13px">Browse job finder</button></div>';
       }
     }
   }catch(e){ el.innerHTML='<p style="color:var(--text2);font-size:14px">Could not load jobs. <button onclick="loadDash()" style="color:var(--blue);background:none;border:none;cursor:pointer;font-weight:600;font-size:14px">Retry</button></p>'; }
@@ -1901,7 +1942,15 @@ async function getQs(){
   try{
     var raw=await ai('Generate 6 '+tp+' interview questions for a '+rl+' role. 2-sentence tip each. Return ONLY JSON: [{"question":"...","tip":"..."}]',1000);
     var qs=JSON.parse(raw.replace(/```json|```/g,'').trim());
-    c.innerHTML=qs.map(function(q,i){ return '<div class="qi"><strong>'+(i+1)+'. '+q.question+'</strong><span><i class="ti ti-bulb" style="color:var(--blue);font-size:14px;margin-right:5px;vertical-align:-2px"></i>'+q.tip+'</span></div>'; }).join('');
+    c.innerHTML=qs.map(function(q,i){
+    return '<div class="qi" style="margin-bottom:14px">'+
+      '<strong style="display:block;margin-bottom:6px">'+(i+1)+'. '+q.question+'</strong>'+
+      '<span style="display:block;margin-bottom:10px;font-size:13px;color:var(--text2)"><i class="ti ti-bulb" style="color:var(--blue);font-size:13px;margin-right:5px;vertical-align:-2px"></i>'+q.tip+'</span>'+
+      '<textarea id="ip-ans-'+i+'" placeholder="Type your answer here then get AI feedback..." style="width:100%;min-height:80px;padding:10px 12px;font-size:13px;border:1.5px solid var(--border);border-radius:var(--r);background:var(--inp);color:var(--inp-c);font-family:Inter,sans-serif;resize:vertical;margin-bottom:6px"></textarea>'+
+      '<button onclick="getFeedback('+i+','+JSON.stringify(q.question)+')" style="padding:7px 14px;background:var(--blue);border:none;border-radius:var(--r);color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;display:inline-flex;align-items:center;gap:5px"><i class="ti ti-sparkles" style="font-size:13px"></i>Get feedback on my answer</button>'+
+      '<div id="ip-fb-'+i+'" style="display:none;margin-top:8px;padding:12px;background:#080C1A;border:1px solid var(--blue);border-radius:var(--r);font-size:13px;color:#C8D8F8;line-height:1.7"></div>'+
+    '</div>';
+  }).join('');
   }catch(e){ if(e.message!=='No API key') c.innerHTML='<p style="color:var(--text2)">Error: '+e.message+'</p>'; }
   stopLoading('ipb', '<i class="ti ti-microphone"></i>Generate practice questions');
 }
@@ -1915,10 +1964,16 @@ async function genCover(){
   var bg=document.getElementById('cl-bg').value.trim();
   var rl=document.getElementById('cl-rl').value.trim();
   if(!bg||!rl){ alert('Please fill in both fields.'); return; }
+  document.getElementById('cl-res-wrap').style.display='none';
   var btn=document.getElementById('clb'), res=document.getElementById('cl-res');
   startLoading('clb', ['Writing your cover letter...','Personalizing to the role...','Polishing the language...'], 2200);
   res.style.display='block'; res.textContent='Writing...';
-  try{ res.textContent=await ai('Write a professional cover letter for a recent grad.\nBackground: '+bg+'\nRole: '+rl+'\n3 paragraphs. Start "Dear Hiring Manager," end "Sincerely,\n[Your Name]"',900); }
+  try{
+    var result=await ai('Write a professional cover letter for a recent college grad.\nBackground: '+bg+'\nRole: '+rl+'\n3 tight paragraphs. Confident and specific. Start with something about why this company/role. Start with \'Dear Hiring Manager,\' end with \'Sincerely,\n[Your Name]\'',900);
+    res.textContent=result;
+    document.getElementById('cl-res-wrap').style.display='block';
+    document.getElementById('cl-res-wrap').scrollIntoView({behavior:'smooth',block:'start'});
+  }
   catch(e){ if(e.message!=='No API key') res.textContent=getAIError(e); }
   stopLoading('clb', '<i class="ti ti-mail"></i>Generate cover letter');
 }
@@ -1926,11 +1981,41 @@ async function genCover(){
 // ─── TRACKER ───
 async function tkAdvice(){
   var btn=document.getElementById('tkb'), res=document.getElementById('tk-res');
-  btn.disabled=true; btn.innerHTML='<span class="sp"></span>Analyzing...';
-  res.style.display='block'; res.textContent='Getting next steps...';
-  try{ res.textContent=await ai('Career coach. Applications: 1.Enterprise Holdings MT-Applied 3 days ago 2.Webster Bank FA-Interview 3.Travelers-Pending 4.PwC-Rejected. Give: 1.Next action each 2.Handle rejection 3.Interview prep 4.One overall improvement. Be direct.',900); }
+  startLoading('tkb',['Analyzing your applications...','Building next steps...','Almost done...'],2000);
+  res.style.display='block'; res.textContent='Analyzing your applications...';
+  try{
+    if(!trackerApps.length){
+      res.textContent='No applications yet — add some first then come back for advice.';
+      stopLoading('tkb','<i class="ti ti-sparkles"></i>Get AI next-step advice');
+      return;
+    }
+    // Build a detailed summary of each real application
+    var STATUS_LABELS={applied:'Applied',interview:'Interview scheduled',pending:'Pending response',offer:'Received an offer',rejected:'Rejected'};
+    var summary = trackerApps.map(function(a, i){
+      var days='';
+      if(a.appliedDate){
+        var d=Math.floor((Date.now()-new Date(a.appliedDate).getTime())/86400000);
+        days=' ('+d+' day'+(d===1?'':'s')+' ago)';
+      }
+      return (i+1)+'. '+a.company+' — '+a.role+' — '+STATUS_LABELS[a.status]+days+(a.notes?' — Notes: '+a.notes:'');
+    }).join('\n');
+
+    var hasInterview = trackerApps.some(function(a){ return a.status==='interview'; });
+    var hasOffer = trackerApps.some(function(a){ return a.status==='offer'; });
+    var hasRejected = trackerApps.some(function(a){ return a.status==='rejected'; });
+    var hasPending = trackerApps.some(function(a){ return a.status==='pending'||a.status==='applied'; });
+
+    var prompt = 'You are a career coach advising a recent college grad on their job search. Here are their current applications:\n\n'+summary+'\n\nGive specific, actionable advice for each application based on its status. Structure your response as:\n\n';
+    if(hasPending) prompt += '**FOLLOW UP** — For any Applied or Pending applications, give exact wording they can use to follow up professionally.\n';
+    if(hasInterview) prompt += '**INTERVIEW PREP** — For any Interview applications, give specific preparation tips for that company/role.\n';
+    if(hasOffer) prompt += '**OFFER STRATEGY** — For any offers, give advice on evaluating and negotiating.\n';
+    if(hasRejected) prompt += '**HANDLING REJECTION** — For any rejections, give advice on next steps and how to stay motivated.\n';
+    prompt += '**OVERALL** — One specific improvement they can make to their job search strategy this week based on their pipeline.\n\nBe direct, encouraging, and specific to their actual companies and roles. No generic advice.';
+
+    res.textContent = await ai(prompt, 1200);
+  }
   catch(e){ if(e.message!=='No API key') res.textContent=getAIError(e); }
-  btn.disabled=false; btn.innerHTML='<i class="ti ti-sparkles"></i>Get AI next-step advice';
+  stopLoading('tkb','<i class="ti ti-sparkles"></i>Get AI next-step advice');btn.innerHTML='<i class="ti ti-sparkles"></i>Get AI next-step advice';
 }
 
 // ─── PROFILE ───
@@ -2045,7 +2130,10 @@ function addApp(){
   renderTracker();
   updateDashStats();
   updateProfileStrength();
-  toast(company+' added!');
+  toast('✓ '+company+' added to tracker!');
+  // Flash the tracker tab
+  var tkTab = document.querySelector('.si[onclick*="tk"]');
+  if(tkTab){ tkTab.style.background='var(--blue-lt)'; setTimeout(function(){ tkTab.style.background=''; }, 1000); }
 }
 
 function updateAppStatus(id,newStatus){
@@ -2942,6 +3030,88 @@ function closeOnboard(){
   localStorage.setItem('crj_onboarded', 'true');
 }
 
+
+// ─── COVER LETTER ACTIONS ───
+function copyCoverLetter(){
+  var txt = document.getElementById('cl-res').textContent;
+  if(!txt){ toast('Generate a cover letter first'); return; }
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(txt).then(function(){ toast('Cover letter copied!'); });
+  } else {
+    var ta=document.createElement('textarea');
+    ta.value=txt; ta.style.cssText='position:fixed;opacity:0';
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    toast('Cover letter copied!');
+  }
+}
+
+function dlCoverLetter(){
+  var txt = document.getElementById('cl-res').textContent;
+  if(!txt){ toast('Generate a cover letter first'); return; }
+  var blob=new Blob([txt],{type:'text/plain'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='Cover-Letter-CollegeReadyJobs.txt';
+  a.click();
+  toast('Downloaded!');
+}
+
+// ─── SAVE JOB TO TRACKER ───
+function saveJobToTracker(company, role, location){
+  // Check if already saved
+  var exists = trackerApps.some(function(a){
+    return a.company.toLowerCase()===company.toLowerCase() && a.role.toLowerCase()===role.toLowerCase();
+  });
+  if(exists){ toast(company+' is already in your tracker'); return; }
+  var today = new Date().toISOString().split('T')[0];
+  var app = {
+    id: Date.now(),
+    company: company,
+    role: role,
+    location: location || 'US',
+    status: 'applied',
+    date: new Date().toLocaleDateString(),
+    appliedDate: today,
+    notes: 'Added from job finder'
+  };
+  trackerApps.unshift(app);
+  localStorage.setItem('crj_tracker', JSON.stringify(trackerApps));
+  saveAppToCloud(app);
+  updateDashStats();
+  updateProfileStrength();
+  toast('✓ '+company+' saved to your tracker!');
+}
+
+// ─── INTERVIEW PREP ANSWER FEEDBACK ───
+async function getFeedback(idx, question){
+  var answer = document.getElementById('ip-ans-'+idx);
+  var fbEl = document.getElementById('ip-fb-'+idx);
+  if(!answer||!fbEl) return;
+  var ans = answer.value.trim();
+  if(!ans){ toast('Type your answer first'); return; }
+  var btn = answer.nextElementSibling;
+  if(btn){ btn.disabled=true; btn.innerHTML='<span class="sp"></span> Analyzing...'; }
+  fbEl.style.display='block'; fbEl.textContent='Getting feedback...';
+  try{
+    var result = await ai('You are an interview coach. Give feedback on this interview answer in 3-4 sentences. Be specific and encouraging. Point out 1 strength and 1 thing to improve. Then give a stronger version in 1-2 sentences.\n\nQuestion: '+question+'\n\nAnswer: '+ans, 400);
+    fbEl.innerHTML = '<p style="font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">AI Feedback</p>'+result.replace(/\n/g,'<br>');
+  } catch(e){
+    fbEl.textContent = 'Could not get feedback. Try again.';
+  }
+  if(btn){ btn.disabled=false; btn.innerHTML='<i class="ti ti-sparkles"></i> Get feedback'; }
+}
+
+
+// ─── WORD COUNT ───
+function updateWordCount(el, countId){
+  var words = el.value.trim().split(/\s+/).filter(function(w){ return w.length>0; }).length;
+  var countEl = document.getElementById(countId);
+  if(countEl){ 
+    countEl.style.display = el.value.trim() ? 'block' : 'none';
+    countEl.textContent = words+' words'+(words<100?' — paste more resume text for better results':words>700?' — looks good!':'');
+  }
+}
 </script>
 </body>
 </html>
