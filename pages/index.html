@@ -1763,7 +1763,7 @@ async function runATS(){
     }
     if(bm){ try{ renderBA('at-ba-grid','at-ba',safeParseJSON(bm[1])); }catch(e){} }
     // Store for interview prep link
-    atsScanResults = {score:sc, text:mainText, jd:jd};
+    atsScanResults = {score:sc, text:'ATS Score: '+sc+'% | '+raw.substring(0,500), jd:jd};
     // Save to persistent history
     // Increment scan counter
     var cnt=parseInt(localStorage.getItem('crj_scan_count')||'0');
@@ -1779,10 +1779,9 @@ async function runATS(){
 }
 
 function svReport(){
-  if(!atsScanResults){ toast('Run an ATS scan first'); return; }
   var sc = document.getElementById('at-sc').textContent;
-  var txt = document.getElementById('at-txt').textContent;
-  if(!sc || sc === '--'){ toast('No scan results to save'); return; }
+  if(!sc || sc === '--' || sc === '...'){ toast('Run an ATS scan first'); return; }
+  var txt = atsScanResults ? atsScanResults.text : ('ATS Score: '+sc+'%');
   var report = {score:parseInt(sc)||0, date:new Date().toLocaleDateString(), time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}), text:txt};
   savedReports.unshift(report);
   if(savedReports.length>20) savedReports.pop();
@@ -1793,12 +1792,14 @@ function svReport(){
   toast('Report saved ✓');
 }
 function dlReport(){
-  var blob=new Blob(['CollegeReadyJobs ATS Report\nScore: '+document.getElementById('at-sc').textContent+'\nDate: '+new Date().toLocaleDateString()+'\n\n'+document.getElementById('at-txt').textContent],{type:'text/plain'});
+  var sc=document.getElementById('at-sc').textContent; var txt=atsScanResults?atsScanResults.text:'ATS Score: '+sc+'%'; var blob=new Blob(['CollegeReadyJobs ATS Report\nScore: '+sc+'\nDate: '+new Date().toLocaleDateString()+'\n\n'+txt],{type:'text/plain'});
   var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='ATS-Report.txt'; a.click();
   toast('Downloaded ✓');
 }
 function copyATS(scId,txtId){
-  var text='CollegeReadyJobs ATS Report\nScore: '+document.getElementById(scId).textContent+'\n\n'+document.getElementById(txtId).textContent;
+  var sc=document.getElementById(scId).textContent;
+  var rawTxt = atsScanResults ? atsScanResults.text : document.getElementById(txtId).textContent;
+  var text='CollegeReadyJobs ATS Report\nScore: '+sc+'\n\n'+rawTxt;
   if(navigator.clipboard){
     navigator.clipboard.writeText(text).then(function(){ toast('Report copied!'); }).catch(function(){ fallbackCopy(text); });
   } else { fallbackCopy(text); }
