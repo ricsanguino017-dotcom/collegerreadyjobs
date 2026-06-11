@@ -1244,7 +1244,7 @@ async function gSignIn(){
     if(d.error){ alert(d.error); return; }
     if(d.url) window.location.href = d.url;
   } catch(err){
-    alert('Could not connect to Google. Try again.');
+    alert('Could not connect to Google. Check your connection and try again.');
   }
 }
 async function signIn(){
@@ -2086,30 +2086,40 @@ function safeParseJSON(raw){
 }
 
 // ─── AUTO-LOGIN ───
-// Handle Google OAuth callback — token passed in URL params
+// Handle Google OAuth callback — Supabase puts session in URL hash
 (function(){
+  // Check URL params (our callback route)
   var params = new URLSearchParams(window.location.search);
-  var token = params.get('token');
-  var name = params.get('name');
-  var major = params.get('major');
-  var id = params.get('id');
   var authError = params.get('error');
-  if(authError){ alert('Google sign in failed. Please try again.'); }
-  if(token && name){
-    SESSION = token;
-    localStorage.setItem('crj_session', token);
-    U = {
-      name: name,
-      major: major || 'Business Administration',
-      initials: name.substring(0,2).toUpperCase(),
-      email: '',
-      id: id
-    };
-    localStorage.setItem('crj_user', JSON.stringify(U));
-    // Clean URL
-    window.history.replaceState({}, document.title, '/');
-    launch();
-    return;
+  if(authError){ setTimeout(function(){ alert('Google sign in failed. Please try again.'); }, 500); }
+
+  // Check URL hash for Supabase session (access_token in hash)
+  var hash = window.location.hash;
+  if(hash && hash.includes('access_token')){
+    var hashParams = new URLSearchParams(hash.substring(1));
+    var token = hashParams.get('access_token');
+    var type = hashParams.get('type');
+    if(token){
+      SESSION = token;
+      localStorage.setItem('crj_session', token);
+      // Fetch user info from Supabase
+      fetch('/api/auth', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json','Authorization':'Bearer '+token},
+        body: JSON.stringify({action:'me'})
+      }).then(function(r){ return r.json(); })
+      .then(function(d){
+        if(d.user){
+          var nm = (d.profile&&d.profile.name) || d.user.user_metadata&&d.user.user_metadata.full_name || d.user.email.split('@')[0];
+          var mj = (d.profile&&d.profile.major) || 'Business Administration';
+          U = {name:nm, major:mj, initials:nm.substring(0,2).toUpperCase(), email:d.user.email, id:d.user.id};
+          localStorage.setItem('crj_user', JSON.stringify(U));
+          window.history.replaceState({}, document.title, '/');
+          launch();
+        }
+      }).catch(function(){ window.history.replaceState({}, document.title, '/'); });
+      return;
+    }
   }
 })();
 // Auto-login handled by Supabase session
