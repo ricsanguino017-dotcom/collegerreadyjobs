@@ -1233,9 +1233,19 @@ function selPlan(p,pd){
 function toast(m){ var t=document.getElementById('tst'); t.textContent=m; t.classList.add('show'); setTimeout(function(){ t.classList.remove('show'); }, 3500); }
 
 // ─── AUTH ───
-function gSignIn(){
-  // Silently redirect to signup form
-  showPage('page-signup');
+async function gSignIn(){
+  try{
+    var res = await fetch('/api/auth', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({action: 'google'})
+    });
+    var d = await res.json();
+    if(d.error){ alert(d.error); return; }
+    if(d.url) window.location.href = d.url;
+  } catch(err){
+    alert('Could not connect to Google. Try again.');
+  }
 }
 async function signIn(){
   var e=document.getElementById('si-em').value.trim();
@@ -2076,6 +2086,32 @@ function safeParseJSON(raw){
 }
 
 // ─── AUTO-LOGIN ───
+// Handle Google OAuth callback — token passed in URL params
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  var token = params.get('token');
+  var name = params.get('name');
+  var major = params.get('major');
+  var id = params.get('id');
+  var authError = params.get('error');
+  if(authError){ alert('Google sign in failed. Please try again.'); }
+  if(token && name){
+    SESSION = token;
+    localStorage.setItem('crj_session', token);
+    U = {
+      name: name,
+      major: major || 'Business Administration',
+      initials: name.substring(0,2).toUpperCase(),
+      email: '',
+      id: id
+    };
+    localStorage.setItem('crj_user', JSON.stringify(U));
+    // Clean URL
+    window.history.replaceState({}, document.title, '/');
+    launch();
+    return;
+  }
+})();
 // Auto-login handled by Supabase session
 
 // ─── PERSIST savedReports render ───

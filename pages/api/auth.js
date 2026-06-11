@@ -81,5 +81,20 @@ export default async function handler(req, res) {
     return res.status(200).json({ success: true })
   }
 
+  if (action === 'google') {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: (process.env.NEXT_PUBLIC_APP_URL || 'https://collegerreadyjobs.vercel.app') + '/auth/callback'
+        }
+      })
+      if (error) return res.status(400).json({ error: error.message })
+      return res.status(200).json({ url: data.url })
+    } catch(err) {
+      return res.status(500).json({ error: err.message })
+    }
+  }
+
   return res.status(400).json({ error: 'Unknown action' })
 }
