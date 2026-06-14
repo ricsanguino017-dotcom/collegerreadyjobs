@@ -1,7 +1,12 @@
-export const config = { runtime: 'nodejs' }
+export default function Callback() {
+  return null
+}
 
-export default function handler(req, res) {
-  res.setHeader('Location', '/')
-  res.statusCode = 302
-  res.end()
+export async function getServerSideProps(context) {
+  return {
+    redirect: {
+      destination: '/',
+      permanent: false,
+    },
+  }
 }
