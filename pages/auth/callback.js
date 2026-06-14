@@ -1,4 +1,7 @@
+export const config = { runtime: 'nodejs' }
+
 export default function handler(req, res) {
-  res.writeHead(302, { Location: '/' })
+  res.setHeader('Location', '/')
+  res.statusCode = 302
   res.end()
 }
