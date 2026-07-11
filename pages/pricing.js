@@ -1,11 +1,5 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
 
 export default function Pricing() {
   const router = useRouter();
@@ -14,21 +8,23 @@ export default function Pricing() {
   const handleUpgrade = async (plan) => {
     setLoading(plan);
 
-    const { data: { session } } = await supabase.auth.getSession();
-
-    if (!session) {
-      router.push('/login');
-      return;
-    }
-
     try {
+      const authData = localStorage.getItem('sb-kpvvifrlrklgmorketck-auth-token');
+      const session = authData ? JSON.parse(authData) : null;
+      const user = session?.user;
+
+      if (!user) {
+        router.push('/login');
+        return;
+      }
+
       const res = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           plan,
-          userId: session.user.id,
-          userEmail: session.user.email,
+          userId: user.id,
+          userEmail: user.email,
         }),
       });
 
@@ -157,5 +153,11 @@ const styles = {
     color: '#000',
     border: 'none',
   },
-  back: { textAlign: 'center', marginTop: '40px', color: '#666', fontSize: '14px', cursor: 'pointer' },
+  back: {
+    textAlign: 'center',
+    marginTop: '40px',
+    color: '#666',
+    fontSize: '14px',
+    cursor: 'pointer',
+  },
 };
