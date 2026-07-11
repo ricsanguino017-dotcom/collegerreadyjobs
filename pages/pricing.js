@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+);
 
 export default function Pricing() {
   const router = useRouter();
-  const supabase = createClientComponentClient();
   const [loading, setLoading] = useState(null);
 
   const handleUpgrade = async (plan) => {
@@ -98,19 +102,9 @@ const styles = {
     color: '#fff',
     fontFamily: 'system-ui, -apple-system, sans-serif',
   },
-  header: {
-    textAlign: 'center',
-    marginBottom: '48px',
-  },
-  title: {
-    fontSize: '36px',
-    fontWeight: 700,
-    marginBottom: '12px',
-  },
-  subtitle: {
-    fontSize: '16px',
-    color: '#a0a0a0',
-  },
+  header: { textAlign: 'center', marginBottom: '48px' },
+  title: { fontSize: '36px', fontWeight: 700, marginBottom: '12px' },
+  subtitle: { fontSize: '16px', color: '#a0a0a0' },
   cardsWrap: {
     display: 'flex',
     gap: '24px',
@@ -143,27 +137,10 @@ const styles = {
     borderRadius: '20px',
     letterSpacing: '0.5px',
   },
-  planName: {
-    fontSize: '20px',
-    fontWeight: 600,
-    marginBottom: '8px',
-  },
-  price: {
-    fontSize: '32px',
-    fontWeight: 700,
-    marginBottom: '12px',
-  },
-  period: {
-    fontSize: '14px',
-    fontWeight: 400,
-    color: '#a0a0a0',
-  },
-  blurb: {
-    fontSize: '14px',
-    color: '#a0a0a0',
-    marginBottom: '24px',
-    minHeight: '40px',
-  },
+  planName: { fontSize: '20px', fontWeight: 600, marginBottom: '8px' },
+  price: { fontSize: '32px', fontWeight: 700, marginBottom: '12px' },
+  period: { fontSize: '14px', fontWeight: 400, color: '#a0a0a0' },
+  blurb: { fontSize: '14px', color: '#a0a0a0', marginBottom: '24px', minHeight: '40px' },
   button: {
     width: '100%',
     padding: '12px',
@@ -180,11 +157,5 @@ const styles = {
     color: '#000',
     border: 'none',
   },
-  back: {
-    textAlign: 'center',
-    marginTop: '40px',
-    color: '#666',
-    fontSize: '14px',
-    cursor: 'pointer',
-  },
+  back: { textAlign: 'center', marginTop: '40px', color: '#666', fontSize: '14px', cursor: 'pointer' },
 };
