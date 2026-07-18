@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 export default function PremiumWelcome() {
   const router = useRouter();
-  const supabase = createClientComponentClient();
   const [countdown, setCountdown] = useState(5);
 
   useEffect(() => {
-    // Auto-redirect to dashboard after 5 seconds
     const timer = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
@@ -38,10 +35,7 @@ export default function PremiumWelcome() {
           <div style={styles.feature}>✅ Save Jobs to Tracker</div>
         </div>
 
-        <button
-          style={styles.button}
-          onClick={() => router.push('/')}
-        >
+        <button style={styles.button} onClick={() => router.push('/')}>
           Go to Dashboard
         </button>
 
@@ -73,10 +67,7 @@ const styles = {
     textAlign: 'center',
     color: '#fff',
   },
-  icon: {
-    fontSize: '56px',
-    marginBottom: '16px',
-  },
+  icon: { fontSize: '56px', marginBottom: '16px' },
   title: {
     fontSize: '32px',
     fontWeight: 700,
@@ -101,10 +92,7 @@ const styles = {
     flexDirection: 'column',
     gap: '12px',
   },
-  feature: {
-    fontSize: '15px',
-    color: '#e0e0e0',
-  },
+  feature: { fontSize: '15px', color: '#e0e0e0' },
   button: {
     width: '100%',
     padding: '14px',
@@ -117,8 +105,5 @@ const styles = {
     cursor: 'pointer',
     marginBottom: '16px',
   },
-  countdown: {
-    fontSize: '13px',
-    color: '#555',
-  },
+  countdown: { fontSize: '13px', color: '#555' },
 };
